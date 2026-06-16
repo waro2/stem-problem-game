@@ -1,0 +1,35 @@
+{
+  "id": "p-free-fall-01",
+  "domain": "physics",
+  "difficulty": "beginner",
+  "title": "Free Fall",
+  "title_fr": "Chute libre",
+  "variables": [
+    { "id": "g", "label": "gravitational acceleration", "label_fr": "accélération gravitationnelle", "unit": "m/s²", "domain": "physics" },
+    { "id": "t", "label": "time", "label_fr": "temps", "unit": "s", "domain": "physics" },
+    { "id": "v", "label": "velocity", "label_fr": "vitesse", "unit": "m/s", "domain": "physics" },
+    { "id": "d", "label": "distance fallen", "label_fr": "hauteur de chute", "unit": "m", "domain": "physics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "v = g · t",
+      "expression_fr": "v = g · t",
+      "variableIds": ["v", "g", "t"],
+      "conceptName": "Velocity in free fall",
+      "conceptName_fr": "Vitesse en chute libre"
+    },
+    {
+      "id": "f2",
+      "expression": "d = ½ · g · t²",
+      "expression_fr": "d = ½ · g · t²",
+      "variableIds": ["d", "g", "t"],
+      "conceptName": "Distance in free fall",
+      "conceptName_fr": "Distance en chute libre"
+    }
+  ],
+  "hypotheses": ["g", "t"],
+  "conclusions": ["v", "d"],
+  "optimalSteps": 2,
+  "solvable": true
+}

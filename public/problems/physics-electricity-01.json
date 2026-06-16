@@ -1,0 +1,45 @@
+{
+  "id": "p-electricity-01",
+  "domain": "physics",
+  "difficulty": "intermediate",
+  "title": "Circuit Energy",
+  "title_fr": "Énergie d'un circuit",
+  "variables": [
+    { "id": "R", "label": "resistance", "label_fr": "résistance", "unit": "Ω", "domain": "physics" },
+    { "id": "I", "label": "current", "label_fr": "intensité", "unit": "A", "domain": "physics" },
+    { "id": "U", "label": "voltage", "label_fr": "tension", "unit": "V", "domain": "physics" },
+    { "id": "P", "label": "power", "label_fr": "puissance", "unit": "W", "domain": "physics" },
+    { "id": "t", "label": "time", "label_fr": "temps", "unit": "s", "domain": "physics" },
+    { "id": "E", "label": "energy", "label_fr": "énergie", "unit": "J", "domain": "physics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "U = R · I",
+      "expression_fr": "U = R · I",
+      "variableIds": ["U", "R", "I"],
+      "conceptName": "Ohm's Law",
+      "conceptName_fr": "Loi d'Ohm"
+    },
+    {
+      "id": "f2",
+      "expression": "P = U · I",
+      "expression_fr": "P = U · I",
+      "variableIds": ["P", "U", "I"],
+      "conceptName": "Electric power",
+      "conceptName_fr": "Puissance électrique"
+    },
+    {
+      "id": "f3",
+      "expression": "E = P · t",
+      "expression_fr": "E = P · t",
+      "variableIds": ["E", "P", "t"],
+      "conceptName": "Electrical energy",
+      "conceptName_fr": "Énergie électrique"
+    }
+  ],
+  "hypotheses": ["R", "I", "t"],
+  "conclusions": ["E"],
+  "optimalSteps": 3,
+  "solvable": true
+}

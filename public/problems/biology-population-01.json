@@ -1,0 +1,36 @@
+{
+  "id": "p-population-01",
+  "domain": "biology",
+  "difficulty": "beginner",
+  "title": "Exponential Population Growth",
+  "title_fr": "Croissance exponentielle d'une population",
+  "variables": [
+    { "id": "N0",       "label": "initial population", "label_fr": "population initiale", "unit": "ind.", "domain": "biology" },
+    { "id": "r_growth", "label": "intrinsic growth rate", "label_fr": "taux d'accroissement intrinsèque", "unit": "1/year", "domain": "biology" },
+    { "id": "t_years",  "label": "time elapsed", "label_fr": "temps écoulé", "unit": "year", "domain": "biology" },
+    { "id": "N",        "label": "final population", "label_fr": "population finale", "unit": "ind.", "domain": "biology" },
+    { "id": "dN",       "label": "population increase", "label_fr": "accroissement de population", "unit": "ind.", "domain": "biology" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "N = N0 · e^(r_growth · t_years)",
+      "expression_fr": "N = N0 · e^(r_growth · t_years)",
+      "variableIds": ["N", "N0", "r_growth", "t_years"],
+      "conceptName": "Malthusian growth model",
+      "conceptName_fr": "Modèle de Malthus"
+    },
+    {
+      "id": "f2",
+      "expression": "dN = N - N0",
+      "expression_fr": "dN = N - N0",
+      "variableIds": ["dN", "N", "N0"],
+      "conceptName": "Absolute population change",
+      "conceptName_fr": "Accroissement absolu de la population"
+    }
+  ],
+  "hypotheses": ["N0", "r_growth", "t_years"],
+  "conclusions": ["N", "dN"],
+  "optimalSteps": 2,
+  "solvable": true
+}

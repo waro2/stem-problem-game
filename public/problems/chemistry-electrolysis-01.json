@@ -1,0 +1,67 @@
+{
+  "id": "p-electrolysis-01",
+  "domain": "chemistry",
+  "difficulty": "expert",
+  "title": "Faraday Electrolysis",
+  "title_fr": "Électrolyse de Faraday",
+  "variables": [
+    { "id": "E_cath",    "label": "cathode standard potential", "label_fr": "potentiel standard de la cathode", "unit": "V", "domain": "chemistry" },
+    { "id": "E_an",      "label": "anode standard potential", "label_fr": "potentiel standard de l'anode", "unit": "V", "domain": "chemistry" },
+    { "id": "R_cell",    "label": "cell resistance", "label_fr": "résistance interne de la cellule", "unit": "Ω", "domain": "chemistry" },
+    { "id": "t_elec",    "label": "electrolysis time", "label_fr": "durée d'électrolyse", "unit": "s", "domain": "chemistry" },
+    { "id": "F_const",   "label": "Faraday constant", "label_fr": "constante de Faraday", "unit": "C/mol", "domain": "chemistry" },
+    { "id": "M_r_dep",   "label": "molar mass of deposited species", "label_fr": "masse molaire de l'espèce déposée", "unit": "g/mol", "domain": "chemistry" },
+    { "id": "n_ox",      "label": "number of electrons transferred", "label_fr": "nombre d'électrons échangés", "unit": "", "domain": "chemistry" },
+    { "id": "E_cell",    "label": "cell potential", "label_fr": "tension de la cellule", "unit": "V", "domain": "chemistry" },
+    { "id": "I_curr",    "label": "current", "label_fr": "intensité du courant", "unit": "A", "domain": "chemistry" },
+    { "id": "Q_charge",  "label": "electric charge", "label_fr": "charge électrique", "unit": "C", "domain": "chemistry" },
+    { "id": "n_e",       "label": "moles of electrons", "label_fr": "moles d'électrons", "unit": "mol", "domain": "chemistry" },
+    { "id": "m_dep",     "label": "mass deposited", "label_fr": "masse déposée", "unit": "g", "domain": "chemistry" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "E_cell = E_cath - E_an",
+      "expression_fr": "E_cell = E_cath - E_an",
+      "variableIds": ["E_cell", "E_cath", "E_an"],
+      "conceptName": "Cell potential",
+      "conceptName_fr": "Tension de cellule électrochimique"
+    },
+    {
+      "id": "f2",
+      "expression": "I_curr = E_cell / R_cell",
+      "expression_fr": "I_curr = E_cell / R_cell",
+      "variableIds": ["I_curr", "E_cell", "R_cell"],
+      "conceptName": "Ohm's law (electrochemical cell)",
+      "conceptName_fr": "Loi d'Ohm (cellule électrochimique)"
+    },
+    {
+      "id": "f3",
+      "expression": "Q_charge = I_curr · t_elec",
+      "expression_fr": "Q_charge = I_curr · t_elec",
+      "variableIds": ["Q_charge", "I_curr", "t_elec"],
+      "conceptName": "Charge passed",
+      "conceptName_fr": "Charge électrique transférée"
+    },
+    {
+      "id": "f4",
+      "expression": "n_e = Q_charge / F_const",
+      "expression_fr": "n_e = Q_charge / F_const",
+      "variableIds": ["n_e", "Q_charge", "F_const"],
+      "conceptName": "Faraday's first law (moles of electrons)",
+      "conceptName_fr": "Première loi de Faraday (moles d'électrons)"
+    },
+    {
+      "id": "f5",
+      "expression": "m_dep = n_e · M_r_dep / n_ox",
+      "expression_fr": "m_dep = n_e · M_r_dep / n_ox",
+      "variableIds": ["m_dep", "n_e", "M_r_dep", "n_ox"],
+      "conceptName": "Faraday's second law (mass deposited)",
+      "conceptName_fr": "Deuxième loi de Faraday (masse déposée)"
+    }
+  ],
+  "hypotheses": ["E_cath", "E_an", "R_cell", "t_elec", "F_const", "M_r_dep", "n_ox"],
+  "conclusions": ["m_dep"],
+  "optimalSteps": 5,
+  "solvable": true
+}

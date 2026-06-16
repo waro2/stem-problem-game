@@ -1,0 +1,65 @@
+{
+  "id": "p-fluid-01",
+  "domain": "physics",
+  "difficulty": "expert",
+  "title": "Nozzle Flow",
+  "title_fr": "Écoulement dans une tuyère",
+  "variables": [
+    { "id": "A1", "label": "inlet area", "label_fr": "section d'entrée", "unit": "m²", "domain": "physics" },
+    { "id": "v1", "label": "inlet velocity", "label_fr": "vitesse d'entrée", "unit": "m/s", "domain": "physics" },
+    { "id": "A2", "label": "outlet area", "label_fr": "section de sortie", "unit": "m²", "domain": "physics" },
+    { "id": "Q", "label": "flow rate", "label_fr": "débit volumique", "unit": "m³/s", "domain": "physics" },
+    { "id": "v2", "label": "outlet velocity", "label_fr": "vitesse de sortie", "unit": "m/s", "domain": "physics" },
+    { "id": "rho", "label": "fluid density", "label_fr": "masse volumique", "unit": "kg/m³", "domain": "physics" },
+    { "id": "P1", "label": "inlet pressure", "label_fr": "pression d'entrée", "unit": "Pa", "domain": "physics" },
+    { "id": "dP", "label": "pressure drop", "label_fr": "chute de pression", "unit": "Pa", "domain": "physics" },
+    { "id": "P2", "label": "outlet pressure", "label_fr": "pression de sortie", "unit": "Pa", "domain": "physics" },
+    { "id": "F", "label": "thrust force", "label_fr": "force de poussée", "unit": "N", "domain": "physics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "Q = A1 · v1",
+      "expression_fr": "Q = A1 · v1",
+      "variableIds": ["Q", "A1", "v1"],
+      "conceptName": "Continuity equation",
+      "conceptName_fr": "Équation de continuité"
+    },
+    {
+      "id": "f2",
+      "expression": "v2 = Q / A2",
+      "expression_fr": "v2 = Q / A2",
+      "variableIds": ["v2", "Q", "A2"],
+      "conceptName": "Outlet velocity (continuity)",
+      "conceptName_fr": "Vitesse de sortie (continuité)"
+    },
+    {
+      "id": "f3",
+      "expression": "dP = ½ · rho · (v2² - v1²)",
+      "expression_fr": "ΔP = ½ · ρ · (v2² - v1²)",
+      "variableIds": ["dP", "rho", "v2", "v1"],
+      "conceptName": "Bernoulli pressure drop",
+      "conceptName_fr": "Chute de pression (Bernoulli)"
+    },
+    {
+      "id": "f4",
+      "expression": "P2 = P1 - dP",
+      "expression_fr": "P2 = P1 - ΔP",
+      "variableIds": ["P2", "P1", "dP"],
+      "conceptName": "Outlet pressure",
+      "conceptName_fr": "Pression de sortie"
+    },
+    {
+      "id": "f5",
+      "expression": "F = Q · rho · (v2 - v1)",
+      "expression_fr": "F = Q · ρ · (v2 - v1)",
+      "variableIds": ["F", "Q", "rho", "v2", "v1"],
+      "conceptName": "Reaction thrust (momentum theorem)",
+      "conceptName_fr": "Force de réaction (théorème impulse-quantité)"
+    }
+  ],
+  "hypotheses": ["A1", "v1", "A2", "rho", "P1"],
+  "conclusions": ["P2", "F"],
+  "optimalSteps": 5,
+  "solvable": true
+}

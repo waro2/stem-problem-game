@@ -1,0 +1,15 @@
+# Railway service configuration — https://docs.railway.app/reference/config-as-code
+# Service: Express API + Prisma (PostgreSQL provisioned by Railway add-on)
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+dockerBuildTarget = "server-prod"
+
+[deploy]
+# Migration runs inside the container CMD before the server starts.
+# healthcheckPath must return 2xx; see src/server/app.ts GET /health.
+healthcheckPath = "/health"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

@@ -1,0 +1,68 @@
+{
+  "id": "p-photosynthesis-01",
+  "domain": "biology",
+  "difficulty": "expert",
+  "title": "Aquatic Primary Production",
+  "title_fr": "Production primaire aquatique",
+  "variables": [
+    { "id": "k_water",     "label": "water light attenuation coefficient", "label_fr": "coefficient d'atténuation de l'eau", "unit": "1/m", "domain": "biology" },
+    { "id": "k_phyto",     "label": "phytoplankton-specific attenuation", "label_fr": "atténuation spécifique du phytoplancton", "unit": "m²/mg", "domain": "biology" },
+    { "id": "C_phyto",     "label": "phytoplankton concentration", "label_fr": "concentration en phytoplancton", "unit": "mg/m³", "domain": "biology" },
+    { "id": "I0",          "label": "surface light intensity", "label_fr": "intensité lumineuse en surface", "unit": "W/m²", "domain": "biology" },
+    { "id": "z",           "label": "depth", "label_fr": "profondeur", "unit": "m", "domain": "biology" },
+    { "id": "E_photon",    "label": "energy per photon", "label_fr": "énergie par photon", "unit": "J", "domain": "biology" },
+    { "id": "alpha_yield", "label": "quantum yield of carbon fixation", "label_fr": "rendement quantique de fixation du carbone", "unit": "mol C / mol photons", "domain": "biology" },
+    { "id": "R_resp",      "label": "community respiration rate", "label_fr": "taux de respiration communautaire", "unit": "mol C/(m²·s)", "domain": "biology" },
+    { "id": "k_ext",       "label": "total extinction coefficient", "label_fr": "coefficient d'extinction total", "unit": "1/m", "domain": "biology" },
+    { "id": "I_z",         "label": "light intensity at depth z", "label_fr": "intensité lumineuse à la profondeur z", "unit": "W/m²", "domain": "biology" },
+    { "id": "phi",         "label": "photon flux density", "label_fr": "densité de flux de photons", "unit": "mol photons/(m²·s)", "domain": "biology" },
+    { "id": "GPP",         "label": "gross primary production", "label_fr": "production primaire brute", "unit": "mol C/(m²·s)", "domain": "biology" },
+    { "id": "NPP",         "label": "net primary production", "label_fr": "production primaire nette", "unit": "mol C/(m²·s)", "domain": "biology" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "k_ext = k_water + k_phyto · C_phyto",
+      "expression_fr": "k_ext = k_water + k_phyto · C_phyto",
+      "variableIds": ["k_ext", "k_water", "k_phyto", "C_phyto"],
+      "conceptName": "Total extinction coefficient (Beer–Lambert)",
+      "conceptName_fr": "Coefficient d'extinction total (Beer–Lambert)"
+    },
+    {
+      "id": "f2",
+      "expression": "I_z = I0 · e^(-k_ext · z)",
+      "expression_fr": "I_z = I0 · e^(-k_ext · z)",
+      "variableIds": ["I_z", "I0", "k_ext", "z"],
+      "conceptName": "Light attenuation with depth",
+      "conceptName_fr": "Atténuation de la lumière en profondeur"
+    },
+    {
+      "id": "f3",
+      "expression": "phi = I_z / E_photon",
+      "expression_fr": "phi = I_z / E_photon",
+      "variableIds": ["phi", "I_z", "E_photon"],
+      "conceptName": "Photon flux from irradiance",
+      "conceptName_fr": "Flux de photons à partir de l'irradiance"
+    },
+    {
+      "id": "f4",
+      "expression": "GPP = alpha_yield · phi",
+      "expression_fr": "GPP = alpha_yield · phi",
+      "variableIds": ["GPP", "alpha_yield", "phi"],
+      "conceptName": "Gross primary production",
+      "conceptName_fr": "Production primaire brute"
+    },
+    {
+      "id": "f5",
+      "expression": "NPP = GPP - R_resp",
+      "expression_fr": "NPP = GPP - R_resp",
+      "variableIds": ["NPP", "GPP", "R_resp"],
+      "conceptName": "Net primary production",
+      "conceptName_fr": "Production primaire nette"
+    }
+  ],
+  "hypotheses": ["k_water", "k_phyto", "C_phyto", "I0", "z", "E_photon", "alpha_yield", "R_resp"],
+  "conclusions": ["NPP"],
+  "optimalSteps": 5,
+  "solvable": true
+}

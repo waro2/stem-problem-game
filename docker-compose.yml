@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-stem_game}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stem_game}
+      POSTGRES_DB: ${POSTGRES_DB:-stem_game}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-stem_game}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: .
+      target: server
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://stem_game:stem_game@postgres:5432/stem_game}
+      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:-}
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: .
+      target: frontend
+    restart: unless-stopped
+    environment:
+      # Exposed to browser code as `import.meta.env.VITE_API_URL` — must be
+      # reachable from the browser (not just the Docker network), hence
+      # localhost rather than the `server` service name.
+      VITE_API_URL: ${API_URL:-http://localhost:3001}
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:

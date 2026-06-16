@@ -1,0 +1,55 @@
+{
+  "id": "p-dynamics-01",
+  "domain": "physics",
+  "difficulty": "advanced",
+  "title": "Kinematics and Momentum",
+  "title_fr": "Cinématique et quantité de mouvement",
+  "variables": [
+    { "id": "v0", "label": "initial velocity", "label_fr": "vitesse initiale", "unit": "m/s", "domain": "physics" },
+    { "id": "a", "label": "acceleration", "label_fr": "accélération", "unit": "m/s²", "domain": "physics" },
+    { "id": "t", "label": "time", "label_fr": "temps", "unit": "s", "domain": "physics" },
+    { "id": "v", "label": "final velocity", "label_fr": "vitesse finale", "unit": "m/s", "domain": "physics" },
+    { "id": "d", "label": "displacement", "label_fr": "déplacement", "unit": "m", "domain": "physics" },
+    { "id": "m", "label": "mass", "label_fr": "masse", "unit": "kg", "domain": "physics" },
+    { "id": "p", "label": "momentum", "label_fr": "quantité de mouvement", "unit": "kg·m/s", "domain": "physics" },
+    { "id": "Ek", "label": "kinetic energy", "label_fr": "énergie cinétique", "unit": "J", "domain": "physics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "v = v0 + a · t",
+      "expression_fr": "v = v0 + a · t",
+      "variableIds": ["v", "v0", "a", "t"],
+      "conceptName": "MRUA velocity equation",
+      "conceptName_fr": "Équation de vitesse MRUA"
+    },
+    {
+      "id": "f2",
+      "expression": "d = v0 · t + ½ · a · t²",
+      "expression_fr": "d = v0 · t + ½ · a · t²",
+      "variableIds": ["d", "v0", "a", "t"],
+      "conceptName": "MRUA displacement equation",
+      "conceptName_fr": "Équation de déplacement MRUA"
+    },
+    {
+      "id": "f3",
+      "expression": "p = m · v",
+      "expression_fr": "p = m · v",
+      "variableIds": ["p", "m", "v"],
+      "conceptName": "Linear momentum",
+      "conceptName_fr": "Quantité de mouvement"
+    },
+    {
+      "id": "f4",
+      "expression": "Ek = ½ · m · v²",
+      "expression_fr": "Ek = ½ · m · v²",
+      "variableIds": ["Ek", "m", "v"],
+      "conceptName": "Kinetic energy",
+      "conceptName_fr": "Énergie cinétique"
+    }
+  ],
+  "hypotheses": ["v0", "a", "t", "m"],
+  "conclusions": ["d", "p", "Ek"],
+  "optimalSteps": 4,
+  "solvable": true
+}

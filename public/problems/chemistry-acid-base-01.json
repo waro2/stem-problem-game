@@ -1,0 +1,35 @@
+{
+  "id": "p-acid-base-01",
+  "domain": "chemistry",
+  "difficulty": "beginner",
+  "title": "pH and pOH",
+  "title_fr": "pH et pOH",
+  "variables": [
+    { "id": "c_H",  "label": "H⁺ concentration", "label_fr": "concentration en H⁺", "unit": "mol/L", "domain": "chemistry" },
+    { "id": "pKw",  "label": "water ionisation constant (pKw)", "label_fr": "constante d'ionisation de l'eau (pKe)", "unit": "", "domain": "chemistry" },
+    { "id": "pH",   "label": "pH", "label_fr": "pH", "unit": "", "domain": "chemistry" },
+    { "id": "pOH",  "label": "pOH", "label_fr": "pOH", "unit": "", "domain": "chemistry" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "pH = -log(c_H)",
+      "expression_fr": "pH = -log(c_H)",
+      "variableIds": ["pH", "c_H"],
+      "conceptName": "Definition of pH",
+      "conceptName_fr": "Définition du pH"
+    },
+    {
+      "id": "f2",
+      "expression": "pOH = pKw - pH",
+      "expression_fr": "pOH = pKe - pH",
+      "variableIds": ["pOH", "pKw", "pH"],
+      "conceptName": "Acid–base water equilibrium",
+      "conceptName_fr": "Équilibre acido-basique de l'eau"
+    }
+  ],
+  "hypotheses": ["c_H", "pKw"],
+  "conclusions": ["pOH"],
+  "optimalSteps": 2,
+  "solvable": true
+}

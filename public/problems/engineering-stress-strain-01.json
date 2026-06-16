@@ -1,0 +1,37 @@
+{
+  "id": "p-stress-strain-01",
+  "domain": "engineering",
+  "difficulty": "beginner",
+  "title": "Stress and Strain",
+  "title_fr": "Contrainte et déformation",
+  "variables": [
+    { "id": "F_force",  "label": "applied force", "label_fr": "force appliquée", "unit": "N", "domain": "engineering" },
+    { "id": "A_area",   "label": "cross-sectional area", "label_fr": "section transversale", "unit": "m²", "domain": "engineering" },
+    { "id": "delta_L",  "label": "elongation", "label_fr": "allongement", "unit": "m", "domain": "engineering" },
+    { "id": "L_orig",   "label": "original length", "label_fr": "longueur initiale", "unit": "m", "domain": "engineering" },
+    { "id": "sigma",    "label": "normal stress σ", "label_fr": "contrainte normale σ", "unit": "Pa", "domain": "engineering" },
+    { "id": "epsilon",  "label": "axial strain ε", "label_fr": "déformation axiale ε", "unit": "", "domain": "engineering" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "sigma = F_force / A_area",
+      "expression_fr": "sigma = F_force / A_area",
+      "variableIds": ["sigma", "F_force", "A_area"],
+      "conceptName": "Normal stress definition",
+      "conceptName_fr": "Définition de la contrainte normale"
+    },
+    {
+      "id": "f2",
+      "expression": "epsilon = delta_L / L_orig",
+      "expression_fr": "epsilon = delta_L / L_orig",
+      "variableIds": ["epsilon", "delta_L", "L_orig"],
+      "conceptName": "Engineering strain definition",
+      "conceptName_fr": "Définition de la déformation ingénieur"
+    }
+  ],
+  "hypotheses": ["F_force", "A_area", "delta_L", "L_orig"],
+  "conclusions": ["sigma", "epsilon"],
+  "optimalSteps": 2,
+  "solvable": true
+}

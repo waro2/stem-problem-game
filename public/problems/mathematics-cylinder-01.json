@@ -1,0 +1,53 @@
+{
+  "id": "p-cylinder-01",
+  "domain": "mathematics",
+  "difficulty": "advanced",
+  "title": "Cylinder Geometry",
+  "title_fr": "Géométrie du cylindre",
+  "variables": [
+    { "id": "r",     "label": "radius", "label_fr": "rayon", "unit": "m", "domain": "mathematics" },
+    { "id": "h",     "label": "height", "label_fr": "hauteur", "unit": "m", "domain": "mathematics" },
+    { "id": "A_base","label": "base area", "label_fr": "aire de la base", "unit": "m²", "domain": "mathematics" },
+    { "id": "V_cyl", "label": "cylinder volume", "label_fr": "volume du cylindre", "unit": "m³", "domain": "mathematics" },
+    { "id": "circ",  "label": "circumference", "label_fr": "circonférence", "unit": "m", "domain": "mathematics" },
+    { "id": "A_lat", "label": "lateral surface area", "label_fr": "aire latérale", "unit": "m²", "domain": "mathematics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "A_base = π · r²",
+      "expression_fr": "A_base = π · r²",
+      "variableIds": ["A_base", "r"],
+      "conceptName": "Area of a circle",
+      "conceptName_fr": "Aire d'un disque"
+    },
+    {
+      "id": "f2",
+      "expression": "V_cyl = A_base · h",
+      "expression_fr": "V_cyl = A_base · h",
+      "variableIds": ["V_cyl", "A_base", "h"],
+      "conceptName": "Volume of a cylinder",
+      "conceptName_fr": "Volume d'un cylindre"
+    },
+    {
+      "id": "f3",
+      "expression": "circ = 2 · π · r",
+      "expression_fr": "circ = 2 · π · r",
+      "variableIds": ["circ", "r"],
+      "conceptName": "Circumference of a circle",
+      "conceptName_fr": "Périmètre d'un cercle"
+    },
+    {
+      "id": "f4",
+      "expression": "A_lat = circ · h",
+      "expression_fr": "A_lat = circ · h",
+      "variableIds": ["A_lat", "circ", "h"],
+      "conceptName": "Lateral surface of a cylinder",
+      "conceptName_fr": "Surface latérale d'un cylindre"
+    }
+  ],
+  "hypotheses": ["r", "h"],
+  "conclusions": ["V_cyl", "A_lat"],
+  "optimalSteps": 4,
+  "solvable": true
+}

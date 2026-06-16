@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables — never commit
+.env
+.env.local
+.env.*.local
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Test outputs
+/test-results/
+/playwright-report/
+/coverage/
+
+# Capacitor: commit ios/ and android/ — they're part of the native project.
+# Only exclude auto-generated pods (restored by `pod install`) and Gradle caches.
+ios/App/Pods/
+ios/App/.xcode.env.local
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties

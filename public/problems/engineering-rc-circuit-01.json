@@ -1,0 +1,55 @@
+{
+  "id": "p-rc-circuit-01",
+  "domain": "engineering",
+  "difficulty": "advanced",
+  "title": "RC Circuit Charging",
+  "title_fr": "Charge d'un circuit RC",
+  "variables": [
+    { "id": "R_res",  "label": "resistance", "label_fr": "résistance", "unit": "Ω", "domain": "engineering" },
+    { "id": "C_cap",  "label": "capacitance", "label_fr": "capacité", "unit": "F", "domain": "engineering" },
+    { "id": "V_s",    "label": "supply voltage", "label_fr": "tension d'alimentation", "unit": "V", "domain": "engineering" },
+    { "id": "t_time", "label": "time", "label_fr": "temps", "unit": "s", "domain": "engineering" },
+    { "id": "tau",    "label": "time constant τ", "label_fr": "constante de temps τ", "unit": "s", "domain": "engineering" },
+    { "id": "V_c",    "label": "capacitor voltage", "label_fr": "tension aux bornes du condensateur", "unit": "V", "domain": "engineering" },
+    { "id": "I_c",    "label": "capacitor current", "label_fr": "courant dans le condensateur", "unit": "A", "domain": "engineering" },
+    { "id": "P_rc",   "label": "instantaneous power", "label_fr": "puissance instantanée", "unit": "W", "domain": "engineering" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "tau = R_res · C_cap",
+      "expression_fr": "tau = R_res · C_cap",
+      "variableIds": ["tau", "R_res", "C_cap"],
+      "conceptName": "RC time constant",
+      "conceptName_fr": "Constante de temps RC"
+    },
+    {
+      "id": "f2",
+      "expression": "V_c = V_s · (1 - e^(-t_time / tau))",
+      "expression_fr": "V_c = V_s · (1 - e^(-t_time / tau))",
+      "variableIds": ["V_c", "V_s", "t_time", "tau"],
+      "conceptName": "Capacitor charging voltage",
+      "conceptName_fr": "Tension de charge du condensateur"
+    },
+    {
+      "id": "f3",
+      "expression": "I_c = (V_s - V_c) / R_res",
+      "expression_fr": "I_c = (V_s - V_c) / R_res",
+      "variableIds": ["I_c", "V_s", "V_c", "R_res"],
+      "conceptName": "Charging current",
+      "conceptName_fr": "Courant de charge"
+    },
+    {
+      "id": "f4",
+      "expression": "P_rc = V_c · I_c",
+      "expression_fr": "P_rc = V_c · I_c",
+      "variableIds": ["P_rc", "V_c", "I_c"],
+      "conceptName": "Instantaneous power",
+      "conceptName_fr": "Puissance instantanée"
+    }
+  ],
+  "hypotheses": ["R_res", "C_cap", "V_s", "t_time"],
+  "conclusions": ["P_rc"],
+  "optimalSteps": 4,
+  "solvable": true
+}

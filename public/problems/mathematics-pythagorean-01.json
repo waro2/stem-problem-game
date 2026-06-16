@@ -1,0 +1,35 @@
+{
+  "id": "p-pythagorean-01",
+  "domain": "mathematics",
+  "difficulty": "beginner",
+  "title": "Right Triangle",
+  "title_fr": "Triangle rectangle",
+  "variables": [
+    { "id": "a",     "label": "leg a", "label_fr": "côté a", "unit": "m", "domain": "mathematics" },
+    { "id": "b",     "label": "leg b", "label_fr": "côté b", "unit": "m", "domain": "mathematics" },
+    { "id": "c_hyp", "label": "hypotenuse", "label_fr": "hypoténuse", "unit": "m", "domain": "mathematics" },
+    { "id": "A_tri", "label": "triangle area", "label_fr": "aire du triangle", "unit": "m²", "domain": "mathematics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "c_hyp = √(a² + b²)",
+      "expression_fr": "c_hyp = √(a² + b²)",
+      "variableIds": ["c_hyp", "a", "b"],
+      "conceptName": "Pythagorean theorem",
+      "conceptName_fr": "Théorème de Pythagore"
+    },
+    {
+      "id": "f2",
+      "expression": "A_tri = ½ · a · b",
+      "expression_fr": "A_tri = ½ · a · b",
+      "variableIds": ["A_tri", "a", "b"],
+      "conceptName": "Area of a right triangle",
+      "conceptName_fr": "Aire d'un triangle rectangle"
+    }
+  ],
+  "hypotheses": ["a", "b"],
+  "conclusions": ["c_hyp", "A_tri"],
+  "optimalSteps": 2,
+  "solvable": true
+}

@@ -1,0 +1,57 @@
+{
+  "id": "p-enzyme-kinetics-01",
+  "domain": "biology",
+  "difficulty": "advanced",
+  "title": "Enzyme Inhibition",
+  "title_fr": "Inhibition enzymatique",
+  "variables": [
+    { "id": "k_cat",   "label": "catalytic rate constant kcat", "label_fr": "constante catalytique kcat", "unit": "1/s", "domain": "biology" },
+    { "id": "E_t",     "label": "total enzyme concentration", "label_fr": "concentration totale en enzyme", "unit": "mol/L", "domain": "biology" },
+    { "id": "S_conc",  "label": "substrate concentration [S]", "label_fr": "concentration en substrat [S]", "unit": "mol/L", "domain": "biology" },
+    { "id": "K_m",     "label": "Michaelis constant Km", "label_fr": "constante de Michaelis Km", "unit": "mol/L", "domain": "biology" },
+    { "id": "I_conc",  "label": "inhibitor concentration [I]", "label_fr": "concentration en inhibiteur [I]", "unit": "mol/L", "domain": "biology" },
+    { "id": "K_i",     "label": "inhibition constant Ki", "label_fr": "constante d'inhibition Ki", "unit": "mol/L", "domain": "biology" },
+    { "id": "V_max",   "label": "maximum velocity Vmax", "label_fr": "vitesse maximale Vmax", "unit": "mol/(L·s)", "domain": "biology" },
+    { "id": "v_rate",  "label": "uninhibited reaction velocity", "label_fr": "vitesse de réaction sans inhibiteur", "unit": "mol/(L·s)", "domain": "biology" },
+    { "id": "alpha",   "label": "inhibition factor α", "label_fr": "facteur d'inhibition α", "unit": "", "domain": "biology" },
+    { "id": "v_inh",   "label": "inhibited velocity", "label_fr": "vitesse en présence d'inhibiteur", "unit": "mol/(L·s)", "domain": "biology" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "V_max = k_cat · E_t",
+      "expression_fr": "V_max = k_cat · E_t",
+      "variableIds": ["V_max", "k_cat", "E_t"],
+      "conceptName": "Maximum velocity from kcat",
+      "conceptName_fr": "Vitesse maximale à partir de kcat"
+    },
+    {
+      "id": "f2",
+      "expression": "v_rate = V_max · S_conc / (K_m + S_conc)",
+      "expression_fr": "v_rate = V_max · S_conc / (K_m + S_conc)",
+      "variableIds": ["v_rate", "V_max", "S_conc", "K_m"],
+      "conceptName": "Michaelis–Menten equation",
+      "conceptName_fr": "Équation de Michaelis–Menten"
+    },
+    {
+      "id": "f3",
+      "expression": "alpha = 1 + I_conc / K_i",
+      "expression_fr": "alpha = 1 + I_conc / K_i",
+      "variableIds": ["alpha", "I_conc", "K_i"],
+      "conceptName": "Competitive inhibition factor",
+      "conceptName_fr": "Facteur d'inhibition compétitive"
+    },
+    {
+      "id": "f4",
+      "expression": "v_inh = v_rate / alpha",
+      "expression_fr": "v_inh = v_rate / alpha",
+      "variableIds": ["v_inh", "v_rate", "alpha"],
+      "conceptName": "Inhibited reaction velocity",
+      "conceptName_fr": "Vitesse réduite par l'inhibiteur"
+    }
+  ],
+  "hypotheses": ["k_cat", "E_t", "S_conc", "K_m", "I_conc", "K_i"],
+  "conclusions": ["v_inh"],
+  "optimalSteps": 4,
+  "solvable": true
+}

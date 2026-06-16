@@ -1,0 +1,45 @@
+{
+  "id": "p-optics-01",
+  "domain": "physics",
+  "difficulty": "intermediate",
+  "title": "Thin Lens Image",
+  "title_fr": "Image par une lentille mince",
+  "variables": [
+    { "id": "d_o", "label": "object distance", "label_fr": "distance objet", "unit": "m", "domain": "physics" },
+    { "id": "f", "label": "focal length", "label_fr": "distance focale", "unit": "m", "domain": "physics" },
+    { "id": "d_i", "label": "image distance", "label_fr": "distance image", "unit": "m", "domain": "physics" },
+    { "id": "m_g", "label": "magnification", "label_fr": "grandissement", "unit": "", "domain": "physics" },
+    { "id": "h_o", "label": "object height", "label_fr": "hauteur objet", "unit": "m", "domain": "physics" },
+    { "id": "h_i", "label": "image height", "label_fr": "hauteur image", "unit": "m", "domain": "physics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "1/f = 1/d_o + 1/d_i",
+      "expression_fr": "1/f = 1/d_o + 1/d_i",
+      "variableIds": ["f", "d_o", "d_i"],
+      "conceptName": "Thin lens formula",
+      "conceptName_fr": "Relation conjuguée"
+    },
+    {
+      "id": "f2",
+      "expression": "m_g = -d_i / d_o",
+      "expression_fr": "m_g = -d_i / d_o",
+      "variableIds": ["m_g", "d_i", "d_o"],
+      "conceptName": "Transverse magnification",
+      "conceptName_fr": "Grandissement transversal"
+    },
+    {
+      "id": "f3",
+      "expression": "h_i = m_g · h_o",
+      "expression_fr": "h_i = m_g · h_o",
+      "variableIds": ["h_i", "m_g", "h_o"],
+      "conceptName": "Image height",
+      "conceptName_fr": "Hauteur de l'image"
+    }
+  ],
+  "hypotheses": ["d_o", "f", "h_o"],
+  "conclusions": ["h_i"],
+  "optimalSteps": 3,
+  "solvable": true
+}

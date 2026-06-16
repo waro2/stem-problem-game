@@ -1,0 +1,47 @@
+{
+  "id": "p-heat-transfer-01",
+  "domain": "engineering",
+  "difficulty": "intermediate",
+  "title": "Fourier Heat Conduction",
+  "title_fr": "Conduction thermique de Fourier",
+  "variables": [
+    { "id": "T1",      "label": "hot surface temperature", "label_fr": "température de la surface chaude", "unit": "K", "domain": "engineering" },
+    { "id": "T2",      "label": "cold surface temperature", "label_fr": "température de la surface froide", "unit": "K", "domain": "engineering" },
+    { "id": "k_cond",  "label": "thermal conductivity", "label_fr": "conductivité thermique", "unit": "W/(m·K)", "domain": "engineering" },
+    { "id": "A_wall",  "label": "wall area", "label_fr": "surface de la paroi", "unit": "m²", "domain": "engineering" },
+    { "id": "L_wall",  "label": "wall thickness", "label_fr": "épaisseur de la paroi", "unit": "m", "domain": "engineering" },
+    { "id": "delta_T", "label": "temperature difference ΔT", "label_fr": "différence de température ΔT", "unit": "K", "domain": "engineering" },
+    { "id": "R_therm", "label": "thermal resistance", "label_fr": "résistance thermique", "unit": "K/W", "domain": "engineering" },
+    { "id": "Q_dot",   "label": "heat transfer rate", "label_fr": "flux thermique", "unit": "W", "domain": "engineering" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "delta_T = T1 - T2",
+      "expression_fr": "delta_T = T1 - T2",
+      "variableIds": ["delta_T", "T1", "T2"],
+      "conceptName": "Temperature driving force",
+      "conceptName_fr": "Force motrice thermique"
+    },
+    {
+      "id": "f2",
+      "expression": "R_therm = L_wall / (k_cond · A_wall)",
+      "expression_fr": "R_therm = L_wall / (k_cond · A_wall)",
+      "variableIds": ["R_therm", "L_wall", "k_cond", "A_wall"],
+      "conceptName": "Thermal resistance of a plane wall",
+      "conceptName_fr": "Résistance thermique d'une paroi plane"
+    },
+    {
+      "id": "f3",
+      "expression": "Q_dot = delta_T / R_therm",
+      "expression_fr": "Q_dot = delta_T / R_therm",
+      "variableIds": ["Q_dot", "delta_T", "R_therm"],
+      "conceptName": "Fourier's law (1-D steady state)",
+      "conceptName_fr": "Loi de Fourier (régime permanent 1-D)"
+    }
+  ],
+  "hypotheses": ["T1", "T2", "k_cond", "A_wall", "L_wall"],
+  "conclusions": ["Q_dot"],
+  "optimalSteps": 3,
+  "solvable": true
+}

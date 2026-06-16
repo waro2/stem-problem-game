@@ -1,0 +1,177 @@
+// STEM Problem Game — Prisma Schema
+// Source: GDD §8 (Data Collection Architecture)
+// Run: npx prisma generate && npx prisma migrate dev
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────
+
+enum Domain {
+  physics
+  chemistry
+  mathematics
+  biology
+  engineering
+}
+
+enum Difficulty {
+  beginner
+  intermediate
+  advanced
+  expert
+}
+
+enum Platform {
+  web
+  ios
+  android
+}
+
+enum GameOutcome {
+  win
+  stuck
+}
+
+enum UserRole {
+  student
+  instructor
+  researcher
+  admin
+}
+
+// ─────────────────────────────────────────────
+// Models
+// ─────────────────────────────────────────────
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  name           String?
+  role           UserRole  @default(student)
+  cohort         Cohort?   @relation("CohortMembers", fields: [cohortId], references: [id])
+  cohortId       String?
+  cohortsManaged Cohort[]  @relation("CohortInstructor")
+  sessions       Session[]
+  createdAt      DateTime  @default(now())
+  deletedAt      DateTime? // soft delete (GDPR)
+  consentGivenAt DateTime? // GDPR consent decision timestamp, set on first login (accept or refuse)
+  analyticsConsent Boolean? // true = accepted, false = refused, null = not yet decided
+
+  @@map("users")
+}
+
+model Cohort {
+  id                 String   @id @default(uuid())
+  name               String
+  instructor         User     @relation("CohortInstructor", fields: [instructorId], references: [id])
+  instructorId       String
+  scoreConfig        Json?    // ScoreConfig overrides
+  // Shown on the student-facing LeaderboardPanel only when true (GDD §6.4)
+  leaderboardEnabled Boolean  @default(false) @map("leaderboard_enabled")
+  members            User[]   @relation("CohortMembers")
+  createdAt          DateTime @default(now())
+
+  @@map("cohorts")
+}
+
+model Problem {
+  id           String     @id                // e.g. "p-kinematics-01"
+  domain       Domain
+  difficulty   Difficulty
+  titleEn      String
+  titleFr      String
+  variables    Json                          // Variable[]
+  formulas     Json                          // Formula[]
+  hypotheses   String[]                      // variable IDs
+  conclusions  String[]                      // variable IDs
+  optimalSteps Int
+  solvable     Boolean    @default(true)
+  sessions     Session[]
+  stats        ProblemStats?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("problems")
+}
+
+model Event {
+  id         BigInt   @id @default(autoincrement())
+  userId     String
+  problemId  String?
+  eventType  String
+  payload    Json
+  platform   Platform?
+  receivedAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([eventType])
+  @@index([receivedAt(sort: Desc)])
+  @@map("events")
+}
+
+model Session {
+  id                  String      @id @default(uuid())
+  user                User        @relation(fields: [userId], references: [id])
+  userId              String
+  problem             Problem     @relation(fields: [problemId], references: [id])
+  problemId           String
+  platform            Platform
+  outcome             GameOutcome?
+  totalSteps          Int?
+  optimalSteps        Int?
+  timeElapsedSeconds  Float?
+  hintsUsed           Int         @default(0)
+  finalScore          Int?
+  stepEfficiencyRatio Float?      // optimalSteps / totalSteps
+  activationPath      String[]    // ordered formula IDs
+  startedAt           DateTime
+  completedAt         DateTime?
+
+  @@index([userId])
+  @@index([problemId])
+  @@index([startedAt(sort: Desc)])
+  @@map("sessions")
+}
+
+// Nightly aggregates (GDD §8.3)
+model StudentDomainStats {
+  userId            String
+  domain            Domain
+  problemsAttempted Int      @default(0)
+  problemsCompleted Int      @default(0)
+  totalSessions     Int      @default(0)
+  avgScore          Float?
+  avgEfficiency     Float?
+  avgHintsPerProb   Float?
+  completionRate    Float?
+  lastPlayedAt      DateTime?
+  updatedAt         DateTime @updatedAt
+
+  @@id([userId, domain])
+  @@map("student_domain_stats")
+}
+
+model ProblemStats {
+  problemId       String   @id
+  problem         Problem  @relation(fields: [problemId], references: [id])
+  totalAttempts   Int      @default(0)
+  totalCompletions Int     @default(0)
+  completionRate  Float?
+  avgScore        Float?
+  avgSteps        Float?
+  avgTimeSeconds  Float?
+  avgHints        Float?
+  p50Efficiency   Float?
+  updatedAt       DateTime @updatedAt
+
+  @@map("problem_stats")
+}

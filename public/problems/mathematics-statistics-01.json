@@ -1,0 +1,65 @@
+{
+  "id": "p-statistics-01",
+  "domain": "mathematics",
+  "difficulty": "expert",
+  "title": "Hypothesis Test & Confidence Interval",
+  "title_fr": "Test d'hypothèse et intervalle de confiance",
+  "variables": [
+    { "id": "s_std",    "label": "sample standard deviation s", "label_fr": "écart-type de l'échantillon s", "unit": "", "domain": "mathematics" },
+    { "id": "n_count",  "label": "sample size n", "label_fr": "taille de l'échantillon n", "unit": "", "domain": "mathematics" },
+    { "id": "x_bar",    "label": "sample mean x̄", "label_fr": "moyenne de l'échantillon x̄", "unit": "", "domain": "mathematics" },
+    { "id": "mu_0",     "label": "hypothesised mean μ₀", "label_fr": "moyenne hypothétique μ₀", "unit": "", "domain": "mathematics" },
+    { "id": "t_crit",   "label": "critical t-value", "label_fr": "valeur critique de t", "unit": "", "domain": "mathematics" },
+    { "id": "SE",       "label": "standard error", "label_fr": "erreur standard", "unit": "", "domain": "mathematics" },
+    { "id": "t_stat",   "label": "t-statistic", "label_fr": "statistique t", "unit": "", "domain": "mathematics" },
+    { "id": "df",       "label": "degrees of freedom", "label_fr": "degrés de liberté", "unit": "", "domain": "mathematics" },
+    { "id": "CI_width", "label": "confidence interval half-width", "label_fr": "demi-largeur de l'intervalle de confiance", "unit": "", "domain": "mathematics" },
+    { "id": "lower_CI", "label": "lower confidence bound", "label_fr": "borne inférieure de confiance", "unit": "", "domain": "mathematics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "SE = s_std / √n_count",
+      "expression_fr": "SE = s_std / √n_count",
+      "variableIds": ["SE", "s_std", "n_count"],
+      "conceptName": "Standard error of the mean",
+      "conceptName_fr": "Erreur standard de la moyenne"
+    },
+    {
+      "id": "f2",
+      "expression": "t_stat = (x_bar - mu_0) / SE",
+      "expression_fr": "t_stat = (x_bar - mu_0) / SE",
+      "variableIds": ["t_stat", "x_bar", "mu_0", "SE"],
+      "conceptName": "One-sample t-statistic",
+      "conceptName_fr": "Statistique t à un échantillon"
+    },
+    {
+      "id": "f3",
+      "expression": "df = n_count - 1",
+      "expression_fr": "df = n_count - 1",
+      "variableIds": ["df", "n_count"],
+      "conceptName": "Degrees of freedom",
+      "conceptName_fr": "Degrés de liberté"
+    },
+    {
+      "id": "f4",
+      "expression": "CI_width = t_crit · SE",
+      "expression_fr": "CI_width = t_crit · SE",
+      "variableIds": ["CI_width", "t_crit", "SE"],
+      "conceptName": "Confidence interval margin",
+      "conceptName_fr": "Marge de l'intervalle de confiance"
+    },
+    {
+      "id": "f5",
+      "expression": "lower_CI = x_bar - CI_width",
+      "expression_fr": "lower_CI = x_bar - CI_width",
+      "variableIds": ["lower_CI", "x_bar", "CI_width"],
+      "conceptName": "Lower confidence bound",
+      "conceptName_fr": "Borne inférieure de confiance"
+    }
+  ],
+  "hypotheses": ["s_std", "n_count", "x_bar", "mu_0", "t_crit"],
+  "conclusions": ["t_stat", "df", "lower_CI"],
+  "optimalSteps": 5,
+  "solvable": true
+}

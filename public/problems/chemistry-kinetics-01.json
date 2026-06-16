@@ -1,0 +1,57 @@
+{
+  "id": "p-kinetics-01",
+  "domain": "chemistry",
+  "difficulty": "advanced",
+  "title": "Reaction Calorimetry",
+  "title_fr": "Calorimétrie de réaction",
+  "variables": [
+    { "id": "k_rate", "label": "rate constant", "label_fr": "constante de vitesse", "unit": "1/s", "domain": "chemistry" },
+    { "id": "c_A",    "label": "concentration of A", "label_fr": "concentration de A", "unit": "mol/L", "domain": "chemistry" },
+    { "id": "t_rxn",  "label": "reaction time", "label_fr": "durée de réaction", "unit": "s", "domain": "chemistry" },
+    { "id": "dH",     "label": "reaction enthalpy", "label_fr": "enthalpie de réaction", "unit": "J/mol", "domain": "chemistry" },
+    { "id": "m_sol",  "label": "solution mass", "label_fr": "masse de la solution", "unit": "g", "domain": "chemistry" },
+    { "id": "c_sp",   "label": "specific heat capacity", "label_fr": "capacité thermique massique", "unit": "J/(g·K)", "domain": "chemistry" },
+    { "id": "r_rate", "label": "reaction rate", "label_fr": "vitesse de réaction", "unit": "mol/(L·s)", "domain": "chemistry" },
+    { "id": "n_r",    "label": "moles reacted", "label_fr": "moles ayant réagi", "unit": "mol", "domain": "chemistry" },
+    { "id": "Q_rxn",  "label": "heat released", "label_fr": "chaleur libérée", "unit": "J", "domain": "chemistry" },
+    { "id": "dT",     "label": "temperature change", "label_fr": "variation de température", "unit": "K", "domain": "chemistry" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "r_rate = k_rate · c_A",
+      "expression_fr": "r_rate = k_rate · c_A",
+      "variableIds": ["r_rate", "k_rate", "c_A"],
+      "conceptName": "First-order rate law",
+      "conceptName_fr": "Loi de vitesse d'ordre 1"
+    },
+    {
+      "id": "f2",
+      "expression": "n_r = r_rate · t_rxn",
+      "expression_fr": "n_r = r_rate · t_rxn",
+      "variableIds": ["n_r", "r_rate", "t_rxn"],
+      "conceptName": "Moles reacted at constant rate",
+      "conceptName_fr": "Moles consommées à vitesse constante"
+    },
+    {
+      "id": "f3",
+      "expression": "Q_rxn = n_r · dH",
+      "expression_fr": "Q_rxn = n_r · dH",
+      "variableIds": ["Q_rxn", "n_r", "dH"],
+      "conceptName": "Hess's law (heat from enthalpy)",
+      "conceptName_fr": "Loi de Hess (chaleur par enthalpie)"
+    },
+    {
+      "id": "f4",
+      "expression": "dT = Q_rxn / (m_sol · c_sp)",
+      "expression_fr": "dT = Q_rxn / (m_sol · c_sp)",
+      "variableIds": ["dT", "Q_rxn", "m_sol", "c_sp"],
+      "conceptName": "Calorimetry — temperature rise",
+      "conceptName_fr": "Calorimétrie — élévation de température"
+    }
+  ],
+  "hypotheses": ["k_rate", "c_A", "t_rxn", "dH", "m_sol", "c_sp"],
+  "conclusions": ["dT"],
+  "optimalSteps": 4,
+  "solvable": true
+}

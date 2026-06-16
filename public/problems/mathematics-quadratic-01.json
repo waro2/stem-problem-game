@@ -1,0 +1,45 @@
+{
+  "id": "p-quadratic-01",
+  "domain": "mathematics",
+  "difficulty": "intermediate",
+  "title": "Quadratic Roots",
+  "title_fr": "Racines d'un trinôme",
+  "variables": [
+    { "id": "a_coef", "label": "leading coefficient a", "label_fr": "coefficient dominant a", "unit": "", "domain": "mathematics" },
+    { "id": "b_coef", "label": "coefficient b", "label_fr": "coefficient b", "unit": "", "domain": "mathematics" },
+    { "id": "c_coef", "label": "constant term c", "label_fr": "terme constant c", "unit": "", "domain": "mathematics" },
+    { "id": "delta",  "label": "discriminant Δ", "label_fr": "discriminant Δ", "unit": "", "domain": "mathematics" },
+    { "id": "x1",     "label": "first root x₁", "label_fr": "première racine x₁", "unit": "", "domain": "mathematics" },
+    { "id": "sum_r",  "label": "sum of roots x₁ + x₂", "label_fr": "somme des racines x₁ + x₂", "unit": "", "domain": "mathematics" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "delta = b_coef² - 4 · a_coef · c_coef",
+      "expression_fr": "delta = b_coef² - 4 · a_coef · c_coef",
+      "variableIds": ["delta", "a_coef", "b_coef", "c_coef"],
+      "conceptName": "Discriminant",
+      "conceptName_fr": "Discriminant"
+    },
+    {
+      "id": "f2",
+      "expression": "x1 = (-b_coef + √delta) / (2 · a_coef)",
+      "expression_fr": "x1 = (-b_coef + √delta) / (2 · a_coef)",
+      "variableIds": ["x1", "a_coef", "b_coef", "delta"],
+      "conceptName": "Quadratic formula (first root)",
+      "conceptName_fr": "Formule quadratique (première racine)"
+    },
+    {
+      "id": "f3",
+      "expression": "sum_r = -b_coef / a_coef",
+      "expression_fr": "sum_r = -b_coef / a_coef",
+      "variableIds": ["sum_r", "a_coef", "b_coef"],
+      "conceptName": "Vieta's sum of roots",
+      "conceptName_fr": "Formule de Viète — somme des racines"
+    }
+  ],
+  "hypotheses": ["a_coef", "b_coef", "c_coef"],
+  "conclusions": ["x1", "sum_r"],
+  "optimalSteps": 3,
+  "solvable": true
+}

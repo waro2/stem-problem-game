@@ -1,0 +1,43 @@
+{
+  "id": "p-hardy-weinberg-01",
+  "domain": "biology",
+  "difficulty": "intermediate",
+  "title": "Hardy–Weinberg Equilibrium",
+  "title_fr": "Équilibre de Hardy–Weinberg",
+  "variables": [
+    { "id": "p_allele",   "label": "dominant allele frequency (p)", "label_fr": "fréquence de l'allèle dominant (p)", "unit": "", "domain": "biology" },
+    { "id": "q_allele",   "label": "recessive allele frequency (q)", "label_fr": "fréquence de l'allèle récessif (q)", "unit": "", "domain": "biology" },
+    { "id": "pq_freq",    "label": "heterozygote genotype frequency (2pq)", "label_fr": "fréquence des hétérozygotes (2pq)", "unit": "", "domain": "biology" },
+    { "id": "q_sq_freq",  "label": "recessive homozygote frequency (q²)", "label_fr": "fréquence des homozygotes récessifs (q²)", "unit": "", "domain": "biology" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "q_allele = 1 - p_allele",
+      "expression_fr": "q_allele = 1 - p_allele",
+      "variableIds": ["q_allele", "p_allele"],
+      "conceptName": "Allele frequency complement",
+      "conceptName_fr": "Complémentarité des fréquences alléliques"
+    },
+    {
+      "id": "f2",
+      "expression": "pq_freq = 2 · p_allele · q_allele",
+      "expression_fr": "pq_freq = 2 · p_allele · q_allele",
+      "variableIds": ["pq_freq", "p_allele", "q_allele"],
+      "conceptName": "Heterozygote frequency",
+      "conceptName_fr": "Fréquence des hétérozygotes"
+    },
+    {
+      "id": "f3",
+      "expression": "q_sq_freq = q_allele²",
+      "expression_fr": "q_sq_freq = q_allele²",
+      "variableIds": ["q_sq_freq", "q_allele"],
+      "conceptName": "Recessive homozygote frequency",
+      "conceptName_fr": "Fréquence des homozygotes récessifs"
+    }
+  ],
+  "hypotheses": ["p_allele"],
+  "conclusions": ["pq_freq", "q_sq_freq"],
+  "optimalSteps": 3,
+  "solvable": true
+}

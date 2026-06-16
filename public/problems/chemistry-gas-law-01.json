@@ -1,0 +1,48 @@
+{
+  "id": "p-gas-law-01",
+  "domain": "chemistry",
+  "difficulty": "intermediate",
+  "title": "Ideal Gas Work",
+  "title_fr": "Travail d'un gaz parfait",
+  "variables": [
+    { "id": "m_mass", "label": "mass of gas", "label_fr": "masse du gaz", "unit": "g", "domain": "chemistry" },
+    { "id": "M_r",    "label": "molar mass", "label_fr": "masse molaire", "unit": "g/mol", "domain": "chemistry" },
+    { "id": "R_gas",  "label": "ideal gas constant", "label_fr": "constante des gaz parfaits", "unit": "J/(mol·K)", "domain": "chemistry" },
+    { "id": "T_temp", "label": "temperature", "label_fr": "température", "unit": "K", "domain": "chemistry" },
+    { "id": "V_vol",  "label": "volume", "label_fr": "volume", "unit": "m³", "domain": "chemistry" },
+    { "id": "dV",     "label": "volume change", "label_fr": "variation de volume", "unit": "m³", "domain": "chemistry" },
+    { "id": "n_mol",  "label": "amount of substance", "label_fr": "quantité de matière", "unit": "mol", "domain": "chemistry" },
+    { "id": "P_press","label": "pressure", "label_fr": "pression", "unit": "Pa", "domain": "chemistry" },
+    { "id": "W_work", "label": "work done by gas", "label_fr": "travail fourni par le gaz", "unit": "J", "domain": "chemistry" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "n_mol = m_mass / M_r",
+      "expression_fr": "n_mol = m_mass / M_r",
+      "variableIds": ["n_mol", "m_mass", "M_r"],
+      "conceptName": "Moles from mass",
+      "conceptName_fr": "Quantité de matière à partir de la masse"
+    },
+    {
+      "id": "f2",
+      "expression": "P_press = n_mol · R_gas · T_temp / V_vol",
+      "expression_fr": "P_press = n_mol · R_gas · T_temp / V_vol",
+      "variableIds": ["P_press", "n_mol", "R_gas", "T_temp", "V_vol"],
+      "conceptName": "Ideal gas law",
+      "conceptName_fr": "Loi des gaz parfaits"
+    },
+    {
+      "id": "f3",
+      "expression": "W_work = P_press · dV",
+      "expression_fr": "W_work = P_press · dV",
+      "variableIds": ["W_work", "P_press", "dV"],
+      "conceptName": "Work in isobaric expansion",
+      "conceptName_fr": "Travail lors d'une détente isobare"
+    }
+  ],
+  "hypotheses": ["m_mass", "M_r", "R_gas", "T_temp", "V_vol", "dV"],
+  "conclusions": ["W_work"],
+  "optimalSteps": 3,
+  "solvable": true
+}

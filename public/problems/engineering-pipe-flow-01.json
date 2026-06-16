@@ -1,0 +1,66 @@
+{
+  "id": "p-pipe-flow-01",
+  "domain": "engineering",
+  "difficulty": "expert",
+  "title": "Pipe Flow Safety",
+  "title_fr": "Sécurité d'écoulement en conduite",
+  "variables": [
+    { "id": "rho_f",       "label": "fluid density", "label_fr": "masse volumique du fluide", "unit": "kg/m³", "domain": "engineering" },
+    { "id": "v_f",         "label": "flow velocity", "label_fr": "vitesse d'écoulement", "unit": "m/s", "domain": "engineering" },
+    { "id": "D_pipe",      "label": "pipe diameter", "label_fr": "diamètre de la conduite", "unit": "m", "domain": "engineering" },
+    { "id": "mu_dyn",      "label": "dynamic viscosity", "label_fr": "viscosité dynamique", "unit": "Pa·s", "domain": "engineering" },
+    { "id": "L_pipe",      "label": "pipe length", "label_fr": "longueur de la conduite", "unit": "m", "domain": "engineering" },
+    { "id": "S_y",         "label": "yield strength of pipe material", "label_fr": "limite d'élasticité du matériau", "unit": "Pa", "domain": "engineering" },
+    { "id": "Re_num",      "label": "Reynolds number", "label_fr": "nombre de Reynolds", "unit": "", "domain": "engineering" },
+    { "id": "f_darcy",     "label": "Darcy friction factor", "label_fr": "facteur de friction de Darcy", "unit": "", "domain": "engineering" },
+    { "id": "dP_loss",     "label": "pressure loss", "label_fr": "perte de pression", "unit": "Pa", "domain": "engineering" },
+    { "id": "tau_wall",    "label": "wall shear stress", "label_fr": "contrainte de cisaillement pariétale", "unit": "Pa", "domain": "engineering" },
+    { "id": "safety_ratio","label": "stress-to-yield ratio", "label_fr": "rapport contrainte/limite élastique", "unit": "", "domain": "engineering" }
+  ],
+  "formulas": [
+    {
+      "id": "f1",
+      "expression": "Re_num = rho_f · v_f · D_pipe / mu_dyn",
+      "expression_fr": "Re_num = rho_f · v_f · D_pipe / mu_dyn",
+      "variableIds": ["Re_num", "rho_f", "v_f", "D_pipe", "mu_dyn"],
+      "conceptName": "Reynolds number",
+      "conceptName_fr": "Nombre de Reynolds"
+    },
+    {
+      "id": "f2",
+      "expression": "f_darcy = 64 / Re_num",
+      "expression_fr": "f_darcy = 64 / Re_num",
+      "variableIds": ["f_darcy", "Re_num"],
+      "conceptName": "Darcy friction factor (laminar flow)",
+      "conceptName_fr": "Facteur de friction de Darcy (écoulement laminaire)"
+    },
+    {
+      "id": "f3",
+      "expression": "dP_loss = f_darcy · (L_pipe / D_pipe) · rho_f · v_f² / 2",
+      "expression_fr": "dP_loss = f_darcy · (L_pipe / D_pipe) · rho_f · v_f² / 2",
+      "variableIds": ["dP_loss", "f_darcy", "L_pipe", "D_pipe", "rho_f", "v_f"],
+      "conceptName": "Darcy–Weisbach pressure loss",
+      "conceptName_fr": "Perte de pression de Darcy–Weisbach"
+    },
+    {
+      "id": "f4",
+      "expression": "tau_wall = dP_loss · D_pipe / (4 · L_pipe)",
+      "expression_fr": "tau_wall = dP_loss · D_pipe / (4 · L_pipe)",
+      "variableIds": ["tau_wall", "dP_loss", "D_pipe", "L_pipe"],
+      "conceptName": "Wall shear stress from pressure loss",
+      "conceptName_fr": "Contrainte pariétale à partir de la perte de pression"
+    },
+    {
+      "id": "f5",
+      "expression": "safety_ratio = tau_wall / S_y",
+      "expression_fr": "safety_ratio = tau_wall / S_y",
+      "variableIds": ["safety_ratio", "tau_wall", "S_y"],
+      "conceptName": "Stress-to-yield safety ratio",
+      "conceptName_fr": "Rapport contrainte sur limite élastique"
+    }
+  ],
+  "hypotheses": ["rho_f", "v_f", "D_pipe", "mu_dyn", "L_pipe", "S_y"],
+  "conclusions": ["safety_ratio"],
+  "optimalSteps": 5,
+  "solvable": true
+}
