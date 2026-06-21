@@ -32,6 +32,8 @@ export function createApp(
   config: AppConfig = { jwtSecret: process.env['SUPABASE_JWT_SECRET'] ?? '' }
 ): Express {
   const app = express();
+  const allowedOrigins = config.allowedOrigins ?? DEFAULT_ALLOWED_ORIGINS;
+
   app.use(express.json());
 
   // Health check — exempt from CSRF so Railway/load-balancer probes reach it unauthenticated.
@@ -39,7 +41,26 @@ export function createApp(
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  app.use(requireSameOrigin(config.allowedOrigins ?? DEFAULT_ALLOWED_ORIGINS));
+  // CORS: browsers require Access-Control-Allow-Origin on cross-origin responses.
+  // The frontend (port 5173) and backend (port 3001) are different origins even on
+  // localhost. Without these headers the browser silently blocks every fetch response,
+  // so analytics events are swallowed before reaching the server.
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin && allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Vary', 'Origin');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    }
+    if (req.method === 'OPTIONS') {
+      res.sendStatus(204);
+      return;
+    }
+    next();
+  });
+
+  app.use(requireSameOrigin(allowedOrigins));
   app.use(createEventsRouter(db));
   app.use(createProblemsRouter(db));
   app.use(createResearchRouter(db));
