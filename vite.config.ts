@@ -5,6 +5,11 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [react()],
+  clearScreen: false,
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
   build: {
     rollupOptions: {
       output: {
