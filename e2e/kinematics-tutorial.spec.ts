@@ -62,7 +62,14 @@ test('tutorial → cinématique → score en base → événement problem_comple
 
   // ── 5. Étape tutoriel 4 — activer f2 (révèle F = conclusion → victoire) ──
   // f3 activation reveals a, making f2 activatable. Activating f2 reveals F (the conclusion),
-  // setting phase → 'win'. store.ts calls endSession() then markTutorialDone().
+  // setting phase → 'win'. store.ts calls endSession() which emits problem_completed
+  // then immediately calls flushEvents() — so the POST may arrive before or after
+  // the 'online' dispatch below. The listener must be set up BEFORE the click.
+  const eventsPost = page.waitForResponse(
+    resp => resp.url().includes('/api/events'),
+    { timeout: 30_000 },
+  );
+
   const f2Card = page.getByRole('button', { name: /Formule f2.*Activable/ });
   await expect(f2Card).toBeVisible();
   await f2Card.click();
@@ -87,16 +94,11 @@ test('tutorial → cinématique → score en base → événement problem_comple
   );
   expect(userId).toBeTruthy();
 
-  // ── 9. Vider la file d'événements vers le serveur (flush immédiat) ────────
-  // EventQueue.listenForReconnect() registers: window.addEventListener('online', () => flush()).
-  // Dispatching 'online' triggers an immediate POST /api/events instead of waiting 30s.
-  const [flushResponse] = await Promise.all([
-    page.waitForResponse(
-      resp => resp.url().includes('/api/events') && resp.status() === 202,
-      { timeout: 15_000 },
-    ),
-    page.evaluate(() => window.dispatchEvent(new Event('online'))),
-  ]);
+  // ── 9. Attendre le POST /api/events (déclenché par endSession→flushEvents) ─
+  // flushEvents() is called synchronously in endSession(); the 'online' dispatch
+  // is a belt-and-suspenders fallback in case the queue wasn't flushed yet.
+  await page.evaluate(() => window.dispatchEvent(new Event('online')));
+  const flushResponse = await eventsPost;
   expect(flushResponse.status()).toBe(202);
 
   // ── 10. Vérifier l'événement problem_completed dans la table events ───────

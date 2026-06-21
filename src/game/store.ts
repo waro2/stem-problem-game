@@ -25,7 +25,7 @@ import {
 } from './engine';
 import type { ActivationAnnouncement } from './engine';
 import type { FormulaEvaluation, SessionSummary, HintResult } from './types';
-import { emitEvent, Events } from '../api/events';
+import { emitEvent, flushEvents, Events } from '../api/events';
 import { markProblemCompleted } from './progressionStorage';
 import { isParAchieved, isLightningSpeed } from './achievements';
 import { markParAchieved, markLightningSpeed } from './achievementsStorage';
@@ -246,6 +246,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       stepEfficiencyRatio: summary.optimalSteps / Math.max(1, summary.totalSteps),
       activationPath: summary.activationPath,
     }));
+    void flushEvents();
 
     if (summary.outcome === 'win') {
       markProblemCompleted(gameState.problem.id);
