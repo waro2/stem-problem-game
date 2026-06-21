@@ -18,6 +18,10 @@ const DATABASE_URL =
   process.env['DATABASE_URL'] ??
   'postgresql://stem_game:stem_game@localhost:5432/stem_game';
 
+// Expose DATABASE_URL to test worker processes (e.g. e2e/helpers/db.ts uses
+// PrismaClient directly; it reads DATABASE_URL from process.env at init time).
+process.env['DATABASE_URL'] ??= DATABASE_URL;
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
