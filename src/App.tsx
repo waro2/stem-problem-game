@@ -1,11 +1,12 @@
 /**
- * App — Main page of the web UI  (GDD §5.1)
- * Handles bootstrap (problem loading, analytics client, timers) and
- * delegates the three-panel layout to GameScreen.
+ * App — Root component: AuthProvider + global layout + React Router routes.
+ * The game screen (/) preserves all existing logic unchanged.
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import type { Formula } from '@game/types';
+import type { UserRole } from '@game/types';
 import { useGameStore } from '@game/store';
 import { loadProblemFromUrl } from '@game/problemLoader';
 import { Capacitor } from '@capacitor/core';
@@ -23,14 +24,17 @@ import { ConceptLibrary } from './pages/ConceptLibrary';
 import { Settings } from './pages/Settings';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfService } from './pages/TermsOfService';
+import { Login } from './pages/Login';
+import { ProblemLibrary } from './pages/ProblemLibrary';
+import { Achievements } from './pages/Achievements';
+import { InstructorDashboard } from './pages/InstructorDashboard';
+import { ResearchDashboard } from './pages/ResearchDashboard';
+import { ProblemEditor } from './pages/ProblemEditor';
 
 const API_URL = (import.meta.env['VITE_API_URL'] as string | undefined) ?? 'http://localhost:3001';
 const DEFAULT_PROBLEM_URL = '/problems/physics-kinematics-01.json';
 const MOBILE_BREAKPOINT = '(max-width: 768px)';
 
-/** Panel spotlighted by each tutorial step. Step 4 targets the Progress panel
- *  on desktop, but stays on the Formulas panel on mobile (where the final
- *  swipe-to-activate control lives). */
 const TUTORIAL_TARGET_DESKTOP: Record<number, string> = {
   1: '[data-tutorial="variables"]',
   2: '[data-tutorial="formulas"]',
@@ -42,11 +46,19 @@ const TUTORIAL_TARGET_MOBILE: Record<number, string> = {
   4: '[data-tutorial="formulas"]',
 };
 
-/**
- * Renders the GDPR consent banner when an authenticated profile has not
- * yet decided whether to allow analytics (GDD §8.4). Must be rendered
- * inside <AuthProvider>.
- */
+// ── Shared helpers ────────────────────────────────────────────────────────────
+
+function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia(MOBILE_BREAKPOINT).matches);
+  useEffect(() => {
+    const mql = window.matchMedia(MOBILE_BREAKPOINT);
+    const onChange = () => setIsMobile(mql.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+  return isMobile;
+}
+
 function ConsentGate({
   lang,
   onShowPrivacy,
@@ -61,21 +73,108 @@ function ConsentGate({
   return <ConsentModal lang={lang} onShowPrivacy={onShowPrivacy} onShowTerms={onShowTerms} />;
 }
 
-/** True when the viewport matches the mobile breakpoint. */
-function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = useState(() => window.matchMedia(MOBILE_BREAKPOINT).matches);
+// ── ProtectedRoute ────────────────────────────────────────────────────────────
 
-  useEffect(() => {
-    const mql = window.matchMedia(MOBILE_BREAKPOINT);
-    const onChange = () => setIsMobile(mql.matches);
-    mql.addEventListener('change', onChange);
-    return () => mql.removeEventListener('change', onChange);
-  }, []);
+function ProtectedRoute({
+  allowedRoles,
+  children,
+}: {
+  allowedRoles?: UserRole[];
+  children: React.ReactNode;
+}) {
+  const { status, profile } = useAuth();
+  const location = useLocation();
 
-  return isMobile;
+  if (status === 'loading') {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        …
+      </div>
+    );
+  }
+  if (status === 'signed-out') {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  if (allowedRoles && profile && !allowedRoles.includes(profile.role)) {
+    return <Navigate to="/" replace />;
+  }
+  return <>{children}</>;
 }
 
-export function App() {
+// ── Route page components ─────────────────────────────────────────────────────
+
+function LoginPage() {
+  const { status } = useAuth();
+  const { lang, setLang } = useGameStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (status === 'signed-in') {
+      const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/';
+      navigate(from, { replace: true });
+    }
+  }, [status, navigate, location]);
+
+  if (status === 'loading' || status === 'signed-in') return null;
+  return <Login lang={lang} onLangChange={setLang} />;
+}
+
+function LibraryPage() {
+  const { profile } = useAuth();
+  const { lang, setLang } = useGameStore();
+  const navigate = useNavigate();
+  return (
+    <ProblemLibrary
+      apiUrl={API_URL}
+      userId={profile!.id}
+      lang={lang}
+      onLangChange={setLang}
+      onSelectProblem={() => navigate('/')}
+    />
+  );
+}
+
+function AchievementsPage() {
+  const { profile } = useAuth();
+  const { lang, setLang } = useGameStore();
+  return (
+    <Achievements
+      apiUrl={API_URL}
+      userId={profile!.id}
+      lang={lang}
+      onLangChange={setLang}
+    />
+  );
+}
+
+function InstructorPage() {
+  const { profile } = useAuth();
+  const { lang, setLang } = useGameStore();
+  return (
+    <InstructorDashboard
+      apiUrl={API_URL}
+      cohortId={profile?.cohortId ?? ''}
+      role={profile!.role}
+      lang={lang}
+      onLangChange={setLang}
+    />
+  );
+}
+
+function ResearchPage() {
+  const { lang, setLang } = useGameStore();
+  return <ResearchDashboard apiUrl={API_URL} lang={lang} onLangChange={setLang} />;
+}
+
+function EditorPage() {
+  const { lang, setLang } = useGameStore();
+  return <ProblemEditor apiUrl={API_URL} lang={lang} onLangChange={setLang} />;
+}
+
+// ── GamePage (existing game logic, unchanged) ─────────────────────────────────
+
+function GamePage() {
   const {
     gameState,
     summary,
@@ -90,7 +189,6 @@ export function App() {
     skipTutorial,
     pendingEventCount,
     setPendingEventCount,
-    announcement,
   } = useGameStore();
 
   const isMobile = useIsMobile();
@@ -99,62 +197,47 @@ export function App() {
   const [newlyActivatedFormulaId, setNewlyActivatedFormulaId] = useState<string | null>(null);
   const [conceptFormula, setConceptFormula] = useState<Formula | null>(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [showPrivacy, setShowPrivacy] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
   const prevIdentifiedRef = useRef<ReadonlySet<string> | null>(null);
   const prevActivatedRef = useRef<ReadonlySet<string> | null>(null);
 
-  // Bootstrap: init the analytics client, load the first problem, hide native splash.
   useEffect(() => {
-    initEventClient(API_URL);
     loadProblemFromUrl(DEFAULT_PROBLEM_URL).catch(err => console.error('[app] failed to load problem', err));
-    if (Capacitor.isNativePlatform()) {
-      void SplashScreen.hide();
-    }
     return subscribeToPendingEvents(setPendingEventCount);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // mount-only: all refs are module-level constants or stable Zustand actions
+  }, []);
 
-  // Reset the clock whenever a new problem is loaded.
   useEffect(() => {
     setElapsedSeconds(0);
-  }, [gameState?.problem.id]); // only react to problem change, not every state update
+  }, [gameState?.problem.id]);
 
-  // Tick the clock while the session is active.
   useEffect(() => {
     if (!gameState || gameState.phase === 'win' || gameState.phase === 'stuck') return;
     const id = setInterval(() => setElapsedSeconds(s => s + 1), 1000);
     return () => clearInterval(id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameState?.phase, gameState?.problem.id]); // gameState.phase/.problem.id are the only volatile parts that should restart the interval
+  }, [gameState?.phase, gameState?.problem.id]);
 
-  // Briefly flag the variable revealed by the most recent activation.
   useEffect(() => {
     if (!gameState) return;
     const prev = prevIdentifiedRef.current;
     const next = gameState.identifiedVars;
     prevIdentifiedRef.current = next;
-    if (!prev) return; // first load — nothing to flash yet
-
+    if (!prev) return;
     const newVar = [...next].find(v => !prev.has(v));
     if (!newVar) return;
-
     setNewlyIdentifiedVarId(newVar);
     const timeout = setTimeout(() => setNewlyIdentifiedVarId(null), 1500);
     return () => clearTimeout(timeout);
   }, [gameState]);
 
-  // Briefly flag the formula activated by the most recent step (golden halo, 0.5s).
   useEffect(() => {
     if (!gameState) return;
     const prev = prevActivatedRef.current;
     const next = gameState.activatedFormulas;
     prevActivatedRef.current = next;
-    if (!prev) return; // first load — nothing to flash yet
-
+    if (!prev) return;
     const newFormula = [...next].find(f => !prev.has(f));
     if (!newFormula) return;
-
     setNewlyActivatedFormulaId(newFormula);
     const timeout = setTimeout(() => setNewlyActivatedFormulaId(null), 500);
     return () => clearTimeout(timeout);
@@ -180,30 +263,7 @@ export function App() {
   const Screen = isMobile ? GameScreenMobile : GameScreen;
 
   return (
-    <AuthProvider apiUrl={API_URL}>
-      <ConsentGate
-        lang={lang}
-        onShowPrivacy={() => setShowPrivacy(true)}
-        onShowTerms={() => setShowTerms(true)}
-      />
-
-      {/* Screen-reader live region */}
-      <div
-        aria-live="polite"
-        role="status"
-        style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}
-      >
-        {announcement}
-      </div>
-
-      {/* Legal pages — fixed overlays above ConsentModal (zIndex 1100) */}
-      {showPrivacy && (
-        <PrivacyPolicy lang={lang} onLangChange={setLang} onBack={() => setShowPrivacy(false)} />
-      )}
-      {showTerms && (
-        <TermsOfService lang={lang} onLangChange={setLang} onBack={() => setShowTerms(false)} />
-      )}
-
+    <>
       {showSettings ? (
         <Settings lang={lang} onLangChange={setLang} onBack={() => setShowSettings(false)} />
       ) : (
@@ -252,39 +312,124 @@ export function App() {
           )}
         </>
       )}
+    </>
+  );
+}
 
-      {/* Footer — hidden when a full-screen page is active */}
-      {!showPrivacy && !showTerms && !showSettings && (
-        <footer
-          style={{
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 50,
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 24,
-            padding: '6px 16px',
-            background: 'rgba(255,255,255,0.92)',
-            borderTop: '1px solid #E8ECF0',
-            backdropFilter: 'blur(4px)',
-          }}
-        >
-          <button
-            onClick={() => setShowPrivacy(true)}
-            style={{ border: 'none', background: 'none', color: '#8C8C8C', fontSize: 11, cursor: 'pointer', padding: 0 }}
-          >
-            {t('footerPrivacyLink', lang)}
-          </button>
-          <button
-            onClick={() => setShowTerms(true)}
-            style={{ border: 'none', background: 'none', color: '#8C8C8C', fontSize: 11, cursor: 'pointer', padding: 0 }}
-          >
-            {t('footerTermsLink', lang)}
-          </button>
-        </footer>
+// ── AppLayout — global chrome (consent, legal overlays, footer, routes) ───────
+
+function AppLayout() {
+  const { lang, setLang, announcement } = useGameStore();
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+
+  // Bootstrap: init analytics client once, hide native splash.
+  useEffect(() => {
+    initEventClient(API_URL);
+    if (Capacitor.isNativePlatform()) void SplashScreen.hide();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <>
+      <ConsentGate lang={lang} onShowPrivacy={() => setShowPrivacy(true)} onShowTerms={() => setShowTerms(true)} />
+
+      <div
+        aria-live="polite"
+        role="status"
+        style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}
+      >
+        {announcement}
+      </div>
+
+      {showPrivacy && (
+        <PrivacyPolicy lang={lang} onLangChange={setLang} onBack={() => setShowPrivacy(false)} />
       )}
+      {showTerms && (
+        <TermsOfService lang={lang} onLangChange={setLang} onBack={() => setShowTerms(false)} />
+      )}
+
+      {!showPrivacy && !showTerms && (
+        <>
+          <Routes>
+            <Route path="/" element={<GamePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/library"
+              element={<ProtectedRoute><LibraryPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/achievements"
+              element={<ProtectedRoute><AchievementsPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/instructor"
+              element={
+                <ProtectedRoute allowedRoles={['instructor', 'admin']}>
+                  <InstructorPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/research"
+              element={
+                <ProtectedRoute allowedRoles={['researcher', 'admin']}>
+                  <ResearchPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/editor"
+              element={
+                <ProtectedRoute allowedRoles={['instructor', 'admin']}>
+                  <EditorPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+
+          <footer
+            style={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 50,
+              display: 'flex',
+              justifyContent: 'center',
+              gap: 24,
+              padding: '6px 16px',
+              background: 'rgba(255,255,255,0.92)',
+              borderTop: '1px solid #E8ECF0',
+              backdropFilter: 'blur(4px)',
+            }}
+          >
+            <button
+              onClick={() => setShowPrivacy(true)}
+              style={{ border: 'none', background: 'none', color: '#8C8C8C', fontSize: 11, cursor: 'pointer', padding: 0 }}
+            >
+              {t('footerPrivacyLink', lang)}
+            </button>
+            <button
+              onClick={() => setShowTerms(true)}
+              style={{ border: 'none', background: 'none', color: '#8C8C8C', fontSize: 11, cursor: 'pointer', padding: 0 }}
+            >
+              {t('footerTermsLink', lang)}
+            </button>
+          </footer>
+        </>
+      )}
+    </>
+  );
+}
+
+// ── App ───────────────────────────────────────────────────────────────────────
+
+export function App() {
+  return (
+    <AuthProvider apiUrl={API_URL}>
+      <AppLayout />
     </AuthProvider>
   );
 }
