@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /**
  * Playwright E2E configuration.
  *
@@ -44,7 +45,8 @@ export default defineConfig({
     {
       command: 'npm run server',
       url: 'http://localhost:3001',
-      timeout: 30_000,
+      // 30s timed out on shared GitHub Actions runners; 120s absorbs cold-start jitter.
+      timeout: 120_000,
       reuseExistingServer: !process.env['CI'],
       env: {
         DATABASE_URL,
@@ -55,7 +57,7 @@ export default defineConfig({
     {
       command: 'npm run dev',
       url: 'http://localhost:5173',
-      timeout: 30_000,
+      timeout: 120_000,
       reuseExistingServer: !process.env['CI'],
       env: {
         VITE_API_URL: 'http://localhost:3001',
