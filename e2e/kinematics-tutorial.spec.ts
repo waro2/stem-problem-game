@@ -68,7 +68,7 @@ test('tutorial → cinématique → score en base → événement problem_comple
   await f2Card.click();
 
   // ── 6. L'écran de résumé doit apparaître ─────────────────────────────────
-  await expect(page.getByText('🎉 Problème résolu !')).toBeVisible();
+  await expect(page.getByTestId('summary-screen').getByText('🎉 Problème résolu !')).toBeVisible();
 
   // ── 7. Lire le score affiché dans l'interface ─────────────────────────────
   // SummaryScreen renders <Row label="Score final" value={score.total} bold />, which produces:

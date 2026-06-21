@@ -4,7 +4,6 @@
  * steps vs. par (optimal), elapsed time, and a Replay action.
  */
 
-import React from 'react';
 import type { Formula, Problem, SessionSummary } from '@game/types';
 import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
@@ -28,6 +27,7 @@ export function SummaryScreen({ summary, problem, onReplay, onOpenConcept, lang 
 
   return (
     <div
+      data-testid="summary-screen"
       style={{
         position: 'fixed',
         inset: 0,
