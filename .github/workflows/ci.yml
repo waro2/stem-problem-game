@@ -106,6 +106,7 @@ jobs:
       - run: npm run test:e2e
         env:
           CI: true
+          DEBUG: pw:webserver
 
   migrate:
     runs-on: ubuntu-latest
