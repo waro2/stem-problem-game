@@ -45,9 +45,10 @@ export default defineConfig({
     {
       command: 'npm run server',
       url: 'http://localhost:3001',
-      // 30s timed out on shared GitHub Actions runners; 120s absorbs cold-start jitter.
       timeout: 120_000,
       reuseExistingServer: !process.env['CI'],
+      stdout: 'pipe',
+      stderr: 'pipe',
       env: {
         DATABASE_URL,
         SUPABASE_JWT_SECRET: process.env['SUPABASE_JWT_SECRET'] ?? 'e2e-test-secret',
@@ -59,6 +60,8 @@ export default defineConfig({
       url: 'http://localhost:5173',
       timeout: 120_000,
       reuseExistingServer: !process.env['CI'],
+      stdout: 'pipe',
+      stderr: 'pipe',
       env: {
         VITE_API_URL: 'http://localhost:3001',
       },
