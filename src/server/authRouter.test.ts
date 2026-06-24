@@ -4,15 +4,29 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 import type { Server } from 'node:http';
 import { createApp, type Database } from './app';
 
-const SECRET = 'test-jwt-secret';
-const TOKEN = jwt.sign({ sub: 'user-1', email: 'alice@example.com' }, SECRET);
+vi.mock('jose', () => ({
+  createRemoteJWKSet: vi.fn(() => ({})),
+  jwtVerify: vi.fn(),
+}));
+
+process.env['SUPABASE_URL'] = 'https://test.supabase.co';
+
+const SECRET = 'unused-now-verification-goes-through-jwks';
+const TOKEN = 'valid-test-token';
+
+const mockedJwtVerify = vi.mocked(jwtVerify);
 
 let server: Server;
 let baseUrl: string;
+
+beforeEach(() => {
+  mockedJwtVerify.mockReset();
+  mockedJwtVerify.mockResolvedValue({ payload: { sub: 'user-1', email: 'alice@example.com' } } as never);
+});
 
 function start(db: Database) {
   const app = createApp(db, { jwtSecret: SECRET });
