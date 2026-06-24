@@ -33,7 +33,8 @@ export function verifyAuthToken(token: string, secret: string): AuthUser | null 
     if (typeof sub !== 'string' || typeof email !== 'string') return null;
 
     return { id: sub, email };
-  } catch {
+  } catch (error) {
+    console.error('[auth] JWT verification failed:', error instanceof Error ? error.name : typeof error, error instanceof Error ? error.message : error);
     return null;
   }
 }
