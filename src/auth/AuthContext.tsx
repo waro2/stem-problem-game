@@ -72,9 +72,17 @@ export function AuthProvider({ apiUrl, children }: { apiUrl: string; children: R
   }, [apiUrl, setUserId]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => handleSession(data.session));
+    const client = supabase;
+    if (!client) {
+      // Supabase not configured — app runs in anonymous-only mode.
+      setStatus('signed-out');
+      setAnalyticsConsent(true);
+      return;
+    }
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    client.auth.getSession().then(({ data }) => handleSession(data.session));
+
+    const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
       handleSession(session);
     });
 
@@ -82,21 +90,29 @@ export function AuthProvider({ apiUrl, children }: { apiUrl: string; children: R
   }, [handleSession]);
 
   const signInWithPassword = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const client = supabase;
+    if (!client) return { error: 'Authentication is not configured on this deployment.' };
+    const { error } = await client.auth.signInWithPassword({ email, password });
     return { error: error?.message ?? null };
   }, []);
 
   const signUp = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password });
+    const client = supabase;
+    if (!client) return { error: 'Authentication is not configured on this deployment.' };
+    const { error } = await client.auth.signUp({ email, password });
     return { error: error?.message ?? null };
   }, []);
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
+    const client = supabase;
+    if (!client) return;
+    await client.auth.signOut();
   }, []);
 
   const recordConsentChoice = useCallback(async (granted: boolean) => {
-    const { data } = await supabase.auth.getSession();
+    const client = supabase;
+    if (!client) return;
+    const { data } = await client.auth.getSession();
     const accessToken = data.session?.access_token;
     if (!accessToken) return;
     const { consentGivenAt, analyticsConsent } = await recordConsent(apiUrl, accessToken, granted);
@@ -108,11 +124,13 @@ export function AuthProvider({ apiUrl, children }: { apiUrl: string; children: R
   const refuseConsent = useCallback(() => recordConsentChoice(false), [recordConsentChoice]);
 
   const deleteMyData = useCallback(async () => {
-    const { data } = await supabase.auth.getSession();
+    const client = supabase;
+    if (!client) return;
+    const { data } = await client.auth.getSession();
     const accessToken = data.session?.access_token;
     if (!accessToken) return;
     await deleteUserData(apiUrl, accessToken);
-    await supabase.auth.signOut();
+    await client.auth.signOut();
   }, [apiUrl]);
 
   const value = useMemo<AuthContextValue>(() => ({
