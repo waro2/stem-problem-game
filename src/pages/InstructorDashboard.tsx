@@ -1,6 +1,6 @@
 /**
  * InstructorDashboard — Cohort roster & score config  (GDD §6.4, §6.2)
- * Protected: only renders for users with role === 'instructor'.
+ * Protected: only renders for users with role 'instructor' or 'admin'.
  * Shows each student's average score and per-domain completion rate, and
  * lets the instructor adjust the cohort's score penalties/bonuses.
  */
@@ -33,7 +33,7 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
   const [leaderboardSaveStatus, setLeaderboardSaveStatus] = useState<SaveStatus>('idle');
 
   useEffect(() => {
-    if (role !== 'instructor') return;
+    if (role !== 'instructor' && role !== 'admin') return;
 
     fetchInstructorDashboard(apiUrl, cohortId)
       .then(d => {
@@ -47,7 +47,7 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
       });
   }, [apiUrl, cohortId, role]);
 
-  if (role !== 'instructor') {
+  if (role !== 'instructor' && role !== 'admin') {
     return (
       <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ background: '#fff', border: '1px solid #D6DCE4', borderRadius: 10, padding: 24, textAlign: 'center' }}>
