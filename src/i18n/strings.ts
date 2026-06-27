@@ -222,6 +222,14 @@ export const UI = {
   glossaryCascadeTerm:     { fr: 'Cascade', en: 'Cascade' },
   glossaryCascadeDesc:     { fr: 'Chaîne d\'activations déclenchées par une activation précédente.', en: 'Chain of activations triggered by a previous activation.' },
 
+  // ── Navigation ───────────────────────────────────────────────
+  navGame:         { fr: 'Jeu', en: 'Game' },
+  navLibrary:      { fr: 'Bibliothèque', en: 'Library' },
+  navAchievements: { fr: 'Réussites', en: 'Achievements' },
+  navInstructor:   { fr: 'Enseignant', en: 'Instructor' },
+  navResearch:     { fr: 'Recherche', en: 'Research' },
+  navEditor:       { fr: 'Éditeur', en: 'Editor' },
+
   // ── Instructor Dashboard ─────────────────────────────────────
   instructorDashboardTitle:     { fr: 'Tableau de bord — Enseignant', en: 'Instructor Dashboard' },
   accessDeniedTitle:            { fr: 'Accès refusé', en: 'Access Denied' },

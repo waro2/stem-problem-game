@@ -20,6 +20,7 @@ import { SummaryScreen } from '@components/SummaryScreen';
 import { TutorialOverlay } from '@components/TutorialOverlay';
 import { AuthProvider, useAuth } from '@auth/AuthContext';
 import { ConsentModal } from '@components/ConsentModal';
+import { NavBar } from '@components/NavBar';
 import { ConceptLibrary } from './pages/ConceptLibrary';
 import { Settings } from './pages/Settings';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
@@ -322,6 +323,8 @@ function AppLayout() {
   const { lang, setLang, announcement } = useGameStore();
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const location = useLocation();
+  const showNavBar = location.pathname !== '/login';
 
   // Bootstrap: init analytics client once, hide native splash.
   useEffect(() => {
@@ -351,6 +354,7 @@ function AppLayout() {
 
       {!showPrivacy && !showTerms && (
         <>
+          {showNavBar && <NavBar lang={lang} />}
           <Routes>
             <Route path="/" element={<GamePage />} />
             <Route path="/login" element={<LoginPage />} />
