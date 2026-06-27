@@ -30,8 +30,8 @@ export interface AuthDatabase {
       where: { id: string };
       create: { id: string; email: string; role: 'student' };
       update: Record<string, never>;
-      select: { id: true; email: true; role: true; consentGivenAt: true; analyticsConsent: true };
-    }) => Promise<{ id: string; email: string; role: UserRole; consentGivenAt: Date | null; analyticsConsent: boolean | null }>;
+      select: { id: true; email: true; role: true; cohortId: true; consentGivenAt: true; analyticsConsent: true };
+    }) => Promise<{ id: string; email: string; role: UserRole; cohortId: string | null; consentGivenAt: Date | null; analyticsConsent: boolean | null }>;
     update: (args: {
       where: { id: string };
       data: { consentGivenAt: Date; analyticsConsent: boolean };
@@ -60,7 +60,7 @@ export function createAuthRouter(db: AuthDatabase, jwtSecret: string): Router {
         where: { id: authUser.id },
         create: { id: authUser.id, email: authUser.email, role: 'student' },
         update: {},
-        select: { id: true, email: true, role: true, consentGivenAt: true, analyticsConsent: true },
+        select: { id: true, email: true, role: true, cohortId: true, consentGivenAt: true, analyticsConsent: true },
       });
       res.status(200).json(profile);
     } catch (err) {

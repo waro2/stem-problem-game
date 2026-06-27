@@ -234,6 +234,8 @@ export const UI = {
   instructorDashboardTitle:     { fr: 'Tableau de bord — Enseignant', en: 'Instructor Dashboard' },
   accessDeniedTitle:            { fr: 'Accès refusé', en: 'Access Denied' },
   accessDeniedMsg:               { fr: 'Cette page est réservée aux enseignants.', en: 'This page is restricted to instructors.' },
+  noCohortAssignedTitle:        { fr: 'Aucune cohorte assignée', en: 'No Cohort Assigned' },
+  noCohortAssignedMsg:           { fr: 'Votre compte enseignant n\'est associé à aucune cohorte pour le moment. Contactez un administrateur.', en: 'Your instructor account is not yet associated with a cohort. Contact an administrator.' },
   studentsSectionTitle:         { fr: 'Étudiants', en: 'Students' },
   avgScoreLabel:                 { fr: 'Score moyen', en: 'Average score' },
   scoreConfigSectionTitle:       { fr: 'Configuration du score', en: 'Score Configuration' },

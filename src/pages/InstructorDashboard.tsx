@@ -34,6 +34,7 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
 
   useEffect(() => {
     if (role !== 'instructor' && role !== 'admin') return;
+    if (!cohortId) return;
 
     fetchInstructorDashboard(apiUrl, cohortId)
       .then(d => {
@@ -53,6 +54,17 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
         <div style={{ background: '#fff', border: '1px solid #D6DCE4', borderRadius: 10, padding: 24, textAlign: 'center' }}>
           <h1 style={{ margin: '0 0 8px', fontSize: 18, color: '#2E2E2E' }}>{t('accessDeniedTitle', lang)}</h1>
           <p style={{ margin: 0, fontSize: 14, color: '#595959' }}>{t('accessDeniedMsg', lang)}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!cohortId) {
+    return (
+      <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ background: '#fff', border: '1px solid #D6DCE4', borderRadius: 10, padding: 24, textAlign: 'center' }}>
+          <h1 style={{ margin: '0 0 8px', fontSize: 18, color: '#2E2E2E' }}>{t('noCohortAssignedTitle', lang)}</h1>
+          <p style={{ margin: 0, fontSize: 14, color: '#595959' }}>{t('noCohortAssignedMsg', lang)}</p>
         </div>
       </div>
     );
