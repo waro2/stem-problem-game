@@ -11,8 +11,10 @@ export interface AuthProfile {
   id: string;
   email: string;
   role: UserRole;
-  /** The cohort this user belongs to (null for students without a cohort or instructors). */
+  /** The cohort this user belongs to as a member (null for students without a cohort, and for instructors — see cohortsManaged instead). */
   cohortId?: string | null;
+  /** The cohorts this user manages as an instructor. */
+  cohortsManaged?: { id: string }[];
   /** ISO timestamp of the GDPR consent decision (accept or refuse), or null if not yet decided. */
   consentGivenAt: string | null;
   /** The GDPR analytics-consent choice: true = accepted, false = refused, null = not yet decided. */

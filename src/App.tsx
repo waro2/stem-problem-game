@@ -155,7 +155,7 @@ function InstructorPage() {
   return (
     <InstructorDashboard
       apiUrl={API_URL}
-      cohortId={profile?.cohortId ?? ''}
+      cohortId={profile?.cohortsManaged?.[0]?.id ?? ''}
       role={profile!.role}
       lang={lang}
       onLangChange={setLang}
