@@ -18,13 +18,13 @@ export interface InstructorDatabase {
   cohort: {
     findUnique: (args: {
       where: { id: string };
-      select: { id: true; name: true; scoreConfig: true; leaderboardEnabled: true; members: { select: { id: true; name: true } } };
+      select: { id: true; name: true; scoreConfig: true; leaderboardEnabled: true; members: { select: { id: true; name: true; email: true } } };
     }) => Promise<{
       id: string;
       name: string;
       scoreConfig: Prisma.JsonValue | null;
       leaderboardEnabled: boolean;
-      members: { id: string; name: string | null }[];
+      members: { id: string; name: string | null; email: string }[];
     } | null>;
     update: (args: {
       where: { id: string };
@@ -50,7 +50,7 @@ export function createInstructorRouter(db: InstructorDatabase): Router {
     try {
       const cohort = await db.cohort.findUnique({
         where: { id: cohortId },
-        select: { id: true, name: true, scoreConfig: true, leaderboardEnabled: true, members: { select: { id: true, name: true } } },
+        select: { id: true, name: true, scoreConfig: true, leaderboardEnabled: true, members: { select: { id: true, name: true, email: true } } },
       });
       if (!cohort) {
         res.status(404).json({ error: 'Cohort not found' });

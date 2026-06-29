@@ -10,8 +10,8 @@ import { DEFAULT_SCORE_CONFIG } from '../game/types';
 
 describe('computeCohortStudentRows', () => {
   const members: CohortMember[] = [
-    { id: 'user-1', name: 'Alice' },
-    { id: 'user-2', name: null },
+    { id: 'user-1', name: 'Alice', email: 'alice@example.com' },
+    { id: 'user-2', name: null, email: 'bob@example.com' },
   ];
 
   const sessions: CohortSessionRow[] = [
@@ -39,11 +39,11 @@ describe('computeCohortStudentRows', () => {
     expect(chemistry.completionRate).toBe(1);
   });
 
-  it('falls back to the user id as display name and reports no sessions for inactive members', () => {
+  it('falls back to the email as display name and reports no sessions for inactive members', () => {
     const rows = computeCohortStudentRows(members, sessions);
 
     const bob = rows.find(r => r.userId === 'user-2')!;
-    expect(bob.displayName).toBe('user-2');
+    expect(bob.displayName).toBe('bob@example.com');
     expect(bob.sessionsPlayed).toBe(0);
     expect(bob.avgScore).toBeNull();
     expect(bob.domainCompletion).toEqual([]);

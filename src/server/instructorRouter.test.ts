@@ -35,7 +35,7 @@ describe('GET /api/instructor/cohorts/:cohortId/dashboard', () => {
           name: 'Class A',
           scoreConfig: { stepPenalty: 30 },
           leaderboardEnabled: true,
-          members: [{ id: 'user-1', name: 'Alice' }],
+          members: [{ id: 'user-1', name: 'Alice', email: 'alice@example.com' }],
         }),
         update: vi.fn(),
       },

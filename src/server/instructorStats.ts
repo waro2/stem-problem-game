@@ -24,6 +24,7 @@ function average(values: ReadonlyArray<number | null>): number | null {
 export interface CohortMember {
   id: string;
   name: string | null;
+  email: string;
 }
 
 export interface CohortSessionRow {
@@ -62,7 +63,7 @@ export function computeCohortStudentRows(
 
     return {
       userId: member.id,
-      displayName: member.name ?? member.id,
+      displayName: member.name ?? member.email ?? 'Élève sans nom',
       avgScore: average(userSessions.map(s => s.finalScore)),
       sessionsPlayed: userSessions.length,
       domainCompletion,
