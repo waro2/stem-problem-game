@@ -10,9 +10,10 @@ import { createStudentRouter, type StudentStatsDatabase } from './studentRouter'
 import { createInstructorRouter, type InstructorDatabase } from './instructorRouter';
 import { createCohortRouter, type CohortLeaderboardDatabase } from './cohortRouter';
 import { createAuthRouter, type AuthDatabase } from './authRouter';
+import { createSessionsRouter, type SessionDatabase } from './sessionsRouter';
 import { requireSameOrigin } from './csrfMiddleware';
 
-export type Database = EventWriter & ProblemWriter & ProblemLibraryDatabase & ResearchDatabase & StudentStatsDatabase & InstructorDatabase & CohortLeaderboardDatabase & AuthDatabase;
+export type Database = EventWriter & ProblemWriter & ProblemLibraryDatabase & ResearchDatabase & StudentStatsDatabase & InstructorDatabase & CohortLeaderboardDatabase & AuthDatabase & SessionDatabase;
 
 /** Origins allowed to make state-changing requests (CSRF protection), comma-separated. */
 const DEFAULT_ALLOWED_ORIGINS = (process.env['ALLOWED_ORIGINS'] ?? 'http://localhost:5173,http://localhost:3000')
@@ -50,7 +51,7 @@ export function createApp(
     if (origin && allowedOrigins.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Vary', 'Origin');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     }
     if (req.method === 'OPTIONS') {
@@ -68,5 +69,6 @@ export function createApp(
   app.use(createInstructorRouter(db));
   app.use(createCohortRouter(db));
   app.use(createAuthRouter(db, config.jwtSecret));
+  app.use(createSessionsRouter(db, config.jwtSecret));
   return app;
 }

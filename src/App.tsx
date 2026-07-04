@@ -12,6 +12,7 @@ import { loadProblemFromUrl } from '@game/problemLoader';
 import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { initEventClient, subscribeToPendingEvents } from '@api/events';
+import { saveSession } from '@api/sessions';
 import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
 import { GameScreen } from '@components/GameScreen';
@@ -191,6 +192,7 @@ function GamePage() {
     pendingEventCount,
     setPendingEventCount,
   } = useGameStore();
+  const { profile, getAccessToken } = useAuth();
 
   const isMobile = useIsMobile();
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -206,6 +208,42 @@ function GamePage() {
     return subscribeToPendingEvents(setPendingEventCount);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Persist the session to the DB whenever the game ends (win or stuck).
+  // Only runs when the user is authenticated; anonymous sessions stay local-only.
+  useEffect(() => {
+    if (!summary || !profile) return;
+    void (async () => {
+      const token = await getAccessToken();
+      if (!token) return;
+      const { sessionStartTime } = useGameStore.getState();
+      const p = Capacitor.getPlatform();
+      const platform = p === 'ios' || p === 'android' ? p : ('web' as const);
+      const startedAt = sessionStartTime
+        ? new Date(sessionStartTime).toISOString()
+        : new Date(Date.now() - summary.elapsedSeconds * 1000).toISOString();
+      const completedAt = new Date().toISOString();
+      try {
+        await saveSession(API_URL, {
+          problemId: summary.problemId,
+          platform,
+          outcome: summary.outcome,
+          totalSteps: summary.totalSteps,
+          optimalSteps: summary.optimalSteps,
+          timeElapsedSeconds: summary.elapsedSeconds,
+          hintsUsed: summary.hintsUsed,
+          finalScore: summary.score.total,
+          stepEfficiencyRatio: summary.optimalSteps / Math.max(1, summary.totalSteps),
+          activationPath: summary.activationPath,
+          startedAt,
+          completedAt,
+        }, token);
+      } catch (err) {
+        console.error('[game] failed to save session', err);
+      }
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [summary, profile?.id]);
 
   useEffect(() => {
     setElapsedSeconds(0);

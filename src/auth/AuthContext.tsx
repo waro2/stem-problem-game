@@ -28,6 +28,8 @@ interface AuthContextValue {
   refuseConsent: () => Promise<void>;
   /** GDPR right-to-erasure (GDD §8.4): anonymise the user's data, then sign out. */
   deleteMyData: () => Promise<void>;
+  /** Returns the current Supabase access token, or null if not signed in. */
+  getAccessToken: () => Promise<string | null>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -133,6 +135,13 @@ export function AuthProvider({ apiUrl, children }: { apiUrl: string; children: R
     await client.auth.signOut();
   }, [apiUrl]);
 
+  const getAccessToken = useCallback(async (): Promise<string | null> => {
+    const client = supabase;
+    if (!client) return null;
+    const { data } = await client.auth.getSession();
+    return data.session?.access_token ?? null;
+  }, []);
+
   const value = useMemo<AuthContextValue>(() => ({
     status,
     profile,
@@ -143,7 +152,8 @@ export function AuthProvider({ apiUrl, children }: { apiUrl: string; children: R
     giveConsent,
     refuseConsent,
     deleteMyData,
-  }), [status, profile, signInWithPassword, signUp, signOut, giveConsent, refuseConsent, deleteMyData]);
+    getAccessToken,
+  }), [status, profile, signInWithPassword, signUp, signOut, giveConsent, refuseConsent, deleteMyData, getAccessToken]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
