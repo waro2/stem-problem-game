@@ -10,12 +10,28 @@ import type { ProblemSummary } from '@api/library';
 import type { Domain, Difficulty } from '@game/types';
 import { computeUnlockedIds } from '@game/progression';
 import { getCompletedProblemIds } from '@game/progressionStorage';
-import { t, domainLabel, difficultyLabel } from '@i18n/strings';
+import { t, tf, domainLabel, difficultyLabel } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
 import { LangSwitch } from '@components/GameScreen';
 
 const DOMAINS: readonly Domain[] = ['physics', 'chemistry', 'mathematics', 'biology', 'engineering'];
 const DIFFICULTIES: readonly Difficulty[] = ['beginner', 'intermediate', 'advanced', 'expert'];
+
+const DOMAIN_EMOJI: Record<Domain, string> = {
+  physics: '⚡',
+  chemistry: '⚗️',
+  mathematics: '📐',
+  biology: '🧬',
+  engineering: '⚙️',
+};
+
+const DOMAIN_COLOR: Record<Domain, string> = {
+  physics:     '#1565C0',
+  chemistry:   '#2E7D32',
+  mathematics: '#6A1B9A',
+  biology:     '#AD1457',
+  engineering: '#E65100',
+};
 
 interface ProblemLibraryProps {
   apiUrl: string;
@@ -29,7 +45,7 @@ interface ProblemLibraryProps {
 export function ProblemLibrary({ apiUrl, userId, lang, onLangChange, onSelectProblem }: ProblemLibraryProps) {
   const [problems, setProblems] = useState<ProblemSummary[] | null>(null);
   const [error, setError] = useState(false);
-  const [domainFilter, setDomainFilter] = useState<Domain | 'all'>('all');
+  const [activeDomain, setActiveDomain] = useState<Domain | null>(null);
   const [difficultyFilter, setDifficultyFilter] = useState<Difficulty | 'all'>('all');
 
   useEffect(() => {
@@ -44,9 +60,9 @@ export function ProblemLibrary({ apiUrl, userId, lang, onLangChange, onSelectPro
   const filtered = useMemo(() => {
     if (!problems) return [];
     return problems.filter(
-      p => (domainFilter === 'all' || p.domain === domainFilter) && (difficultyFilter === 'all' || p.difficulty === difficultyFilter)
+      p => (!activeDomain || p.domain === activeDomain) && (difficultyFilter === 'all' || p.difficulty === difficultyFilter)
     );
-  }, [problems, domainFilter, difficultyFilter]);
+  }, [problems, activeDomain, difficultyFilter]);
 
   const unlockedIds = useMemo(() => {
     if (!problems) return new Set<string>();
@@ -55,6 +71,17 @@ export function ProblemLibrary({ apiUrl, userId, lang, onLangChange, onSelectPro
       if (p.completed) completedIds.add(p.id);
     }
     return computeUnlockedIds(problems.map(p => p.id), completedIds);
+  }, [problems]);
+
+  const domainStats = useMemo(() => {
+    if (!problems) return {} as Record<Domain, { total: number; completed: number }>;
+    const stats = {} as Record<Domain, { total: number; completed: number }>;
+    for (const domain of DOMAINS) stats[domain] = { total: 0, completed: 0 };
+    for (const p of problems) {
+      stats[p.domain].total++;
+      if (p.completed) stats[p.domain].completed++;
+    }
+    return stats;
   }, [problems]);
 
   return (
@@ -95,14 +122,47 @@ export function ProblemLibrary({ apiUrl, userId, lang, onLangChange, onSelectPro
 
         {problems && (
           <>
+            {/* Domain cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+              {DOMAINS.map(domain => {
+                const stats = domainStats[domain];
+                const color = DOMAIN_COLOR[domain];
+                const isActive = activeDomain === domain;
+                const pct = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+                return (
+                  <button
+                    key={domain}
+                    onClick={() => setActiveDomain(isActive ? null : domain)}
+                    style={{
+                      border: `2px solid ${isActive ? color : '#E8ECF0'}`,
+                      borderRadius: 10,
+                      background: isActive ? `${color}12` : '#fff',
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 6,
+                    }}
+                  >
+                    <span style={{ fontSize: 24 }}>{DOMAIN_EMOJI[domain]}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: isActive ? color : '#2E2E2E' }}>
+                      {domainLabel(domain, lang)}
+                    </span>
+                    <span style={{ fontSize: 11, color: '#595959' }}>
+                      {tf('libraryProblemsCount', lang)(stats.total)}
+                    </span>
+                    {/* Progress bar */}
+                    <div style={{ height: 4, borderRadius: 2, background: '#E8ECF0', overflow: 'hidden', marginTop: 2 }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: color, borderRadius: 2 }} />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Difficulty filter */}
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              <FilterSelect
-                label={t('domainFilterLabel', lang)}
-                value={domainFilter}
-                onChange={v => setDomainFilter(v as Domain | 'all')}
-                allLabel={t('allDomainsOption', lang)}
-                options={DOMAINS.map(d => ({ value: d, label: domainLabel(d, lang) }))}
-              />
               <FilterSelect
                 label={t('difficultyFilterLabel', lang)}
                 value={difficultyFilter}

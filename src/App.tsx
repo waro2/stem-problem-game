@@ -14,8 +14,10 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { initEventClient, subscribeToPendingEvents } from '@api/events';
 import { saveSession } from '@api/sessions';
 import { createProblem } from '@api/problems';
-import { t } from '@i18n/strings';
+import { t, format } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
+import { getCompletedProblemIds } from '@game/progressionStorage';
+import { getUnlockedBadges } from '@game/achievementsStorage';
 import { GameScreen } from '@components/GameScreen';
 import { GameScreenMobile } from '@components/GameScreenMobile';
 import { SummaryScreen } from '@components/SummaryScreen';
@@ -175,6 +177,95 @@ function EditorPage() {
   return <ProblemEditor apiUrl={API_URL} lang={lang} onLangChange={setLang} />;
 }
 
+// ── HeroSection — shown before the game loads (Option B) ─────────────────────
+
+const TEAL = '#0F6E56';
+const AMBER = '#EF9F27';
+
+function StatCard({ value, label }: { value: string | number; label: string }) {
+  return (
+    <div
+      style={{
+        background: '#fff',
+        border: '1px solid #E8ECF0',
+        borderRadius: 10,
+        padding: '14px 20px',
+        flex: 1,
+        minWidth: 120,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+      }}
+    >
+      <span style={{ fontSize: 24, fontWeight: 700, color: TEAL }}>{value}</span>
+      <span style={{ fontSize: 12, color: '#595959' }}>{label}</span>
+    </div>
+  );
+}
+
+function HeroSection({
+  lang,
+  profile,
+  onPlayNow,
+}: {
+  lang: Lang;
+  profile: ReturnType<typeof useAuth>['profile'];
+  onPlayNow: () => void;
+}) {
+  const displayName = profile?.name ?? profile?.email ?? '';
+  const solvedCount = getCompletedProblemIds().size;
+  const badges = getUnlockedBadges();
+  const badgeCount = badges.domainMastered.size + badges.parAchieved.size + badges.lightningSpeed.size;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '32px 24px', maxWidth: 700, margin: '0 auto', width: '100%' }}>
+      {/* Hero block */}
+      <div
+        style={{
+          background: TEAL,
+          borderRadius: 14,
+          padding: '32px 28px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 12,
+          color: '#fff',
+        }}
+      >
+        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>
+          {displayName ? format(t('heroWelcome', lang), displayName) : t('heroSubtitle', lang)}
+        </h1>
+        {displayName && (
+          <p style={{ margin: 0, fontSize: 15, opacity: 0.85 }}>{t('heroSubtitle', lang)}</p>
+        )}
+        <button
+          onClick={onPlayNow}
+          style={{
+            alignSelf: 'flex-start',
+            marginTop: 8,
+            border: 'none',
+            background: AMBER,
+            color: '#fff',
+            borderRadius: 8,
+            padding: '10px 22px',
+            fontSize: 15,
+            fontWeight: 700,
+            cursor: 'pointer',
+          }}
+        >
+          {t('heroPlayButton', lang)}
+        </button>
+      </div>
+
+      {/* Stat cards */}
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+        <StatCard value={solvedCount} label={t('statProblemsSolved', lang)} />
+        <StatCard value="—" label={t('statBestScore', lang)} />
+        <StatCard value={badgeCount} label={t('statAchievements', lang)} />
+      </div>
+    </div>
+  );
+}
+
 // ── GamePage (existing game logic, unchanged) ─────────────────────────────────
 
 function GamePage() {
@@ -196,6 +287,7 @@ function GamePage() {
   const { profile, getAccessToken } = useAuth();
 
   const isMobile = useIsMobile();
+  const [gameLoading, setGameLoading] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [newlyIdentifiedVarId, setNewlyIdentifiedVarId] = useState<string | null>(null);
   const [newlyActivatedFormulaId, setNewlyActivatedFormulaId] = useState<string | null>(null);
@@ -205,10 +297,17 @@ function GamePage() {
   const prevActivatedRef = useRef<ReadonlySet<string> | null>(null);
 
   useEffect(() => {
-    loadProblemFromUrl(DEFAULT_PROBLEM_URL).catch(err => console.error('[app] failed to load problem', err));
     return subscribeToPendingEvents(setPendingEventCount);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handlePlayNow = () => {
+    setGameLoading(true);
+    loadProblemFromUrl(DEFAULT_PROBLEM_URL).catch(err => {
+      console.error('[app] failed to load problem', err);
+      setGameLoading(false);
+    });
+  };
 
   // Persist the session to the DB whenever the game ends (win or stuck).
   // Only runs when the user is authenticated; anonymous sessions stay local-only.
@@ -286,6 +385,10 @@ function GamePage() {
     const timeout = setTimeout(() => setNewlyActivatedFormulaId(null), 500);
     return () => clearTimeout(timeout);
   }, [gameState]);
+
+  if (!gameState && !gameLoading) {
+    return <HeroSection lang={lang} profile={profile} onPlayNow={handlePlayNow} />;
+  }
 
   if (!gameState) {
     return (

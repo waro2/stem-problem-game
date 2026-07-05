@@ -10,6 +10,7 @@ import type { UserRole } from '../game/types';
 export interface AuthProfile {
   id: string;
   email: string;
+  name: string | null;
   role: UserRole;
   /** The cohort this user belongs to as a member (null for students without a cohort, and for instructors — see cohortsManaged instead). */
   cohortId?: string | null;

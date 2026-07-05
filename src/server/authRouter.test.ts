@@ -46,7 +46,7 @@ describe('POST /api/auth/sync', () => {
   beforeEach(async () => {
     await start({
       user: {
-        upsert: vi.fn().mockResolvedValue({ id: 'user-1', email: 'alice@example.com', role: 'student', consentGivenAt: null, analyticsConsent: null }),
+        upsert: vi.fn().mockResolvedValue({ id: 'user-1', name: null, email: 'alice@example.com', role: 'student', consentGivenAt: null, analyticsConsent: null }),
         update: vi.fn(),
       },
       session: { updateMany: vi.fn() },
@@ -61,7 +61,7 @@ describe('POST /api/auth/sync', () => {
       headers: { Authorization: `Bearer ${TOKEN}` },
     });
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ id: 'user-1', email: 'alice@example.com', role: 'student', consentGivenAt: null, analyticsConsent: null });
+    expect(await res.json()).toEqual({ id: 'user-1', name: null, email: 'alice@example.com', role: 'student', consentGivenAt: null, analyticsConsent: null });
   });
 
   it('returns 401 without a bearer token', async () => {

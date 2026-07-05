@@ -10,12 +10,33 @@ import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
 import { LangSwitch } from '@components/GameScreen';
 
+const TEAL = '#0F6E56';
+
 interface LoginProps {
   lang: Lang;
   onLangChange: (lang: Lang) => void;
 }
 
 type Mode = 'login' | 'signup';
+
+function LogoBadge() {
+  return (
+    <div
+      style={{
+        width: 36,
+        height: 36,
+        borderRadius: 8,
+        background: TEAL,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      }}
+    >
+      <span style={{ color: '#fff', fontSize: 14, fontWeight: 700, lineHeight: 1 }}>STEM.</span>
+    </div>
+  );
+}
 
 export function Login({ lang, onLangChange }: LoginProps) {
   const { signInWithPassword, signUp } = useAuth();
@@ -77,7 +98,13 @@ export function Login({ lang, onLangChange }: LoginProps) {
             gap: 14,
           }}
         >
-          <h1 style={{ margin: 0, fontSize: 18, color: '#2E2E2E' }}>
+          {/* Brand header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+            <LogoBadge />
+            <span style={{ fontSize: 18, fontWeight: 700, color: TEAL }}>{t('appName', lang)}</span>
+          </div>
+
+          <h1 style={{ margin: 0, fontSize: 15, color: '#2E2E2E', fontWeight: 500 }}>
             {t(mode === 'login' ? 'loginTitle' : 'signupTitle', lang)}
           </h1>
 
@@ -120,8 +147,8 @@ export function Login({ lang, onLangChange }: LoginProps) {
             type="submit"
             disabled={submitting}
             style={{
-              border: '1px solid #2E75B6',
-              background: '#2E75B6',
+              border: `1px solid ${TEAL}`,
+              background: TEAL,
               color: '#fff',
               borderRadius: 6,
               padding: '8px 16px',
@@ -139,7 +166,7 @@ export function Login({ lang, onLangChange }: LoginProps) {
             style={{
               border: 'none',
               background: 'transparent',
-              color: '#2E75B6',
+              color: TEAL,
               fontSize: 12,
               cursor: 'pointer',
               textAlign: 'left',

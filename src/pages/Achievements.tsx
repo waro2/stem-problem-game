@@ -13,8 +13,10 @@ import type { Domain } from '@game/types';
 import { computeMasteredDomains } from '@game/achievements';
 import { getCompletedProblemIds } from '@game/progressionStorage';
 import { getUnlockedBadges, markDomainMastered } from '@game/achievementsStorage';
-import { t, domainLabel } from '@i18n/strings';
+import { t, tf, domainLabel } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
+
+const AMBER = '#EF9F27';
 import { LangSwitch } from '@components/GameScreen';
 
 const DOMAINS: readonly Domain[] = ['physics', 'chemistry', 'mathematics', 'biology', 'engineering'];
@@ -111,6 +113,23 @@ export function Achievements({ apiUrl, userId, lang, onLangChange }: Achievement
 
         {problems && (
           <>
+            {/* Global progress bar */}
+            {(() => {
+              const total = DOMAINS.length + parProblems.length + speedProblems.length;
+              const unlocked = badges.domainMastered.size + badges.parAchieved.size + badges.lightningSpeed.size;
+              const pct = total > 0 ? Math.round((unlocked / total) * 100) : 0;
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <span style={{ fontSize: 13, color: '#595959' }}>
+                    {tf('achievementProgressLabel', lang)(unlocked, total)}
+                  </span>
+                  <div style={{ height: 8, borderRadius: 4, background: '#E8ECF0', overflow: 'hidden' }}>
+                    <div style={{ width: `${pct}%`, height: '100%', background: AMBER, borderRadius: 4, transition: 'width 0.4s ease' }} />
+                  </div>
+                </div>
+              );
+            })()}
+
             <Section title={t('badgeDomainMasteredTitle', lang)}>
               <BadgeGrid>
                 {DOMAINS.map(domain => (

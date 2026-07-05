@@ -222,6 +222,25 @@ export const UI = {
   glossaryCascadeTerm:     { fr: 'Cascade', en: 'Cascade' },
   glossaryCascadeDesc:     { fr: 'Chaîne d\'activations déclenchées par une activation précédente.', en: 'Chain of activations triggered by a previous activation.' },
 
+  // ── Brand ────────────────────────────────────────────────────
+  appName:         { fr: 'Défi STEM', en: 'STEM Challenge' },
+
+  // ── Home hero ────────────────────────────────────────────────
+  heroWelcome:     { fr: 'Bonjour, {0} !', en: 'Hello, {0}!' },
+  heroSubtitle:    { fr: 'Prêt pour un nouveau défi ?', en: 'Ready for a new challenge?' },
+  heroPlayButton:  { fr: 'Jouer maintenant', en: 'Play now' },
+
+  // ── Home stat-cards ──────────────────────────────────────────
+  statProblemsSolved: { fr: 'Problèmes résolus', en: 'Problems solved' },
+  statBestScore:      { fr: 'Meilleur score', en: 'Best score' },
+  statAchievements:   { fr: 'Réussites', en: 'Achievements' },
+
+  // ── Library domain cards ─────────────────────────────────────
+  libraryProblemsCount:   { fr: (n: number) => `${n} problème(s)`, en: (n: number) => `${n} problem(s)` },
+
+  // ── Achievement progress ─────────────────────────────────────
+  achievementProgressLabel: { fr: (x: number, total: number) => `${x} / ${total} réussites débloquées`, en: (x: number, total: number) => `${x} / ${total} achievements unlocked` },
+
   // ── Navigation ───────────────────────────────────────────────
   navGame:         { fr: 'Jeu', en: 'Game' },
   navLibrary:      { fr: 'Bibliothèque', en: 'Library' },
