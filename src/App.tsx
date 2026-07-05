@@ -212,9 +212,14 @@ function GamePage() {
   // Persist the session to the DB whenever the game ends (win or stuck).
   // Only runs when the user is authenticated; anonymous sessions stay local-only.
   useEffect(() => {
-    if (!summary || !profile) return;
+    console.log('[session-diag] useEffect fired — summary:', summary?.outcome ?? null, 'profile.id:', profile?.id ?? null);
+    if (!summary || !profile) {
+      console.log('[session-diag] early return — summary falsy:', !summary, '| profile falsy:', !profile);
+      return;
+    }
     void (async () => {
       const token = await getAccessToken();
+      console.log('[session-diag] getAccessToken() returned:', token ? `Bearer ${token.slice(0, 12)}…` : null);
       if (!token) return;
       const { sessionStartTime } = useGameStore.getState();
       const p = Capacitor.getPlatform();

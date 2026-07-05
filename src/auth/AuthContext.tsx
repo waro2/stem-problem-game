@@ -137,8 +137,10 @@ export function AuthProvider({ apiUrl, children }: { apiUrl: string; children: R
 
   const getAccessToken = useCallback(async (): Promise<string | null> => {
     const client = supabase;
+    console.log('[session-diag] getAccessToken — supabase client:', client ? 'present' : 'NULL');
     if (!client) return null;
     const { data } = await client.auth.getSession();
+    console.log('[session-diag] getAccessToken — session:', data.session ? 'present' : 'NULL', '| access_token:', data.session?.access_token ? 'present' : 'missing');
     return data.session?.access_token ?? null;
   }, []);
 
