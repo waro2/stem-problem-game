@@ -13,6 +13,7 @@ import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { initEventClient, subscribeToPendingEvents } from '@api/events';
 import { saveSession } from '@api/sessions';
+import { createProblem } from '@api/problems';
 import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
 import { GameScreen } from '@components/GameScreen';
@@ -212,16 +213,11 @@ function GamePage() {
   // Persist the session to the DB whenever the game ends (win or stuck).
   // Only runs when the user is authenticated; anonymous sessions stay local-only.
   useEffect(() => {
-    console.log('[session-diag] useEffect fired — summary:', summary?.outcome ?? null, 'profile.id:', profile?.id ?? null);
-    if (!summary || !profile) {
-      console.log('[session-diag] early return — summary falsy:', !summary, '| profile falsy:', !profile);
-      return;
-    }
+    if (!summary || !profile) return;
     void (async () => {
       const token = await getAccessToken();
-      console.log('[session-diag] getAccessToken() returned:', token ? `Bearer ${token.slice(0, 12)}…` : null);
       if (!token) return;
-      const { sessionStartTime } = useGameStore.getState();
+      const { gameState: gs, sessionStartTime } = useGameStore.getState();
       const p = Capacitor.getPlatform();
       const platform = p === 'ios' || p === 'android' ? p : ('web' as const);
       const startedAt = sessionStartTime
@@ -229,6 +225,10 @@ function GamePage() {
         : new Date(Date.now() - summary.elapsedSeconds * 1000).toISOString();
       const completedAt = new Date().toISOString();
       try {
+        // Ensure the problem exists in the DB before creating the session.
+        // Problems are loaded from JSON files and are not auto-seeded; the upsert
+        // is idempotent so this is a no-op on subsequent plays of the same problem.
+        if (gs) await createProblem(API_URL, gs.problem).catch(() => undefined);
         await saveSession(API_URL, {
           problemId: summary.problemId,
           platform,
