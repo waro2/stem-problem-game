@@ -229,6 +229,7 @@ export const UI = {
   navInstructor:   { fr: 'Enseignant', en: 'Instructor' },
   navResearch:     { fr: 'Recherche', en: 'Research' },
   navEditor:       { fr: 'Éditeur', en: 'Editor' },
+  navSignOut:      { fr: 'Se déconnecter', en: 'Sign out' },
 
   // ── Instructor Dashboard ─────────────────────────────────────
   instructorDashboardTitle:     { fr: 'Tableau de bord — Enseignant', en: 'Instructor Dashboard' },

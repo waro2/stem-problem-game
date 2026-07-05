@@ -5,7 +5,7 @@
  */
 
 import type { CSSProperties } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@auth/AuthContext';
 import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
@@ -29,8 +29,13 @@ function navLinkStyle({ isActive }: { isActive: boolean }): CSSProperties {
 }
 
 export function NavBar({ lang }: { lang: Lang }) {
-  const { profile } = useAuth();
+  const { profile, status, signOut } = useAuth();
+  const navigate = useNavigate();
   const role = profile?.role;
+
+  const handleSignOut = () => {
+    void signOut().then(() => navigate('/login', { replace: true }));
+  };
 
   return (
     <nav
@@ -58,6 +63,22 @@ export function NavBar({ lang }: { lang: Lang }) {
       )}
       {(role === 'instructor' || role === 'admin') && (
         <NavLink to="/editor" style={navLinkStyle}>{t('navEditor', lang)}</NavLink>
+      )}
+      {status === 'signed-in' && (
+        <button
+          onClick={handleSignOut}
+          style={{
+            marginLeft: 'auto',
+            border: 'none',
+            background: 'none',
+            color: '#8C8C8C',
+            fontSize: 13,
+            cursor: 'pointer',
+            padding: '4px 0',
+          }}
+        >
+          {t('navSignOut', lang)}
+        </button>
       )}
     </nav>
   );
