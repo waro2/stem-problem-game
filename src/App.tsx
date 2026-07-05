@@ -238,6 +238,7 @@ function HeroSection({
           <p style={{ margin: 0, fontSize: 15, opacity: 0.85 }}>{t('heroSubtitle', lang)}</p>
         )}
         <button
+          data-testid="hero-play-btn"
           onClick={onPlayNow}
           style={{
             alignSelf: 'flex-start',

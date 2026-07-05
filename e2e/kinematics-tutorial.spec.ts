@@ -36,6 +36,10 @@ test('tutorial → cinématique → score en base → événement problem_comple
   // ── 1. Charger l'application ──────────────────────────────────────────────
   await page.goto('/');
 
+  // The hero screen is displayed before the game loads (Option B).
+  // Click "Jouer maintenant" to trigger the problem load.
+  await page.click('[data-testid="hero-play-btn"]');
+
   // Wait for the kinematics problem to finish loading (GameScreen renders the formula board).
   await page.waitForSelector('[data-tutorial="formulas"]');
 
