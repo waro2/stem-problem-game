@@ -393,7 +393,7 @@ function GamePage() {
     return () => clearTimeout(timeout);
   }, [gameState]);
 
-  if (!gameState && !gameLoading) {
+  if (!gameLoading) {
     return <HeroSection lang={lang} profile={profile} onPlayNow={handlePlayNow} />;
   }
 
