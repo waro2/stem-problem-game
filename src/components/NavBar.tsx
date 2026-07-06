@@ -5,7 +5,7 @@
  */
 
 import type { CSSProperties } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@auth/AuthContext';
 import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
@@ -52,21 +52,25 @@ function LogoBadge() {
 function UserAvatar({ name, email }: { name: string | null; email: string }) {
   const initial = (name ?? email).charAt(0).toUpperCase();
   return (
-    <div
-      aria-hidden
-      style={{
-        width: 30,
-        height: 30,
-        borderRadius: '50%',
-        background: '#E1F5EE',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-      }}
+    <Link
+      to="/profile"
+      title="Mon profil"
+      style={{ textDecoration: 'none', flexShrink: 0 }}
     >
-      <span style={{ color: TEAL, fontSize: 13, fontWeight: 700, lineHeight: 1 }}>{initial}</span>
-    </div>
+      <div
+        style={{
+          width: 30,
+          height: 30,
+          borderRadius: '50%',
+          background: '#E1F5EE',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <span style={{ color: TEAL, fontSize: 13, fontWeight: 700, lineHeight: 1 }}>{initial}</span>
+      </div>
+    </Link>
   );
 }
 

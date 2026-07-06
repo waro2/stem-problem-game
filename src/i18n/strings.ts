@@ -241,6 +241,16 @@ export const UI = {
   // ── Achievement progress ─────────────────────────────────────
   achievementProgressLabel: { fr: (x: number, total: number) => `${x} / ${total} réussites débloquées`, en: (x: number, total: number) => `${x} / ${total} achievements unlocked` },
 
+  // ── Profile page ─────────────────────────────────────────────
+  profileTitle:        { fr: 'Mon profil', en: 'My Profile' },
+  profileNameLabel:    { fr: 'Nom affiché', en: 'Display name' },
+  profileEmailLabel:   { fr: 'Adresse e-mail', en: 'Email address' },
+  profileRoleLabel:    { fr: 'Rôle', en: 'Role' },
+  profileSaveButton:   { fr: 'Enregistrer', en: 'Save' },
+  profileSavedMsg:     { fr: 'Profil mis à jour.', en: 'Profile updated.' },
+  profileNameRequired: { fr: 'Le nom ne peut pas être vide.', en: 'Display name cannot be empty.' },
+  profileNameTooLong:  { fr: 'Le nom ne peut pas dépasser 80 caractères.', en: 'Display name cannot exceed 80 characters.' },
+
   // ── Navigation ───────────────────────────────────────────────
   navGame:         { fr: 'Jeu', en: 'Game' },
   navLibrary:      { fr: 'Bibliothèque', en: 'Library' },

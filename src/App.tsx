@@ -35,6 +35,7 @@ import { Achievements } from './pages/Achievements';
 import { InstructorDashboard } from './pages/InstructorDashboard';
 import { ResearchDashboard } from './pages/ResearchDashboard';
 import { ProblemEditor } from './pages/ProblemEditor';
+import { Profile } from './pages/Profile';
 
 const API_URL = (import.meta.env['VITE_API_URL'] as string | undefined) ?? 'http://localhost:3001';
 const DEFAULT_PROBLEM_URL = '/problems/physics-kinematics-01.json';
@@ -175,6 +176,11 @@ function ResearchPage() {
 function EditorPage() {
   const { lang, setLang } = useGameStore();
   return <ProblemEditor apiUrl={API_URL} lang={lang} onLangChange={setLang} />;
+}
+
+function ProfilePage() {
+  const { lang } = useGameStore();
+  return <Profile apiUrl={API_URL} lang={lang} />;
 }
 
 // ── HeroSection — shown before the game loads (Option B) ─────────────────────
@@ -536,6 +542,10 @@ function AppLayout() {
                   <EditorPage />
                 </ProtectedRoute>
               }
+            />
+            <Route
+              path="/profile"
+              element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
