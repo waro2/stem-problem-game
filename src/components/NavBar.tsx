@@ -34,9 +34,9 @@ function LogoBadge() {
   return (
     <div
       style={{
-        width: 28,
-        height: 28,
-        borderRadius: 6,
+        width: 36,
+        height: 36,
+        borderRadius: 7,
         background: TEAL,
         display: 'flex',
         alignItems: 'center',
@@ -44,7 +44,7 @@ function LogoBadge() {
         flexShrink: 0,
       }}
     >
-      <span style={{ color: '#fff', fontSize: 13, fontWeight: 700, lineHeight: 1 }}>STEM.</span>
+      <span style={{ color: '#fff', fontSize: 12, fontWeight: 700, lineHeight: 1 }}>STEM.</span>
     </div>
   );
 }
