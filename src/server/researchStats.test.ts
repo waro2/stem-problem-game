@@ -95,8 +95,8 @@ describe('computeCohortLeaderboard', () => {
       { userId: 'user-2', finalScore: 1200, stepEfficiencyRatio: 0.9 },
     ];
     const users: CohortUser[] = [
-      { id: 'user-1', name: 'Alice', cohortName: 'Class A' },
-      { id: 'user-2', name: 'Bob', cohortName: 'Class B' },
+      { id: 'user-1', name: 'Alice', email: null, cohortName: 'Class A' },
+      { id: 'user-2', name: 'Bob', email: null, cohortName: 'Class B' },
     ];
 
     const result = computeCohortLeaderboard(sessions, users);
@@ -132,10 +132,10 @@ describe('computeCohortLeaderboard', () => {
 // ── Per-student / per-cohort trend metrics (GDD §8.3) ──────────────────────
 
 const USERS: UserGroupInfo[] = [
-  { id: 'user-1', name: 'Alice', cohortId: 'cohort-A', cohortName: 'Class A' },
-  { id: 'user-2', name: 'Bob', cohortId: 'cohort-A', cohortName: 'Class A' },
-  { id: 'user-3', name: null, cohortId: 'cohort-B', cohortName: 'Class B' },
-  { id: 'user-4', name: 'Dana', cohortId: null, cohortName: null },
+  { id: 'user-1', name: 'Alice', email: null, cohortId: 'cohort-A', cohortName: 'Class A' },
+  { id: 'user-2', name: 'Bob', email: null, cohortId: 'cohort-A', cohortName: 'Class A' },
+  { id: 'user-3', name: null, email: null, cohortId: 'cohort-B', cohortName: 'Class B' },
+  { id: 'user-4', name: 'Dana', email: null, cohortId: null, cohortName: null },
 ];
 
 describe('computeStepEfficiencyTrend', () => {

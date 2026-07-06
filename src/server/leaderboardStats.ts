@@ -12,6 +12,7 @@ import type { LeaderboardEntry } from '../api/leaderboard';
 export interface LeaderboardMember {
   id: string;
   name: string | null;
+  email?: string | null;
 }
 
 /** A single winning session — callers should pre-filter to outcome === 'win'. */
@@ -31,7 +32,7 @@ export function computeCohortLeaderboardEntries(
   members: readonly LeaderboardMember[],
   sessions: readonly LeaderboardSessionRow[]
 ): LeaderboardEntry[] {
-  const nameById = new Map(members.map(m => [m.id, m.name]));
+  const memberById = new Map(members.map(m => [m.id, m]));
 
   const groups = new Map<string, LeaderboardSessionRow[]>();
   for (const session of sessions) {
@@ -40,12 +41,15 @@ export function computeCohortLeaderboardEntries(
     else groups.set(session.userId, [session]);
   }
 
-  const rows = [...groups.entries()].map(([userId, group]) => ({
-    userId,
-    displayName: nameById.get(userId) ?? userId,
-    totalScore: group.reduce((sum, r) => sum + (r.finalScore ?? 0), 0),
-    avgEfficiency: average(group.map(r => r.stepEfficiencyRatio)),
-  }));
+  const rows = [...groups.entries()].map(([userId, group]) => {
+    const member = memberById.get(userId);
+    return {
+      userId,
+      displayName: member?.name ?? member?.email ?? userId,
+      totalScore: group.reduce((sum, r) => sum + (r.finalScore ?? 0), 0),
+      avgEfficiency: average(group.map(r => r.stepEfficiencyRatio)),
+    };
+  });
 
   rows.sort((a, b) => b.totalScore - a.totalScore);
 

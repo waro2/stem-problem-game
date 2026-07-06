@@ -82,8 +82,8 @@ export type ResearchDatabase = {
   user: {
     findMany: (args: {
       where: { deletedAt: null };
-      select: { id: true; name: true; cohort: { select: { id: true; name: true } } };
-    }) => Promise<{ id: string; name: string | null; cohort: { id: string; name: string } | null }[]>;
+      select: { id: true; name: true; email: true; cohort: { select: { id: true; name: true } } };
+    }) => Promise<{ id: string; name: string | null; email: string; cohort: { id: string; name: string } | null }[]>;
   };
   event: {
     findMany: (args: {
@@ -115,7 +115,7 @@ export function createResearchRouter(db: ResearchDatabase): Router {
         }),
         db.user.findMany({
           where: { deletedAt: null },
-          select: { id: true, name: true, cohort: { select: { id: true, name: true } } },
+          select: { id: true, name: true, email: true, cohort: { select: { id: true, name: true } } },
         }),
         db.event.findMany({
           where: { eventType: 'formula_activated' },
@@ -126,6 +126,7 @@ export function createResearchRouter(db: ResearchDatabase): Router {
       const groupUsers: UserGroupInfo[] = users.map(u => ({
         id: u.id,
         name: u.name,
+        email: u.email,
         cohortId: u.cohort?.id ?? null,
         cohortName: u.cohort?.name ?? null,
       }));
@@ -160,7 +161,7 @@ export function createResearchRouter(db: ResearchDatabase): Router {
           sessions
             .filter(s => s.outcome === 'win')
             .map(s => ({ userId: s.userId, finalScore: s.finalScore, stepEfficiencyRatio: s.stepEfficiencyRatio })),
-          users.map(u => ({ id: u.id, name: u.name, cohortName: u.cohort?.name ?? null }))
+          users.map(u => ({ id: u.id, name: u.name, email: u.email, cohortName: u.cohort?.name ?? null }))
         ),
         stepEfficiencyTrend: computeStepEfficiencyTrend(sessionTrendRows, groupUsers),
         hintDecayTrend: computeHintDecayTrend(sessionTrendRows, groupUsers),

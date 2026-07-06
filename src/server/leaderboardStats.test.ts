@@ -56,7 +56,16 @@ describe('computeCohortLeaderboardEntries', () => {
     expect(entries.map(e => e.rank)).toEqual([1, 1, 3]);
   });
 
-  it('falls back to the user id as display name when the member has no name', () => {
+  it('falls back to email when the member has no name but has an email', () => {
+    const withEmail: LeaderboardMember[] = [{ id: 'user-3', name: null, email: 'charlie@example.com' }];
+    const sessions: LeaderboardSessionRow[] = [{ userId: 'user-3', finalScore: 500, stepEfficiencyRatio: 0.5 }];
+
+    const entries = computeCohortLeaderboardEntries(withEmail, sessions);
+
+    expect(entries[0]!.displayName).toBe('charlie@example.com');
+  });
+
+  it('falls back to the user id as display name when the member has no name and no email', () => {
     const sessions: LeaderboardSessionRow[] = [{ userId: 'user-3', finalScore: 500, stepEfficiencyRatio: 0.5 }];
 
     const entries = computeCohortLeaderboardEntries(members, sessions);

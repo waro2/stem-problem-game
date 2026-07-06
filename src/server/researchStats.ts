@@ -89,6 +89,7 @@ export interface LeaderboardSession {
 export interface CohortUser {
   id: string;
   name: string | null;
+  email: string | null;
   cohortName: string | null;
 }
 
@@ -110,7 +111,7 @@ export function computeCohortLeaderboard(
     const user = userById.get(userId);
     return {
       userId,
-      displayName: user?.name ?? userId,
+      displayName: user?.name ?? user?.email ?? userId,
       cohortName: user?.cohortName ?? null,
       totalScore: group.reduce((sum, r) => sum + (r.finalScore ?? 0), 0),
       sessionsPlayed: group.length,
@@ -129,6 +130,7 @@ export function computeCohortLeaderboard(
 export interface UserGroupInfo {
   id: string;
   name: string | null;
+  email: string | null;
   cohortId: string | null;
   cohortName: string | null;
 }
@@ -187,7 +189,10 @@ function buildMetricTrend<T>(
   }
 
   return {
-    byStudent: toTrendSeries(studentBuckets, userId => userById.get(userId)?.name ?? userId),
+    byStudent: toTrendSeries(studentBuckets, userId => {
+      const u = userById.get(userId);
+      return u?.name ?? u?.email ?? userId;
+    }),
     byCohort: toTrendSeries(cohortBuckets, cohortId => cohortNameById.get(cohortId) ?? cohortId),
   };
 }

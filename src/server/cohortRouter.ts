@@ -19,11 +19,11 @@ export interface CohortLeaderboardDatabase {
   cohort: {
     findUnique: (args: {
       where: { id: string };
-      select: { id: true; leaderboardEnabled: true; members: { select: { id: true; name: true } } };
+      select: { id: true; leaderboardEnabled: true; members: { select: { id: true; name: true; email: true } } };
     }) => Promise<{
       id: string;
       leaderboardEnabled: boolean;
-      members: { id: string; name: string | null }[];
+      members: { id: string; name: string | null; email: string }[];
     } | null>;
   };
   session: {
@@ -43,7 +43,7 @@ export function createCohortRouter(db: CohortLeaderboardDatabase): Router {
     try {
       const cohort = await db.cohort.findUnique({
         where: { id: cohortId },
-        select: { id: true, leaderboardEnabled: true, members: { select: { id: true, name: true } } },
+        select: { id: true, leaderboardEnabled: true, members: { select: { id: true, name: true, email: true } } },
       });
       if (!cohort) {
         res.status(404).json({ error: 'Cohort not found' });
