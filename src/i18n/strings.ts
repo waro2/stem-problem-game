@@ -237,6 +237,7 @@ export const UI = {
 
   // ── Library domain cards ─────────────────────────────────────
   libraryProblemsCount:   { fr: (n: number) => `${n} problème(s)`, en: (n: number) => `${n} problem(s)` },
+  libraryPlayButton:      { fr: 'Jouer →', en: 'Play →' },
 
   // ── Achievement progress ─────────────────────────────────────
   achievementProgressLabel: { fr: (x: number, total: number) => `${x} / ${total} réussites débloquées`, en: (x: number, total: number) => `${x} / ${total} achievements unlocked` },

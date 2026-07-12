@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import type { Formula } from '@game/types';
 import type { UserRole } from '@game/types';
 import { useGameStore } from '@game/store';
@@ -129,14 +129,12 @@ function LoginPage() {
 function LibraryPage() {
   const { profile } = useAuth();
   const { lang, setLang } = useGameStore();
-  const navigate = useNavigate();
   return (
     <ProblemLibrary
       apiUrl={API_URL}
       userId={profile!.id}
       lang={lang}
       onLangChange={setLang}
-      onSelectProblem={() => navigate('/')}
     />
   );
 }
@@ -292,9 +290,11 @@ function GamePage() {
     setPendingEventCount,
   } = useGameStore();
   const { profile, getAccessToken } = useAuth();
+  const [searchParams] = useSearchParams();
+  const problemUrl = searchParams.get('problemUrl');
 
   const isMobile = useIsMobile();
-  const [gameLoading, setGameLoading] = useState(false);
+  const [gameLoading, setGameLoading] = useState(() => !!problemUrl);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [newlyIdentifiedVarId, setNewlyIdentifiedVarId] = useState<string | null>(null);
   const [newlyActivatedFormulaId, setNewlyActivatedFormulaId] = useState<string | null>(null);
@@ -310,11 +310,22 @@ function GamePage() {
 
   const handlePlayNow = () => {
     setGameLoading(true);
-    loadProblemFromUrl(DEFAULT_PROBLEM_URL).catch(err => {
+    loadProblemFromUrl(problemUrl ?? DEFAULT_PROBLEM_URL).catch(err => {
       console.error('[app] failed to load problem', err);
       setGameLoading(false);
     });
   };
+
+  // Auto-load when arriving via a deep-link (?problemUrl=...)
+  useEffect(() => {
+    if (problemUrl) {
+      loadProblemFromUrl(problemUrl).catch(err => {
+        console.error('[app] failed to load problem from url param', err);
+        setGameLoading(false);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Persist the session to the DB whenever the game ends (win or stuck).
   // Only runs when the user is authenticated; anonymous sessions stay local-only.

@@ -4,7 +4,8 @@
  * "completed" badge and the player's previous score for each problem.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchProblemLibrary } from '@api/library';
 import type { ProblemSummary } from '@api/library';
 import type { Domain, Difficulty } from '@game/types';
@@ -182,7 +183,6 @@ export function ProblemLibrary({ apiUrl, userId, lang, onLangChange, onSelectPro
                     problem={problem}
                     lang={lang}
                     locked={!unlockedIds.has(problem.id)}
-                    onSelect={onSelectProblem}
                   />
                 ))}
               </div>
@@ -239,19 +239,21 @@ function ProblemCard({
   problem,
   lang,
   locked,
-  onSelect,
 }: {
   problem: ProblemSummary;
   lang: Lang;
   locked: boolean;
-  onSelect: ((problemId: string) => void) | undefined;
 }) {
+  const navigate = useNavigate();
   const title = lang === 'fr' ? problem.title_fr : problem.title;
-  const clickable = !locked && !!onSelect;
+
+  const handlePlay = () => {
+    const url = `/problems/${problem.domain}-${problem.id.replace(/^p-/, '')}.json`;
+    navigate(`/?problemUrl=${encodeURIComponent(url)}`);
+  };
 
   return (
     <div
-      onClick={clickable ? () => onSelect!(problem.id) : undefined}
       title={locked ? t('lockedMsg', lang) : undefined}
       style={{
         background: locked ? '#F0F1F3' : '#fff',
@@ -261,7 +263,6 @@ function ProblemCard({
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
-        cursor: clickable ? 'pointer' : 'default',
         opacity: locked ? 0.6 : 1,
       }}
     >
@@ -308,6 +309,26 @@ function ProblemCard({
           )
         )}
       </div>
+
+      {!locked && (
+        <button
+          onClick={handlePlay}
+          style={{
+            border: 'none',
+            background: '#0F6E56',
+            color: '#fff',
+            borderRadius: 7,
+            padding: '8px 14px',
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: 'pointer',
+            alignSelf: 'flex-end',
+            marginTop: 4,
+          }}
+        >
+          {t('libraryPlayButton', lang)}
+        </button>
+      )}
     </div>
   );
 }
