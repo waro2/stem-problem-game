@@ -8,7 +8,7 @@ import { Routes, Route, Navigate, useNavigate, useLocation, useSearchParams } fr
 import type { Formula } from '@game/types';
 import type { UserRole } from '@game/types';
 import { useGameStore } from '@game/store';
-import { loadProblemFromUrl } from '@game/problemLoader';
+import { loadProblemFromUrl, loadProblemById } from '@game/problemLoader';
 import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { initEventClient, subscribeToPendingEvents } from '@api/events';
@@ -133,6 +133,7 @@ function LibraryPage() {
     <ProblemLibrary
       apiUrl={API_URL}
       userId={profile!.id}
+      role={profile!.role}
       lang={lang}
       onLangChange={setLang}
     />
@@ -292,9 +293,10 @@ function GamePage() {
   const { profile, getAccessToken } = useAuth();
   const [searchParams] = useSearchParams();
   const problemUrl = searchParams.get('problemUrl');
+  const problemId = searchParams.get('problemId');
 
   const isMobile = useIsMobile();
-  const [gameLoading, setGameLoading] = useState(() => !!problemUrl);
+  const [gameLoading, setGameLoading] = useState(() => !!(problemId ?? problemUrl));
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [newlyIdentifiedVarId, setNewlyIdentifiedVarId] = useState<string | null>(null);
   const [newlyActivatedFormulaId, setNewlyActivatedFormulaId] = useState<string | null>(null);
@@ -316,9 +318,14 @@ function GamePage() {
     });
   };
 
-  // Auto-load when arriving via a deep-link (?problemUrl=...)
+  // Auto-load when arriving via a deep-link (?problemId= or ?problemUrl=)
   useEffect(() => {
-    if (problemUrl) {
+    if (problemId) {
+      loadProblemById(API_URL, problemId).catch(err => {
+        console.error('[app] failed to load problem by id', err);
+        setGameLoading(false);
+      });
+    } else if (problemUrl) {
       loadProblemFromUrl(problemUrl).catch(err => {
         console.error('[app] failed to load problem from url param', err);
         setGameLoading(false);

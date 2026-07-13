@@ -17,6 +17,16 @@ export interface CreateProblemResponse {
   solvable: true;
 }
 
+/** Fetch a full problem definition by ID from the DB via the API. */
+export async function fetchProblemById(apiUrl: string, problemId: string): Promise<Problem> {
+  const res = await fetch(`${apiUrl}/api/problems/${encodeURIComponent(problemId)}`);
+  if (!res.ok) {
+    const body = (await res.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(body?.error ?? `Failed to fetch problem ${problemId}: ${res.status}`);
+  }
+  return res.json() as Promise<Problem>;
+}
+
 /** Submit a new problem definition. The server re-runs validateSolvability() before persisting. */
 export async function createProblem(apiUrl: string, draft: ProblemDraft): Promise<CreateProblemResponse> {
   const res = await fetch(`${apiUrl}/api/problems`, {

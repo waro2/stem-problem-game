@@ -37,13 +37,14 @@ const DOMAIN_COLOR: Record<Domain, string> = {
 interface ProblemLibraryProps {
   apiUrl: string;
   userId: string;
+  role: string;
   lang: Lang;
   onLangChange: (lang: Lang) => void;
   /** Called when the player picks a problem to play. */
   onSelectProblem?: (problemId: string) => void;
 }
 
-export function ProblemLibrary({ apiUrl, userId, lang, onLangChange, onSelectProblem }: ProblemLibraryProps) {
+export function ProblemLibrary({ apiUrl, userId, role, lang, onLangChange }: ProblemLibraryProps) {
   const [problems, setProblems] = useState<ProblemSummary[] | null>(null);
   const [error, setError] = useState(false);
   const [activeDomain, setActiveDomain] = useState<Domain | null>(null);
@@ -67,12 +68,15 @@ export function ProblemLibrary({ apiUrl, userId, lang, onLangChange, onSelectPro
 
   const unlockedIds = useMemo(() => {
     if (!problems) return new Set<string>();
+    if (role === 'instructor' || role === 'admin') {
+      return new Set(problems.map(p => p.id));
+    }
     const completedIds = new Set(getCompletedProblemIds());
     for (const p of problems) {
       if (p.completed) completedIds.add(p.id);
     }
     return computeUnlockedIds(problems.map(p => p.id), completedIds);
-  }, [problems]);
+  }, [problems, role]);
 
   const domainStats = useMemo(() => {
     if (!problems) return {} as Record<Domain, { total: number; completed: number }>;
@@ -248,8 +252,7 @@ function ProblemCard({
   const title = lang === 'fr' ? problem.title_fr : problem.title;
 
   const handlePlay = () => {
-    const url = `/problems/${problem.domain}-${problem.id.replace(/^p-/, '')}.json`;
-    navigate(`/?problemUrl=${encodeURIComponent(url)}`);
+    navigate(`/?problemId=${encodeURIComponent(problem.id)}`);
   };
 
   return (

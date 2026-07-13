@@ -10,6 +10,7 @@
 import type { Problem } from './types';
 import { parseProblem } from './problemSchema';
 import { useGameStore } from './store';
+import { fetchProblemById } from '../api/problems';
 
 /**
  * Fetch the problem JSON at `url`, validate it, and inject it into the
@@ -18,6 +19,16 @@ import { useGameStore } from './store';
  * Throws if the request fails or the JSON doesn't match the Problem schema
  * (ProblemValidationError, see src/game/problemSchema.ts).
  */
+/**
+ * Fetch a problem by ID from the API and inject it into the game store.
+ * Used for problems created via the editor (stored in DB, not static JSON).
+ */
+export async function loadProblemById(apiUrl: string, problemId: string): Promise<Problem> {
+  const problem = await fetchProblemById(apiUrl, problemId);
+  useGameStore.getState().loadProblem(problem);
+  return problem;
+}
+
 export async function loadProblemFromUrl(url: string): Promise<Problem> {
   const res = await fetch(url);
   if (!res.ok) {

@@ -29,12 +29,28 @@ export interface ProblemWriter {
   };
 }
 
+/** Full problem row returned from DB (variables/formulas stored as Json). */
+interface ProblemRow {
+  id: string;
+  domain: Domain;
+  difficulty: Difficulty;
+  titleEn: string;
+  titleFr: string;
+  variables: unknown;
+  formulas: unknown;
+  hypotheses: string[];
+  conclusions: string[];
+  optimalSteps: number;
+  solvable: boolean;
+}
+
 /** Minimal slice of PrismaClient needed to list the problem library. */
 export interface ProblemLibraryDatabase {
   problem: {
     findMany: (args: {
       select: { id: true; domain: true; difficulty: true; titleEn: true; titleFr: true };
     }) => Promise<{ id: string; domain: Domain; difficulty: Difficulty; titleEn: string; titleFr: string }[]>;
+    findUnique: (args: { where: { id: string } }) => Promise<ProblemRow | null>;
   };
   session: {
     findMany: (args: {
@@ -68,6 +84,25 @@ export function createProblemsRouter(db: ProblemWriter & ProblemLibraryDatabase)
     }
   });
 
+  router.get('/api/problems/:id', async (req: Request, res: Response) => {
+    const id = req.params['id'];
+    if (!id) {
+      res.status(400).json({ error: 'Missing problem id' });
+      return;
+    }
+    try {
+      const row = await db.problem.findUnique({ where: { id } });
+      if (!row) {
+        res.status(404).json({ error: 'Problem not found' });
+        return;
+      }
+      res.status(200).json(toProblem(row));
+    } catch (err) {
+      console.error('[problems] failed to load problem by id', err);
+      res.status(500).json({ error: 'Failed to load problem' });
+    }
+  });
+
   router.post('/api/problems', async (req: Request, res: Response) => {
     const input = parseProblemInput(req.body);
     if (!input) {
@@ -94,6 +129,22 @@ export function createProblemsRouter(db: ProblemWriter & ProblemLibraryDatabase)
   });
 
   return router;
+}
+
+function toProblem(row: ProblemRow): Problem {
+  return {
+    id: row.id,
+    domain: row.domain,
+    difficulty: row.difficulty,
+    title: row.titleEn,
+    title_fr: row.titleFr,
+    variables: row.variables as Problem['variables'],
+    formulas: row.formulas as Problem['formulas'],
+    hypotheses: row.hypotheses,
+    conclusions: row.conclusions,
+    optimalSteps: row.optimalSteps,
+    solvable: true,
+  };
 }
 
 function toProblemRow(input: ProblemInput, optimalSteps: number): Prisma.ProblemCreateInput {
