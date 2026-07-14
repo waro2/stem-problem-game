@@ -23,10 +23,18 @@ import { fetchProblemById } from '../api/problems';
  * Fetch a problem by ID from the API and inject it into the game store.
  * Used for problems created via the editor (stored in DB, not static JSON).
  */
+/**
+ * Load a problem by ID: first tries the DB via the API.
+ * If the problem is not yet in the DB (404), falls back to the matching
+ * static JSON file at /problems/<problemId>.json.
+ */
 export async function loadProblemById(apiUrl: string, problemId: string): Promise<Problem> {
-  const problem = await fetchProblemById(apiUrl, problemId);
-  useGameStore.getState().loadProblem(problem);
-  return problem;
+  const fromDb = await fetchProblemById(apiUrl, problemId);
+  if (fromDb !== null) {
+    useGameStore.getState().loadProblem(fromDb);
+    return fromDb;
+  }
+  return loadProblemFromUrl(`/problems/${problemId}.json`);
 }
 
 export async function loadProblemFromUrl(url: string): Promise<Problem> {

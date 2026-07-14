@@ -17,9 +17,14 @@ export interface CreateProblemResponse {
   solvable: true;
 }
 
-/** Fetch a full problem definition by ID from the DB via the API. */
-export async function fetchProblemById(apiUrl: string, problemId: string): Promise<Problem> {
+/**
+ * Fetch a full problem definition by ID from the DB via the API.
+ * Returns null if the problem is not found in the DB (404).
+ * Throws for other HTTP errors.
+ */
+export async function fetchProblemById(apiUrl: string, problemId: string): Promise<Problem | null> {
   const res = await fetch(`${apiUrl}/api/problems/${encodeURIComponent(problemId)}`);
+  if (res.status === 404) return null;
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as { error?: string } | null;
     throw new Error(body?.error ?? `Failed to fetch problem ${problemId}: ${res.status}`);
