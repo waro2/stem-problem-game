@@ -95,6 +95,7 @@ model Problem {
   conclusions  String[]                      // variable IDs
   optimalSteps Int
   solvable     Boolean    @default(true)
+  isTrap       Boolean    @default(false)
   sessions     Session[]
   stats        ProblemStats?
   createdAt    DateTime   @default(now())
