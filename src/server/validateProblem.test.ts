@@ -27,6 +27,7 @@ const VALID_PROBLEM = {
   ],
   hypotheses: ['d', 'v'],
   conclusions: ['t'],
+  isTrap: false,
 };
 
 describe('parseProblemInput', () => {

@@ -45,6 +45,7 @@ const VALID_PROBLEM = {
   conclusions: ['t'],
   optimalSteps: 1,
   solvable: true,
+  isTrap: false,
 };
 
 let useGameStore: typeof import('./store').useGameStore;

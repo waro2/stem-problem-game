@@ -27,6 +27,7 @@ describe('computeProblemSummaries', () => {
       title_fr: 'Chaîne Cinématique',
       completed: true,
       previousScore: 900,
+      isTrap: false,
     });
   });
 
@@ -40,6 +41,7 @@ describe('computeProblemSummaries', () => {
       title_fr: 'Bases de Stoechiométrie',
       completed: false,
       previousScore: null,
+      isTrap: false,
     });
   });
 

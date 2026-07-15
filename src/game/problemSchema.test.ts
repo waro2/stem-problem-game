@@ -24,6 +24,7 @@ const VALID_PROBLEM = {
   conclusions: ['t'],
   optimalSteps: 1,
   solvable: true,
+  isTrap: false,
 };
 
 describe('parseProblem', () => {
