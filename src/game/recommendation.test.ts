@@ -38,10 +38,10 @@ describe('getWeakestDomain', () => {
 
 describe('recommendNextProblem', () => {
   const PROBLEMS: ProblemSummary[] = [
-    { id: 'p-chem-01', domain: 'chemistry', difficulty: 'beginner', title: 'A', title_fr: 'A', completed: true, previousScore: 1000 },
-    { id: 'p-chem-02', domain: 'chemistry', difficulty: 'intermediate', title: 'B', title_fr: 'B', completed: false, previousScore: null },
-    { id: 'p-chem-03', domain: 'chemistry', difficulty: 'advanced', title: 'C', title_fr: 'C', completed: false, previousScore: null },
-    { id: 'p-phys-01', domain: 'physics', difficulty: 'beginner', title: 'D', title_fr: 'D', completed: false, previousScore: null },
+    { id: 'p-chem-01', domain: 'chemistry', difficulty: 'beginner', title: 'A', title_fr: 'A', completed: true, previousScore: 1000, isTrap: false },
+    { id: 'p-chem-02', domain: 'chemistry', difficulty: 'intermediate', title: 'B', title_fr: 'B', completed: false, previousScore: null, isTrap: false },
+    { id: 'p-chem-03', domain: 'chemistry', difficulty: 'advanced', title: 'C', title_fr: 'C', completed: false, previousScore: null, isTrap: false },
+    { id: 'p-phys-01', domain: 'physics', difficulty: 'beginner', title: 'D', title_fr: 'D', completed: false, previousScore: null, isTrap: false },
   ];
 
   it('recommends the first not-yet-completed problem in the target domain', () => {

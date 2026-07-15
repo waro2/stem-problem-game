@@ -63,6 +63,7 @@ export function ProblemEditor({ apiUrl, lang, onLangChange }: ProblemEditorProps
   const [hypotheses, setHypotheses] = useState<string[]>([]);
   const [conclusions, setConclusions] = useState<string[]>([]);
 
+  const [isTrap, setIsTrap] = useState(false);
   const [missingFields, setMissingFields] = useState(false);
   const [unsolvable, setUnsolvable] = useState(false);
   const [optimalPath, setOptimalPath] = useState<OptimalPathStep[] | null>(null);
@@ -130,17 +131,20 @@ export function ProblemEditor({ apiUrl, lang, onLangChange }: ProblemEditorProps
     setMissingFields(false);
 
     const draft: ProblemDraft = {
-      id, domain, difficulty, title, title_fr: titleFr, variables, formulas, hypotheses, conclusions,
+      id, domain, difficulty, title, title_fr: titleFr, variables, formulas, hypotheses, conclusions, isTrap,
     };
     const candidate: Problem = { ...draft, optimalSteps: 0, solvable: true };
 
-    if (!validateSolvability(candidate)) {
-      setUnsolvable(true);
-      return;
+    if (!isTrap) {
+      if (!validateSolvability(candidate)) {
+        setUnsolvable(true);
+        return;
+      }
+      const path = computeOptimalPath(candidate);
+      setOptimalPath(describeOptimalPath(candidate, path, lang));
+    } else {
+      setOptimalPath([]);
     }
-
-    const path = computeOptimalPath(candidate);
-    setOptimalPath(describeOptimalPath(candidate, path, lang));
 
     setSubmitStatus('submitting');
     createProblem(apiUrl, draft)
@@ -197,6 +201,10 @@ export function ProblemEditor({ apiUrl, lang, onLangChange }: ProblemEditorProps
               <input value={titleFr} onChange={e => setTitleFr(e.target.value)} style={inputStyle} />
             </Field>
           </div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, fontSize: 13, color: '#595959', cursor: 'pointer' }}>
+            <input type="checkbox" checked={isTrap} onChange={e => { setIsTrap(e.target.checked); setUnsolvable(false); }} />
+            {t('editorIsTrap', lang)}
+          </label>
         </Section>
 
         <Section title={t('panelVariables', lang)}>

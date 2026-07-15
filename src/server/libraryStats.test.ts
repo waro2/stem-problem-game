@@ -7,8 +7,8 @@ import { describe, it, expect } from 'vitest';
 import { computeProblemSummaries, type ProblemRow, type UserSessionRow } from './libraryStats';
 
 const PROBLEMS: ProblemRow[] = [
-  { id: 'p-kinematics-01', domain: 'physics', difficulty: 'intermediate', titleEn: 'Kinematics Chain', titleFr: 'Chaîne Cinématique' },
-  { id: 'p-stoich-01', domain: 'chemistry', difficulty: 'beginner', titleEn: 'Stoichiometry Basics', titleFr: 'Bases de Stoechiométrie' },
+  { id: 'p-kinematics-01', domain: 'physics', difficulty: 'intermediate', titleEn: 'Kinematics Chain', titleFr: 'Chaîne Cinématique', isTrap: false },
+  { id: 'p-stoich-01', domain: 'chemistry', difficulty: 'beginner', titleEn: 'Stoichiometry Basics', titleFr: 'Bases de Stoechiométrie', isTrap: false },
 ];
 
 describe('computeProblemSummaries', () => {

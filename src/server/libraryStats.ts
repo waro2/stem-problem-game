@@ -16,6 +16,7 @@ export interface ProblemRow {
   difficulty: Difficulty;
   titleEn: string;
   titleFr: string;
+  isTrap: boolean;
 }
 
 export interface UserSessionRow {
@@ -50,6 +51,7 @@ export function computeProblemSummaries(
       title_fr: problem.titleFr,
       completed,
       previousScore: latest?.finalScore ?? null,
+      isTrap: problem.isTrap,
     };
   });
 }

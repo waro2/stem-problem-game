@@ -73,5 +73,6 @@ export function parseProblemInput(body: unknown): ProblemInput | null {
     formulas: v.formulas,
     hypotheses: v.hypotheses,
     conclusions: v.conclusions,
+    isTrap: typeof v.isTrap === 'boolean' ? v.isTrap : false,
   };
 }

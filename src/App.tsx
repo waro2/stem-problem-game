@@ -187,6 +187,44 @@ function ProfilePage() {
 const TEAL = '#0F6E56';
 const AMBER = '#EF9F27';
 
+function TrapVictoryScreen({ lang, onReplay }: { lang: Lang; onReplay: () => void }) {
+  return (
+    <div
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(0,0,0,0.55)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}
+    >
+      <div
+        style={{
+          background: '#fff', borderRadius: 14, padding: '36px 32px',
+          maxWidth: 420, width: '90%',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
+          textAlign: 'center',
+        }}
+      >
+        <div style={{ fontSize: 48 }}>🎯</div>
+        <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: TEAL }}>
+          {t('trapDetected', lang)}
+        </h2>
+        <p style={{ margin: 0, fontSize: 15, color: '#595959' }}>
+          {t('trapWin', lang)}
+        </p>
+        <button
+          onClick={onReplay}
+          style={{
+            marginTop: 8, border: 'none', background: TEAL, color: '#fff',
+            borderRadius: 8, padding: '10px 28px', fontSize: 15, fontWeight: 700, cursor: 'pointer',
+          }}
+        >
+          {t('replayButton', lang)}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function StatCard({ value, label }: { value: string | number; label: string }) {
   return (
     <div
@@ -353,10 +391,12 @@ function GamePage() {
         // Problems are loaded from JSON files and are not auto-seeded; the upsert
         // is idempotent so this is a no-op on subsequent plays of the same problem.
         if (gs) await createProblem(API_URL, gs.problem).catch(() => undefined);
+        // Trap problems: reaching stuck = detected the impossible = win.
+        const effectiveOutcome = summary.outcome === 'stuck' && gs?.problem.isTrap ? 'win' : summary.outcome;
         await saveSession(API_URL, {
           problemId: summary.problemId,
           platform,
-          outcome: summary.outcome,
+          outcome: effectiveOutcome,
           totalSteps: summary.totalSteps,
           optimalSteps: summary.optimalSteps,
           timeElapsedSeconds: summary.elapsedSeconds,
@@ -465,13 +505,17 @@ function GamePage() {
             />
           )}
           {summary && !conceptFormula && (
-            <SummaryScreen
-              summary={summary}
-              problem={gameState.problem}
-              onReplay={handleReplay}
-              onOpenConcept={setConceptFormula}
-              lang={lang}
-            />
+            summary.outcome === 'stuck' && gameState.problem.isTrap
+              ? <TrapVictoryScreen lang={lang} onReplay={handleReplay} />
+              : (
+                <SummaryScreen
+                  summary={summary}
+                  problem={gameState.problem}
+                  onReplay={handleReplay}
+                  onOpenConcept={setConceptFormula}
+                  lang={lang}
+                />
+              )
           )}
           {conceptFormula && (
             <ConceptLibrary

@@ -96,6 +96,8 @@ export interface Problem {
   optimalSteps: number;
   /** Pre-validated: server confirmed C is reachable from H */
   solvable: true;
+  /** Intentionally unsolvable trap problem — correctly reaching stuck = win */
+  isTrap?: boolean;
 }
 
 // ─────────────────────────────────────────────

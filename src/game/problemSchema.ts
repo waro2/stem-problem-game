@@ -42,6 +42,7 @@ export const ProblemSchema = z.object({
   conclusions: z.array(z.string()),
   optimalSteps: z.number(),
   solvable: z.literal(true),
+  isTrap: z.boolean().optional().default(false),
 });
 
 /** Thrown by parseProblem() when a problem JSON file fails schema validation. */

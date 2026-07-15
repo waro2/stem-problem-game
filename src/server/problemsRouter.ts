@@ -42,14 +42,15 @@ interface ProblemRow {
   conclusions: string[];
   optimalSteps: number;
   solvable: boolean;
+  isTrap: boolean;
 }
 
 /** Minimal slice of PrismaClient needed to list the problem library. */
 export interface ProblemLibraryDatabase {
   problem: {
     findMany: (args: {
-      select: { id: true; domain: true; difficulty: true; titleEn: true; titleFr: true };
-    }) => Promise<{ id: string; domain: Domain; difficulty: Difficulty; titleEn: string; titleFr: string }[]>;
+      select: { id: true; domain: true; difficulty: true; titleEn: true; titleFr: true; isTrap: true };
+    }) => Promise<{ id: string; domain: Domain; difficulty: Difficulty; titleEn: string; titleFr: string; isTrap: boolean }[]>;
     findUnique: (args: { where: { id: string } }) => Promise<ProblemRow | null>;
   };
   session: {
@@ -68,7 +69,7 @@ export function createProblemsRouter(db: ProblemWriter & ProblemLibraryDatabase)
 
     try {
       const [problems, sessions] = await Promise.all([
-        db.problem.findMany({ select: { id: true, domain: true, difficulty: true, titleEn: true, titleFr: true } }),
+        db.problem.findMany({ select: { id: true, domain: true, difficulty: true, titleEn: true, titleFr: true, isTrap: true } }),
         userId
           ? db.session.findMany({
               where: { userId, outcome: { not: null } },
@@ -110,13 +111,17 @@ export function createProblemsRouter(db: ProblemWriter & ProblemLibraryDatabase)
       return;
     }
 
-    const candidate: Problem = { ...input, optimalSteps: 0, solvable: true };
-    if (!validateSolvability(candidate)) {
-      res.status(400).json({ error: 'Problem is not solvable: conclusions are not reachable from the hypotheses' });
-      return;
+    // Trap problems are intentionally unsolvable — skip the solvability gate.
+    const isTrap = input.isTrap === true;
+    if (!isTrap) {
+      const candidate: Problem = { ...input, optimalSteps: 0, solvable: true };
+      if (!validateSolvability(candidate)) {
+        res.status(400).json({ error: 'Problem is not solvable: conclusions are not reachable from the hypotheses' });
+        return;
+      }
     }
 
-    const optimalSteps = computeOptimalSteps(candidate);
+    const optimalSteps = isTrap ? 0 : computeOptimalSteps({ ...input, optimalSteps: 0, solvable: true });
     const row = toProblemRow(input, optimalSteps);
 
     try {
@@ -144,6 +149,7 @@ function toProblem(row: ProblemRow): Problem {
     conclusions: row.conclusions,
     optimalSteps: row.optimalSteps,
     solvable: true,
+    isTrap: row.isTrap,
   };
 }
 
@@ -160,5 +166,6 @@ function toProblemRow(input: ProblemInput, optimalSteps: number): Prisma.Problem
     conclusions: input.conclusions,
     optimalSteps,
     solvable: true,
+    isTrap: input.isTrap ?? false,
   };
 }

@@ -187,6 +187,7 @@ export function ProblemLibrary({ apiUrl, userId, role, lang, onLangChange }: Pro
                     problem={problem}
                     lang={lang}
                     locked={!unlockedIds.has(problem.id)}
+                    role={role}
                   />
                 ))}
               </div>
@@ -243,10 +244,12 @@ function ProblemCard({
   problem,
   lang,
   locked,
+  role,
 }: {
   problem: ProblemSummary;
   lang: Lang;
   locked: boolean;
+  role: string;
 }) {
   const navigate = useNavigate();
   const title = lang === 'fr' ? problem.title_fr : problem.title;
@@ -295,21 +298,38 @@ function ProblemCard({
             {t('lockedBadge', lang)}
           </span>
         ) : (
-          problem.completed && (
-            <span
-              style={{
-                border: '1px solid #70AD47',
-                background: '#F0FBF0',
-                color: '#70AD47',
-                borderRadius: 6,
-                padding: '2px 8px',
-                fontSize: 11,
-                fontWeight: 700,
-              }}
-            >
-              {t('completedBadge', lang)}
-            </span>
-          )
+          <>
+            {problem.completed && (
+              <span
+                style={{
+                  border: '1px solid #70AD47',
+                  background: '#F0FBF0',
+                  color: '#70AD47',
+                  borderRadius: 6,
+                  padding: '2px 8px',
+                  fontSize: 11,
+                  fontWeight: 700,
+                }}
+              >
+                {t('completedBadge', lang)}
+              </span>
+            )}
+            {problem.isTrap && (role === 'instructor' || role === 'admin') && (
+              <span
+                style={{
+                  border: '1px solid #D97706',
+                  background: '#FEF3C7',
+                  color: '#92400E',
+                  borderRadius: 6,
+                  padding: '2px 8px',
+                  fontSize: 11,
+                  fontWeight: 700,
+                }}
+              >
+                {t('trapBadge', lang)}
+              </span>
+            )}
+          </>
         )}
       </div>
 

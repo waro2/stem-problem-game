@@ -235,6 +235,12 @@ export const UI = {
   statBestScore:      { fr: 'Meilleur score', en: 'Best score' },
   statAchievements:   { fr: 'Réussites', en: 'Achievements' },
 
+  // ── Trap problems ────────────────────────────────────────────────
+  trapDetected:   { fr: 'Tu as détecté l\'impossible !', en: 'You spotted the impossible!' },
+  trapWin:        { fr: 'Bravo ! Ce problème était intentionnellement non résoluble.', en: 'Well done! This problem was intentionally unsolvable.' },
+  editorIsTrap:   { fr: 'Problème piège (intentionnellement non résoluble)', en: 'Trap problem (intentionally unsolvable)' },
+  trapBadge:      { fr: '⚠️ Piège', en: '⚠️ Trap' },
+
   // ── Library domain cards ─────────────────────────────────────
   libraryProblemsCount:   { fr: (n: number) => `${n} problème(s)`, en: (n: number) => `${n} problem(s)` },
   libraryPlayButton:      { fr: 'Jouer →', en: 'Play →' },

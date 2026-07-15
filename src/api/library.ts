@@ -18,6 +18,8 @@ export interface ProblemSummary {
   completed: boolean;
   /** Final score of the user's most recent completed session, or null if never attempted. */
   previousScore: number | null;
+  /** Intentionally unsolvable — visible only to instructors/admins. */
+  isTrap: boolean;
 }
 
 /** Fetch the problem library, annotated with the given user's progress. */
