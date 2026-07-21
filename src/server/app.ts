@@ -17,7 +17,9 @@ import { requireSameOrigin } from './csrfMiddleware';
 export type Database = EventWriter & ProblemWriter & ProblemLibraryDatabase & ResearchDatabase & StudentStatsDatabase & InstructorDatabase & CohortLeaderboardDatabase & AuthDatabase & SessionDatabase & UserDatabase;
 
 /** Origins allowed to make state-changing requests (CSRF protection), comma-separated. */
-const DEFAULT_ALLOWED_ORIGINS = (process.env['ALLOWED_ORIGINS'] ?? 'http://localhost:5173,http://localhost:3000')
+const DEFAULT_ALLOWED_ORIGINS = (
+  process.env['ALLOWED_ORIGINS'] ?? 'http://localhost:5173,http://localhost:3000,https://stem-problem-game.vercel.app'
+)
   .split(',')
   .map(origin => origin.trim())
   .filter(origin => origin.length > 0);
@@ -54,6 +56,7 @@ export function createApp(
       res.setHeader('Vary', 'Origin');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
     }
     if (req.method === 'OPTIONS') {
       res.sendStatus(204);
