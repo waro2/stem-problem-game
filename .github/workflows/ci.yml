@@ -101,7 +101,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx prisma generate
-      - run: npx prisma migrate deploy
+      - name: Run migrations
+        env:
+          DATABASE_URL: postgresql://stem_game:stem_game@localhost:5432/stem_game
+          DIRECT_URL: postgresql://stem_game:stem_game@localhost:5432/stem_game
+        run: npx prisma migrate deploy
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
         env:
@@ -123,9 +127,11 @@ jobs:
       - run: npx prisma generate
       # Migration files live in src/db/migrations/ — create the initial migration
       # locally with `npx prisma migrate dev --name init` and commit the result.
-      - run: npx prisma migrate deploy
+      - name: Run migrations
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx prisma migrate deploy
 
   deploy-frontend:
     runs-on: ubuntu-latest
