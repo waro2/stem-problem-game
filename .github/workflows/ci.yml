@@ -112,30 +112,9 @@ jobs:
           CI: true
           DEBUG: pw:webserver
 
-  migrate:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - run: npm ci
-      - run: npx prisma generate
-      # Migration files live in src/db/migrations/ — create the initial migration
-      # locally with `npx prisma migrate dev --name init` and commit the result.
-      - name: Run migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
-        run: npx prisma migrate deploy
-
   deploy-frontend:
     runs-on: ubuntu-latest
-    needs: migrate
+    needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production
     env:
