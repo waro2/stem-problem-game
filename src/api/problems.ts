@@ -36,9 +36,11 @@ export async function fetchProblemById(apiUrl: string, problemId: string): Promi
     conclusions: raw.conclusions ?? raw.target  ?? [],
     title:    raw.title    ?? raw.titleEn ?? '',
     title_fr: raw.title_fr ?? raw.titleFr ?? '',
-    formulas: (raw.formulas ?? []).map((f: { variableIds?: string[]; vars?: string[]; [key: string]: unknown }) => ({
+    formulas: (raw.formulas ?? []).map((f: any) => ({
       ...f,
-      variableIds: f.variableIds ?? f.vars ?? [],
+      variableIds:   f.variableIds   ?? f.vars   ?? [],
+      expression:    f.expression    ?? f.exprEN  ?? f.exprFR ?? '',
+      expression_fr: f.expression_fr ?? f.exprFR  ?? f.exprEN ?? '',
     })),
   } as Problem;
 }
