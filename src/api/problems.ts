@@ -22,6 +22,16 @@ export interface CreateProblemResponse {
  * Returns null if the problem is not found in the DB (404).
  * Throws for other HTTP errors.
  */
+type RawFormula = {
+  variableIds?: string[];
+  vars?: string[];
+  expression?: string;
+  expression_fr?: string;
+  exprEN?: string;
+  exprFR?: string;
+  [key: string]: unknown;
+};
+
 export async function fetchProblemById(apiUrl: string, problemId: string): Promise<Problem | null> {
   const res = await fetch(`${apiUrl}/api/problems/${encodeURIComponent(problemId)}`);
   if (res.status === 404) return null;
@@ -36,7 +46,7 @@ export async function fetchProblemById(apiUrl: string, problemId: string): Promi
     conclusions: raw.conclusions ?? raw.target  ?? [],
     title:    raw.title    ?? raw.titleEn ?? '',
     title_fr: raw.title_fr ?? raw.titleFr ?? '',
-    formulas: (raw.formulas ?? []).map((f: any) => ({
+    formulas: ((raw.formulas ?? []) as RawFormula[]).map((f) => ({
       ...f,
       variableIds:   f.variableIds   ?? f.vars   ?? [],
       expression:    f.expression    ?? f.exprEN  ?? f.exprFR ?? '',
