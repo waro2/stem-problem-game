@@ -29,7 +29,14 @@ export async function fetchProblemById(apiUrl: string, problemId: string): Promi
     const body = (await res.json().catch(() => null)) as { error?: string } | null;
     throw new Error(body?.error ?? `Failed to fetch problem ${problemId}: ${res.status}`);
   }
-  return res.json() as Promise<Problem>;
+  const raw = await res.json();
+  return {
+    ...raw,
+    given:   raw.given   ?? raw.hypotheses ?? [],
+    target:  raw.target  ?? raw.conclusions ?? [],
+    titleFr: raw.titleFr ?? raw.title_fr   ?? '',
+    titleEn: raw.titleEn ?? raw.title      ?? '',
+  } as Problem;
 }
 
 /** Submit a new problem definition. The server re-runs validateSolvability() before persisting. */
