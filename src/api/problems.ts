@@ -36,6 +36,10 @@ export async function fetchProblemById(apiUrl: string, problemId: string): Promi
     conclusions: raw.conclusions ?? raw.target  ?? [],
     title:    raw.title    ?? raw.titleEn ?? '',
     title_fr: raw.title_fr ?? raw.titleFr ?? '',
+    formulas: (raw.formulas ?? []).map((f: { variableIds?: string[]; vars?: string[]; [key: string]: unknown }) => ({
+      ...f,
+      variableIds: f.variableIds ?? f.vars ?? [],
+    })),
   } as Problem;
 }
 
