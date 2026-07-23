@@ -97,7 +97,7 @@ export function createProblemsRouter(db: ProblemWriter & ProblemLibraryDatabase)
         res.status(404).json({ error: 'Problem not found' });
         return;
       }
-      const { titleFr, titleEn, hypotheses, conclusions, ...rest } = row as any;
+      const { titleFr, titleEn, hypotheses, conclusions, ...rest } = row;
       res.json({
         ...rest,
         title: titleEn,
@@ -143,22 +143,6 @@ export function createProblemsRouter(db: ProblemWriter & ProblemLibraryDatabase)
   return router;
 }
 
-function toProblem(row: ProblemRow): Problem {
-  return {
-    id: row.id,
-    domain: row.domain,
-    difficulty: row.difficulty,
-    title: row.titleEn,
-    title_fr: row.titleFr,
-    variables: row.variables as Problem['variables'],
-    formulas: row.formulas as Problem['formulas'],
-    hypotheses: row.hypotheses,
-    conclusions: row.conclusions,
-    optimalSteps: row.optimalSteps,
-    solvable: true,
-    isTrap: row.isTrap,
-  };
-}
 
 function toProblemRow(input: ProblemInput, optimalSteps: number): Prisma.ProblemCreateInput {
   return {
