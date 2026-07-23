@@ -97,7 +97,14 @@ export function createProblemsRouter(db: ProblemWriter & ProblemLibraryDatabase)
         res.status(404).json({ error: 'Problem not found' });
         return;
       }
-      res.status(200).json(toProblem(row));
+      const { titleFr, titleEn, hypotheses, conclusions, ...rest } = row as any;
+      res.json({
+        ...rest,
+        title: titleEn,
+        title_fr: titleFr,
+        given: hypotheses,
+        target: conclusions,
+      });
     } catch (err) {
       console.error('[problems] failed to load problem by id', err);
       res.status(500).json({ error: 'Failed to load problem' });
