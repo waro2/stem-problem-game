@@ -32,10 +32,10 @@ export async function fetchProblemById(apiUrl: string, problemId: string): Promi
   const raw = await res.json();
   return {
     ...raw,
-    given:   raw.given   ?? raw.hypotheses ?? [],
-    target:  raw.target  ?? raw.conclusions ?? [],
-    titleFr: raw.titleFr ?? raw.title_fr   ?? '',
-    titleEn: raw.titleEn ?? raw.title      ?? '',
+    hypotheses:  raw.hypotheses  ?? raw.given   ?? [],
+    conclusions: raw.conclusions ?? raw.target  ?? [],
+    title:    raw.title    ?? raw.titleEn ?? '',
+    title_fr: raw.title_fr ?? raw.titleFr ?? '',
   } as Problem;
 }
 
