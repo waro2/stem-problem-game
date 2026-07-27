@@ -80,6 +80,11 @@ export function createAdminRouter(db: PrismaClient, jwtSecret: string) {
         cohortId?: string | null;
       };
 
+      if (id === req.authUser!.id && role !== undefined) {
+        res.status(400).json({ error: 'Cannot change your own role' });
+        return;
+      }
+
       const validRoles: UserRole[] = ['student', 'instructor', 'researcher', 'admin'];
       if (role !== undefined && !validRoles.includes(role)) {
         res.status(400).json({ error: 'Invalid role' });

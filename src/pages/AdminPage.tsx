@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@auth/AuthContext';
 import {
   adminGetUsers,
   adminUpdateUser,
@@ -94,6 +95,7 @@ function Badge({ role }: { role: UserRole }) {
 // ── Onglet Utilisateurs ───────────────────────────────────────────────────
 
 function UsersTab({ cohorts }: { cohorts: AdminCohort[] }) {
+  const { profile } = useAuth();
   const [users, setUsers]       = useState<AdminUser[]>([]);
   const [loading, setLoading]   = useState(true);
   const [saving, setSaving]     = useState<Set<string>>(new Set());
@@ -200,7 +202,7 @@ function UsersTab({ cohorts }: { cohorts: AdminCohort[] }) {
                   <td style={{ padding: '10px 14px' }}>
                     <select
                       value={user.role}
-                      disabled={isSaving}
+                      disabled={isSaving || user.id === profile?.id}
                       onChange={e => void handleRoleChange(user, e.target.value as UserRole)}
                       style={{
                         border: `1px solid ${TEAL}`,
