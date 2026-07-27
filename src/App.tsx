@@ -37,6 +37,7 @@ import { ResearchDashboard } from './pages/ResearchDashboard';
 import { ProblemEditor } from './pages/ProblemEditor';
 import { Profile } from './pages/Profile';
 import { AdminPage } from './pages/AdminPage';
+import { TutorialPage } from './pages/TutorialPage';
 
 const API_URL = (import.meta.env['VITE_API_URL'] as string | undefined) ?? 'http://localhost:3001';
 const DEFAULT_PROBLEM_URL = '/problems/physics-kinematics-01.json';
@@ -330,12 +331,21 @@ function GamePage() {
     setPendingEventCount,
   } = useGameStore();
   const { profile, getAccessToken } = useAuth();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const problemUrl = searchParams.get('problemUrl');
   const problemId = searchParams.get('problemId');
 
   const isMobile = useIsMobile();
   const [gameLoading, setGameLoading] = useState(() => !!(problemId ?? problemUrl));
+
+  useEffect(() => {
+    if (!profile) return;
+    const isSpaGroup = profile.cohort?.name?.includes('enseigné');
+    const done = localStorage.getItem(`spa_tutorial_done_${profile.id}`);
+    if (isSpaGroup && !done) navigate('/tutorial', { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile]);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [newlyIdentifiedVarId, setNewlyIdentifiedVarId] = useState<string | null>(null);
   const [newlyActivatedFormulaId, setNewlyActivatedFormulaId] = useState<string | null>(null);
@@ -618,6 +628,7 @@ function AppLayout() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/tutorial" element={<TutorialPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
 

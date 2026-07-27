@@ -110,6 +110,7 @@ export function NavBar({ lang }: { lang: Lang }) {
       <NavLink to="/" style={navLinkStyle}>{t('navGame', lang)}</NavLink>
       <NavLink to="/library" style={navLinkStyle}>{t('navLibrary', lang)}</NavLink>
       <NavLink to="/achievements" style={navLinkStyle}>{t('navAchievements', lang)}</NavLink>
+      <NavLink to="/tutorial" style={navLinkStyle}>Tutoriel</NavLink>
       {(role === 'instructor' || role === 'admin') && (
         <NavLink to="/instructor" style={navLinkStyle}>{t('navInstructor', lang)}</NavLink>
       )}

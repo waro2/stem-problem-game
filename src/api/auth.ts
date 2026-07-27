@@ -14,6 +14,8 @@ export interface AuthProfile {
   role: UserRole;
   /** The cohort this user belongs to as a member (null for students without a cohort, and for instructors — see cohortsManaged instead). */
   cohortId?: string | null;
+  /** Cohort object — present when the user is a member, used for client-side group checks (e.g. tutorial redirection). */
+  cohort?: { name: string } | null;
   /** The cohorts this user manages as an instructor. */
   cohortsManaged?: { id: string }[];
   /** ISO timestamp of the GDPR consent decision (accept or refuse), or null if not yet decided. */
