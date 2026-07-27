@@ -113,7 +113,7 @@ export function NavBar({ lang }: { lang: Lang }) {
       {(role === 'instructor' || role === 'admin') && (
         <NavLink to="/instructor" style={navLinkStyle}>{t('navInstructor', lang)}</NavLink>
       )}
-      {(role === 'researcher' || role === 'admin') && (
+      {(role === 'instructor' || role === 'researcher' || role === 'admin') && (
         <NavLink to="/research" style={navLinkStyle}>{t('navResearch', lang)}</NavLink>
       )}
       {(role === 'instructor' || role === 'admin') && (
