@@ -36,6 +36,7 @@ import { InstructorDashboard } from './pages/InstructorDashboard';
 import { ResearchDashboard } from './pages/ResearchDashboard';
 import { ProblemEditor } from './pages/ProblemEditor';
 import { Profile } from './pages/Profile';
+import { AdminPage } from './pages/AdminPage';
 
 const API_URL = (import.meta.env['VITE_API_URL'] as string | undefined) ?? 'http://localhost:3001';
 const DEFAULT_PROBLEM_URL = '/problems/physics-kinematics-01.json';
@@ -608,6 +609,14 @@ function AppLayout() {
             <Route
               path="/profile"
               element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

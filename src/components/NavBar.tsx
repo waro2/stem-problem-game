@@ -119,6 +119,9 @@ export function NavBar({ lang }: { lang: Lang }) {
       {(role === 'instructor' || role === 'admin') && (
         <NavLink to="/editor" style={navLinkStyle}>{t('navEditor', lang)}</NavLink>
       )}
+      {role === 'admin' && (
+        <NavLink to="/admin" style={navLinkStyle}>Admin</NavLink>
+      )}
 
       {/* Right side: avatar + sign-out */}
       {status === 'signed-in' && profile && (
