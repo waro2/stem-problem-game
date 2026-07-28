@@ -8,9 +8,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@auth/AuthContext';
 
-const TEAL    = '#0F6E56';
+const TEAL = '#0F6E56';
 const TEAL_LT = '#E6F4F0';
-const GRAY    = '#595959';
+const GRAY = '#595959';
 
 // ── Step content ─────────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ const STEPS = [
     body: (
       <>
         <p>Ce jeu t&apos;invite à résoudre des problèmes scientifiques en activant des <strong>formules</strong>.</p>
-        <p>Avant de commencer, ce tutoriel te présente le formalisme mathématique qui structure chaque problème — appelé <strong>SPA</strong> (Système de Propagation d&apos;Activation).</p>
+        <p>Avant de commencer, ce tutoriel te présente le formalisme mathématique qui structure chaque problème — appelé <strong>APS</strong> (Algoritme des Problème STEM).</p>
         <p>7 étapes, 5 minutes. Prêt·e ?</p>
       </>
     ),
@@ -33,7 +33,7 @@ const STEPS = [
       <>
         <p>Un problème est modélisé par une <strong>théorie T = (V, F)</strong> :</p>
         <ul>
-          <li><strong>V</strong> — un ensemble de <em>variables</em> (grandeurs physiques, chimiques…)</li>
+          <li><strong>V</strong> — un ensemble de <em>variables</em> (grandeurs physiques, mathématiques, chimiques…)</li>
           <li><strong>F</strong> — un ensemble de <em>formules</em>, chacune reliant un sous-ensemble de variables</li>
         </ul>
         <p>Exemple : <code>v = d / t</code> est une formule qui relie les variables <em>vitesse</em>, <em>distance</em> et <em>temps</em>.</p>
@@ -123,12 +123,12 @@ const STEPS = [
 
 export function TutorialPage() {
   const { profile } = useAuth();
-  const navigate    = useNavigate();
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
 
-  const total   = STEPS.length;
+  const total = STEPS.length;
   const current = STEPS[step]!;
-  const isLast  = step === total - 1;
+  const isLast = step === total - 1;
 
   const markDone = () => {
     if (profile) {
