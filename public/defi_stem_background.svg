@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 680 480" role="img">
+<title>Défi STEM — fond algorithmique SPA</title>
+<desc>Réseau de 7 variables scientifiques interconnectées par des formules, illustrant l'algorithme SPA : variables connues en vert, objectifs en rouge, inconnues en gris-bleu.</desc>
+<style>
+.nl{font-family:monospace;font-size:15px;fill:#fff;text-anchor:middle;dominant-baseline:middle;font-weight:bold}
+.fm{font-family:monospace;font-size:10px;fill:#7EC9A2;text-anchor:middle}
+.spa{font-family:monospace;font-size:13px;fill:#F5A623;text-anchor:middle;font-weight:bold}
+.spas{font-size:8px;fill:#B8792A;text-anchor:middle}
+.not{font-size:12px;fill:#2D8050;text-anchor:start;font-style:italic}
+.nots{font-size:8px;fill:#1C5535;text-anchor:start}
+.mc{font-family:monospace;font-size:9px;fill:#1E6040;text-anchor:middle}
+.legti{font-size:8px;fill:#2D7050;text-anchor:middle}
+.leg{font-size:9px;fill:#7EC9A2;text-anchor:start}
+.legd{font-size:9px;fill:#5A7D9A;text-anchor:start}
+.lego{font-size:9px;fill:#E05555;text-anchor:start}
+.brand{font-size:10px;fill:#1A5535;text-anchor:middle;letter-spacing:3px;font-weight:bold}
+.rho{font-family:monospace;font-size:9px;fill:#2A7050;text-anchor:middle}
+</style>
+
+<rect width="680" height="480" fill="#0B3728"/>
+
+<circle cx="52" cy="52" r="1.5" fill="#1C6040" opacity="0.6"/>
+<circle cx="200" cy="38" r="1" fill="#1C6040" opacity="0.5"/>
+<circle cx="385" cy="42" r="2" fill="#1C6040" opacity="0.35"/>
+<circle cx="640" cy="68" r="1.5" fill="#1C6040" opacity="0.5"/>
+<circle cx="660" cy="245" r="1" fill="#1C6040" opacity="0.4"/>
+<circle cx="638" cy="378" r="1.5" fill="#1C6040" opacity="0.4"/>
+<circle cx="55" cy="390" r="1.5" fill="#1C6040" opacity="0.4"/>
+<circle cx="42" cy="245" r="1" fill="#1C6040" opacity="0.5"/>
+<circle cx="250" cy="465" r="1.5" fill="#1C6040" opacity="0.35"/>
+<circle cx="440" cy="460" r="1" fill="#1C6040" opacity="0.4"/>
+<circle cx="480" cy="45" r="1.5" fill="#1C6040" opacity="0.4"/>
+<circle cx="350" cy="142" r="1" fill="#1C6040" opacity="0.3"/>
+<circle cx="88" cy="132" r="1.5" fill="#1C6040" opacity="0.35"/>
+<circle cx="600" cy="148" r="1" fill="#1C6040" opacity="0.35"/>
+
+<rect x="548" y="26" width="90" height="98" rx="4" fill="#0D4020" opacity="0.75" stroke="#1D6040" stroke-width="0.5"/>
+<text x="593" y="37" class="mc" style="font-size:7px;fill:#1A7048">MATRICE SPA</text>
+<text x="593" y="52" class="mc">  v  d  t  F</text>
+<text x="593" y="66" class="mc">f1 1  1  1  0</text>
+<text x="593" y="80" class="mc">f2 1  0  0  1</text>
+<text x="593" y="94" class="mc">f3 0  1  0  1</text>
+<text x="593" y="108" class="mc">f4 1  0  1  0</text>
+<text x="593" y="119" class="mc" style="font-size:7px;fill:#1A7048">F in {0,1}^(mxn)</text>
+
+<text x="42" y="52" class="not">(V, F)</text>
+<text x="42" y="65" class="nots">théorie STEM</text>
+<text x="42" y="430" class="not">(H, C)</text>
+<text x="42" y="443" class="nots">problème STEM</text>
+
+<line x1="148" y1="190" x2="300" y2="110" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<line x1="148" y1="310" x2="300" y2="110" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<line x1="520" y1="175" x2="430" y2="310" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<line x1="520" y1="310" x2="430" y2="310" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<line x1="148" y1="190" x2="300" y2="420" stroke="#2A8060" stroke-width="1.2" opacity="0.35" stroke-dasharray="5,4"/>
+<line x1="520" y1="175" x2="300" y2="420" stroke="#2A8060" stroke-width="1.2" opacity="0.35" stroke-dasharray="5,4"/>
+
+<text x="205" y="168" class="fm">d = v x t</text>
+<text x="492" y="252" class="fm">F = m . a</text>
+<text x="372" y="346" class="fm">E = 1/2 mv2</text>
+
+<rect x="242" y="214" width="196" height="42" rx="5" fill="#0D3F20" stroke="#1E6040" stroke-width="0.8" opacity="0.92"/>
+<text x="340" y="231" class="spa">F . s = F . e - 1</text>
+<text x="340" y="247" class="spas">condition d'activation SPA</text>
+
+<text x="340" y="273" class="rho">rho = optimalSteps / totalSteps</text>
+
+<circle cx="300" cy="110" r="36" fill="none" stroke="#E05555" stroke-width="0.8" opacity="0.28"/>
+<circle cx="300" cy="110" r="46" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.12"/>
+<circle cx="300" cy="420" r="36" fill="none" stroke="#E05555" stroke-width="0.8" opacity="0.28"/>
+<circle cx="300" cy="420" r="46" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.12"/>
+
+<circle cx="148" cy="190" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text x="148" y="190" class="nl">v</text>
+<circle cx="148" cy="310" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text x="148" y="310" class="nl">t</text>
+<circle cx="300" cy="110" r="26" fill="#4D1A1A" stroke="#E05555" stroke-width="2"/>
+<text x="300" y="110" class="nl">d</text>
+<circle cx="520" cy="175" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text x="520" y="175" class="nl">m</text>
+<circle cx="520" cy="310" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text x="520" y="310" class="nl">F</text>
+<circle cx="430" cy="310" r="26" fill="#1A2535" stroke="#5A7D9A" stroke-width="2"/>
+<text x="430" y="310" class="nl">a</text>
+<circle cx="300" cy="420" r="26" fill="#4D1A1A" stroke="#E05555" stroke-width="2"/>
+<text x="300" y="420" class="nl">E</text>
+
+<rect x="530" y="376" width="122" height="78" rx="4" fill="#0D3F20" stroke="#1E6040" stroke-width="0.5" opacity="0.85"/>
+<text x="591" y="390" class="legti">légende</text>
+<circle cx="546" cy="406" r="5" fill="#154D37" stroke="#3EC988" stroke-width="1.5"/>
+<text x="556" y="410" class="leg">connue</text>
+<circle cx="546" cy="424" r="5" fill="#1A2535" stroke="#5A7D9A" stroke-width="1.5"/>
+<text x="556" y="428" class="legd">inconnue</text>
+<circle cx="546" cy="442" r="5" fill="#4D1A1A" stroke="#E05555" stroke-width="1.5"/>
+<text x="556" y="446" class="lego">objectif</text>
+
+<text x="340" y="466" class="brand">DEFI  STEM</text>
+</svg>
