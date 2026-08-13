@@ -463,12 +463,16 @@ function GamePage() {
   }, [gameState]);
 
   if (!gameLoading) {
-    return <HeroSection lang={lang} profile={profile} onPlayNow={handlePlayNow} />;
+    return (
+      <div className="bg-home" style={{ minHeight: '100vh' }}>
+        <HeroSection lang={lang} profile={profile} onPlayNow={handlePlayNow} />
+      </div>
+    );
   }
 
   if (!gameState) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <div className="bg-home" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         {t('loading', lang)}
       </div>
     );
@@ -486,7 +490,7 @@ function GamePage() {
   const Screen = isMobile ? GameScreenMobile : GameScreen;
 
   return (
-    <>
+    <div className="bg-game" style={{ minHeight: '100vh' }}>
       {showSettings ? (
         <Settings lang={lang} onLangChange={setLang} onBack={() => setShowSettings(false)} />
       ) : (
@@ -539,7 +543,7 @@ function GamePage() {
           )}
         </>
       )}
-    </>
+    </div>
   );
 }
 

@@ -78,15 +78,15 @@ export function Achievements({ apiUrl, userId, lang, onLangChange }: Achievement
   );
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8' }}>
+    <div className="bg-pages" style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh' }}>
       <header
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '14px 24px',
-          background: '#fff',
-          borderBottom: '1px solid #D6DCE4',
+          background: 'rgba(10, 30, 18, 0.80)',
+          borderBottom: '1px solid #1E6040',
         }}
       >
         <h1 style={{ margin: 0, fontSize: 18, color: '#2E2E2E' }}>{t('achievementsTitle', lang)}</h1>

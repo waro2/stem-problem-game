@@ -1,0 +1,21 @@
+/* SVG background classes — applied on page root divs */
+.bg-home {
+  background-image: url('/defi_stem_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.bg-game {
+  background-image: url('/defi_stem_game_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.bg-pages {
+  background-image: url('/defi_stem_pages_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}

@@ -1,120 +1,142 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 680 480" role="img">
 <title>Défi STEM — fond algorithmique SPA</title>
-<desc>Réseau de 7 variables scientifiques interconnectées par des formules, illustrant l'algorithme SPA : variables connues en vert, objectifs en rouge, inconnues en gris-bleu.</desc>
+<desc>Réseau de 7 variables scientifiques interconnectées par des formules, illustrant l'algorithme SPA.</desc>
 <style>
-.nl{font-family:monospace;font-size:15px;fill:#fff;text-anchor:middle;dominant-baseline:middle;font-weight:bold}
-.fm{font-family:monospace;font-size:10px;fill:#7EC9A2;text-anchor:middle}
-.spa{font-family:monospace;font-size:13px;fill:#F5A623;text-anchor:middle;font-weight:bold}
+.nl  {font-family:monospace;font-size:15px;fill:#fff;text-anchor:middle;dominant-baseline:middle;font-weight:bold}
+.fm  {font-family:monospace;font-size:10px;fill:#8EDBB5;text-anchor:middle}
+.spa {font-family:monospace;font-size:13px;fill:#F5A623;text-anchor:middle;font-weight:bold}
 .spas{font-size:8px;fill:#B8792A;text-anchor:middle}
-.not{font-size:12px;fill:#2D8050;text-anchor:start;font-style:italic}
+.not {font-size:12px;fill:#2D8050;text-anchor:start;font-style:italic}
 .nots{font-size:8px;fill:#1C5535;text-anchor:start}
-.mc{font-family:monospace;font-size:9px;fill:#1E6040;text-anchor:middle}
+.mc  {font-family:monospace;font-size:9px;fill:#1E6040;text-anchor:middle}
 .legti{font-size:8px;fill:#2D7050;text-anchor:middle}
-.leg{font-size:9px;fill:#7EC9A2;text-anchor:start}
+.leg {font-size:9px;fill:#7EC9A2;text-anchor:start}
 .legd{font-size:9px;fill:#5A7D9A;text-anchor:start}
 .lego{font-size:9px;fill:#E05555;text-anchor:start}
-.brand{font-size:10px;fill:#1A5535;text-anchor:middle;letter-spacing:3px;font-weight:bold}
-.rho{font-family:monospace;font-size:9px;fill:#2A7050;text-anchor:middle}
+.brand{font-size:9px;fill:#1A5535;text-anchor:middle;letter-spacing:3px;font-weight:bold}
+.rho {font-family:monospace;font-size:9px;fill:#2A7050;text-anchor:middle}
 </style>
 
+<!-- Fond -->
 <rect width="680" height="480" fill="#0B3728"/>
 
-<!-- Ambient dots -->
-<circle cx="52" cy="90" r="1.5" fill="#1C6040" opacity="0.6"/>
-<circle cx="200" cy="75" r="1" fill="#1C6040" opacity="0.5"/>
-<circle cx="385" cy="70" r="2" fill="#1C6040" opacity="0.35"/>
-<circle cx="640" cy="90" r="1.5" fill="#1C6040" opacity="0.5"/>
-<circle cx="660" cy="245" r="1" fill="#1C6040" opacity="0.4"/>
-<circle cx="638" cy="360" r="1.5" fill="#1C6040" opacity="0.4"/>
-<circle cx="55" cy="370" r="1.5" fill="#1C6040" opacity="0.4"/>
-<circle cx="42" cy="245" r="1" fill="#1C6040" opacity="0.5"/>
-<circle cx="250" cy="420" r="1.5" fill="#1C6040" opacity="0.35"/>
-<circle cx="440" cy="418" r="1" fill="#1C6040" opacity="0.4"/>
-<circle cx="480" cy="78" r="1.5" fill="#1C6040" opacity="0.4"/>
-<circle cx="350" cy="155" r="1" fill="#1C6040" opacity="0.3"/>
-<circle cx="88" cy="145" r="1.5" fill="#1C6040" opacity="0.35"/>
-<circle cx="600" cy="160" r="1" fill="#1C6040" opacity="0.35"/>
+<!-- Points décoratifs -->
+<circle cx="52"  cy="72"  r="1.5" fill="#1C6040" opacity="0.5"/>
+<circle cx="200" cy="68"  r="1"   fill="#1C6040" opacity="0.45"/>
+<circle cx="385" cy="72"  r="2"   fill="#1C6040" opacity="0.30"/>
+<circle cx="636" cy="88"  r="1.5" fill="#1C6040" opacity="0.45"/>
+<circle cx="655" cy="260" r="1"   fill="#1C6040" opacity="0.4"/>
+<circle cx="630" cy="370" r="1.5" fill="#1C6040" opacity="0.4"/>
+<circle cx="58"  cy="378" r="1.5" fill="#1C6040" opacity="0.4"/>
+<circle cx="45"  cy="250" r="1"   fill="#1C6040" opacity="0.45"/>
+<circle cx="255" cy="445" r="1.5" fill="#1C6040" opacity="0.30"/>
+<circle cx="438" cy="440" r="1"   fill="#1C6040" opacity="0.35"/>
+<circle cx="478" cy="75"  r="1.5" fill="#1C6040" opacity="0.35"/>
+<circle cx="90"  cy="148" r="1.5" fill="#1C6040" opacity="0.30"/>
+<circle cx="596" cy="158" r="1"   fill="#1C6040" opacity="0.30"/>
 
-<!-- Matrix panel — shifted down into safe zone -->
-<rect x="548" y="62" width="90" height="96" rx="4" fill="#0D4020" opacity="0.75" stroke="#1D6040" stroke-width="0.5"/>
-<text x="593" y="73" class="mc" style="font-size:7px;fill:#1A7048">MATRICE SPA</text>
-<text x="593" y="88" class="mc">  v  d  t  F</text>
-<text x="593" y="102" class="mc">f1 1  1  1  0</text>
-<text x="593" y="116" class="mc">f2 1  0  0  1</text>
-<text x="593" y="130" class="mc">f3 0  1  0  1</text>
-<text x="593" y="144" class="mc">f4 1  0  1  0</text>
-<text x="593" y="155" class="mc" style="font-size:7px;fill:#1A7048">F in {0,1}^(mxn)</text>
+<!-- ──────────────────────────────────────────────
+     MATRICE SPA  (décalée dans la safe zone)
+     Box : y=60 → y=162
+────────────────────────────────────────────── -->
+<rect x="543" y="60" width="92" height="102" rx="4" fill="#0D4020" opacity="0.75" stroke="#1D6040" stroke-width="0.5"/>
+<text x="589" y="72"  class="mc" style="font-size:7px;fill:#1A7048">MATRICE SPA</text>
+<text x="589" y="88"  class="mc">  v  d  t  F</text>
+<text x="589" y="102" class="mc">f1 1  1  1  0</text>
+<text x="589" y="116" class="mc">f2 1  0  0  1</text>
+<text x="589" y="130" class="mc">f3 0  1  0  1</text>
+<text x="589" y="144" class="mc">f4 1  0  1  0</text>
+<text x="589" y="156" class="mc" style="font-size:7px;fill:#1A7048">F in {0,1}^(mxn)</text>
 
-<!-- Annotations — inside safe zone -->
-<text x="42" y="82" class="not">(V, F)</text>
-<text x="42" y="95" class="nots">théorie STEM</text>
-<text x="42" y="398" class="not">(H, C)</text>
-<text x="42" y="411" class="nots">problème STEM</text>
+<!-- ──────────────────────────────────────────────
+     Annotations (toutes dans la safe zone y=62…422)
+────────────────────────────────────────────── -->
+<text x="44" y="82"  class="not">(V, F)</text>
+<text x="44" y="95"  class="nots">théorie STEM</text>
 
-<!-- Connection lines -->
-<!-- v(115,190) → d(300,82) -->
-<line x1="115" y1="190" x2="300" y2="82" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
-<!-- t(115,310) → d(300,82) -->
-<line x1="115" y1="310" x2="300" y2="82" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
-<!-- m(565,175) → a(462,310) -->
-<line x1="565" y1="175" x2="462" y2="310" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
-<!-- F(565,310) → a(462,310) -->
-<line x1="565" y1="310" x2="462" y2="310" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
-<!-- v(115,190) → E(300,408) dashed -->
-<line x1="115" y1="190" x2="300" y2="408" stroke="#2A8060" stroke-width="1.2" opacity="0.35" stroke-dasharray="5,4"/>
-<!-- m(565,175) → E(300,408) dashed -->
-<line x1="565" y1="175" x2="300" y2="408" stroke="#2A8060" stroke-width="1.2" opacity="0.35" stroke-dasharray="5,4"/>
+<text x="44" y="398" class="not">(H, C)</text>
+<text x="44" y="411" class="nots">problème STEM</text>
 
-<!-- Formula labels — midpoints of updated lines -->
-<!-- midpoint v(115,190)→d(300,82) ≈ (208,136) -->
-<text x="196" y="133" class="fm">d = v x t</text>
-<!-- midpoint m(565,175)→a(462,310) ≈ (513,242) -->
-<text x="510" y="248" class="fm">F = m . a</text>
-<!-- near dashed lines toward E: midpoint m(565,175)→E(300,408) ≈ (432,291) -->
-<text x="408" y="352" class="fm">E = 1/2 mv2</text>
+<!-- ──────────────────────────────────────────────
+     POSITIONS DES NŒUDS
+     d   : 320,  82  (au-dessus hero card, dans safe zone)
+     v   : 115, 200
+     t   : 115, 330
+     m   : 565, 185
+     F   : 565, 315
+     a   : 462, 315
+     E   : 320, 408  (remonté dans safe zone)
+────────────────────────────────────────────── -->
 
-<!-- SPA activation box -->
-<rect x="242" y="214" width="196" height="42" rx="5" fill="#0D3F20" stroke="#1E6040" stroke-width="0.8" opacity="0.92"/>
-<text x="340" y="231" class="spa">F . s = F . e - 1</text>
-<text x="340" y="247" class="spas">condition d'activation SPA</text>
+<!-- Halos des objectifs -->
+<circle cx="320" cy="82"  r="40" fill="none" stroke="#E05555" stroke-width="0.8" opacity="0.22"/>
+<circle cx="320" cy="82"  r="52" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.09"/>
+<circle cx="320" cy="408" r="40" fill="none" stroke="#E05555" stroke-width="0.8" opacity="0.22"/>
+<circle cx="320" cy="408" r="52" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.09"/>
 
-<text x="340" y="273" class="rho">rho = optimalSteps / totalSteps</text>
+<!-- Lignes de connexion (derrière les nœuds) -->
+<!-- v → d -->
+<line x1="115" y1="200" x2="320" y2="82"  stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<!-- t → d -->
+<line x1="115" y1="330" x2="320" y2="82"  stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<!-- m → a -->
+<line x1="565" y1="185" x2="462" y2="315" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<!-- F → a -->
+<line x1="565" y1="315" x2="462" y2="315" stroke="#2A8060" stroke-width="1.5" opacity="0.65"/>
+<!-- v → E (dashed) -->
+<line x1="115" y1="200" x2="320" y2="408" stroke="#2A8060" stroke-width="1.2" opacity="0.28" stroke-dasharray="5,4"/>
+<!-- m → E (dashed) -->
+<line x1="565" y1="185" x2="320" y2="408" stroke="#2A8060" stroke-width="1.2" opacity="0.28" stroke-dasharray="5,4"/>
 
-<!-- Halos around d (cx=300, cy=82) -->
-<circle cx="300" cy="82" r="36" fill="none" stroke="#E05555" stroke-width="0.8" opacity="0.28"/>
-<circle cx="300" cy="82" r="46" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.12"/>
-<!-- Halos around E (cx=300, cy=408) -->
-<circle cx="300" cy="408" r="36" fill="none" stroke="#E05555" stroke-width="0.8" opacity="0.28"/>
-<circle cx="300" cy="408" r="46" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.12"/>
+<!-- Labels de formules -->
+<text x="188" y="134" class="fm">d = v x t</text>
+<text x="532" y="254" class="fm">F = m . a</text>
+<text x="392" y="356" class="fm">E = ½ mv²</text>
 
-<!-- Nodes -->
-<circle cx="115" cy="190" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
-<text x="115" y="190" class="nl">v</text>
-<circle cx="115" cy="310" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
-<text x="115" y="310" class="nl">t</text>
-<!-- d: objectif, cy=82 -->
-<circle cx="300" cy="82" r="26" fill="#4D1A1A" stroke="#E05555" stroke-width="2"/>
-<text x="300" y="82" class="nl">d</text>
-<circle cx="565" cy="175" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
-<text x="565" y="175" class="nl">m</text>
-<circle cx="565" cy="310" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
-<text x="565" y="310" class="nl">F</text>
-<circle cx="462" cy="310" r="26" fill="#1A2535" stroke="#5A7D9A" stroke-width="2"/>
-<text x="462" y="310" class="nl">a</text>
-<!-- E: objectif, cy=408 -->
-<circle cx="300" cy="408" r="26" fill="#4D1A1A" stroke="#E05555" stroke-width="2"/>
-<text x="300" y="408" class="nl">E</text>
+<!-- Boîte condition SPA -->
+<rect x="244" y="198" width="192" height="42" rx="5" fill="#0D3F20" stroke="#1E6040" stroke-width="0.8" opacity="0.92"/>
+<text x="340" y="215" class="spa">F . s = F . e - 1</text>
+<text x="340" y="231" class="spas">condition d'activation SPA</text>
 
-<!-- Legend — repositioned to y=330-408 -->
-<rect x="530" y="330" width="122" height="78" rx="4" fill="#0D3F20" stroke="#1E6040" stroke-width="0.5" opacity="0.85"/>
-<text x="591" y="344" class="legti">légende</text>
-<circle cx="546" cy="360" r="5" fill="#154D37" stroke="#3EC988" stroke-width="1.5"/>
-<text x="556" y="364" class="leg">connue</text>
-<circle cx="546" cy="378" r="5" fill="#1A2535" stroke="#5A7D9A" stroke-width="1.5"/>
-<text x="556" y="382" class="legd">inconnue</text>
-<circle cx="546" cy="396" r="5" fill="#4D1A1A" stroke="#E05555" stroke-width="1.5"/>
-<text x="556" y="400" class="lego">objectif</text>
+<!-- Formule rho -->
+<text x="340" y="258" class="rho">rho = optimalSteps / totalSteps</text>
 
-<!-- Brand — y=450, safely inside bottom -->
+<!-- ═══ Nœuds ═══ -->
+<!-- d — objectif -->
+<circle cx="320" cy="82"  r="26" fill="#4D1A1A" stroke="#E05555" stroke-width="2"/>
+<text    x="320" y="82"  class="nl">d</text>
+<!-- v — connue -->
+<circle cx="115" cy="200" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text    x="115" y="200" class="nl">v</text>
+<!-- t — connue -->
+<circle cx="115" cy="330" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text    x="115" y="330" class="nl">t</text>
+<!-- m — connue -->
+<circle cx="565" cy="185" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text    x="565" y="185" class="nl">m</text>
+<!-- F — connue -->
+<circle cx="565" cy="315" r="26" fill="#154D37" stroke="#3EC988" stroke-width="2"/>
+<text    x="565" y="315" class="nl">F</text>
+<!-- a — inconnue -->
+<circle cx="462" cy="315" r="26" fill="#1A2535" stroke="#5A7D9A" stroke-width="2"/>
+<text    x="462" y="315" class="nl">a</text>
+<!-- E — objectif -->
+<circle cx="320" cy="408" r="26" fill="#4D1A1A" stroke="#E05555" stroke-width="2"/>
+<text    x="320" y="408" class="nl">E</text>
+
+<!-- ──────────────────────────────────────────────
+     Légende  (remontée dans la safe zone)
+     Box : y=330 → y=408
+────────────────────────────────────────────── -->
+<rect x="528" y="330" width="122" height="78" rx="4" fill="#0D3F20" stroke="#1E6040" stroke-width="0.5" opacity="0.85"/>
+<text x="589" y="344" class="legti">légende</text>
+<circle cx="545" cy="360" r="5" fill="#154D37" stroke="#3EC988" stroke-width="1.5"/>
+<text    x="556" y="364" class="leg">connue</text>
+<circle cx="545" cy="378" r="5" fill="#1A2535" stroke="#5A7D9A" stroke-width="1.5"/>
+<text    x="556" y="382" class="legd">inconnue</text>
+<circle cx="545" cy="396" r="5" fill="#4D1A1A" stroke="#E05555" stroke-width="1.5"/>
+<text    x="556" y="400" class="lego">objectif</text>
+
+<!-- Marque (dans la safe zone) -->
 <text x="340" y="450" class="brand">DEFI  STEM</text>
 </svg>

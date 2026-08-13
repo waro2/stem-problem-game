@@ -6,6 +6,7 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { App } from './App';
 import { registerServiceWorker } from './pwa/registerServiceWorker';
 import './styles/animations.css';
+import './index.css';
 
 // Initialise native chrome before React renders.
 if (Capacitor.isNativePlatform()) {

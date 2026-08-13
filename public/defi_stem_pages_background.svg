@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 800 450" role="img">
+<title>Défi STEM — fond pages secondaires</title>
+
+<defs>
+  <!-- Dégradé principal : vert sobre, légèrement plus clair vers le centre -->
+  <radialGradient id="bg" cx="50%" cy="45%" r="80%">
+    <stop offset="0%"   stop-color="#112E1E"/>
+    <stop offset="55%"  stop-color="#0C2218"/>
+    <stop offset="100%" stop-color="#071410"/>
+  </radialGradient>
+
+  <!-- Lueur verte très douce (coins) -->
+  <radialGradient id="glow-corner" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#2A7048" stop-opacity="0.14"/>
+    <stop offset="100%" stop-color="#2A7048" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+
+<!-- ═══ FOND ════════════════════════════════════════════════════════════ -->
+<rect width="800" height="450" fill="url(#bg)"/>
+
+<!-- Légère lueur douce en haut à gauche et bas à droite -->
+<circle cx="0"   cy="0"   r="300" fill="url(#glow-corner)" opacity="0.7"/>
+<circle cx="800" cy="450" r="280" fill="url(#glow-corner)" opacity="0.6"/>
+
+<!-- ═══ GRILLE DE POINTS (texture très subtile) ══════════════════════════ -->
+<!-- 9 colonnes × 5 rangées = grille régulière, espacement 80×80 -->
+<!-- Rangée y=80 -->
+<circle cx="80"  cy="80"  r="1.2" fill="#2A6040" opacity="0.30"/>
+<circle cx="160" cy="80"  r="1.2" fill="#2A6040" opacity="0.25"/>
+<circle cx="240" cy="80"  r="1.2" fill="#2A6040" opacity="0.25"/>
+<circle cx="320" cy="80"  r="1.2" fill="#2A6040" opacity="0.22"/>
+<circle cx="400" cy="80"  r="1.2" fill="#2A6040" opacity="0.22"/>
+<circle cx="480" cy="80"  r="1.2" fill="#2A6040" opacity="0.22"/>
+<circle cx="560" cy="80"  r="1.2" fill="#2A6040" opacity="0.25"/>
+<circle cx="640" cy="80"  r="1.2" fill="#2A6040" opacity="0.28"/>
+<circle cx="720" cy="80"  r="1.2" fill="#2A6040" opacity="0.22"/>
+<!-- Rangée y=160 -->
+<circle cx="80"  cy="160" r="1.2" fill="#2A6040" opacity="0.28"/>
+<circle cx="160" cy="160" r="1.2" fill="#2A6040" opacity="0.22"/>
+<circle cx="240" cy="160" r="1.2" fill="#2A6040" opacity="0.18"/>
+<circle cx="320" cy="160" r="1.2" fill="#2A6040" opacity="0.15"/>
+<circle cx="400" cy="160" r="1.2" fill="#2A6040" opacity="0.15"/>
+<circle cx="480" cy="160" r="1.2" fill="#2A6040" opacity="0.18"/>
+<circle cx="560" cy="160" r="1.2" fill="#2A6040" opacity="0.20"/>
+<circle cx="640" cy="160" r="1.2" fill="#2A6040" opacity="0.25"/>
+<circle cx="720" cy="160" r="1.2" fill="#2A6040" opacity="0.18"/>
+<!-- Rangée y=240 -->
+<circle cx="80"  cy="240" r="1.2" fill="#2A6040" opacity="0.25"/>
+<circle cx="160" cy="240" r="1.2" fill="#2A6040" opacity="0.18"/>
+<circle cx="240" cy="240" r="1.2" fill="#2A6040" opacity="0.14"/>
+<circle cx="320" cy="240" r="1.2" fill="#2A6040" opacity="0.12"/>
+<circle cx="400" cy="240" r="1.2" fill="#2A6040" opacity="0.12"/>
+<circle cx="480" cy="240" r="1.2" fill="#2A6040" opacity="0.14"/>
+<circle cx="560" cy="240" r="1.2" fill="#2A6040" opacity="0.18"/>
+<circle cx="640" cy="240" r="1.2" fill="#2A6040" opacity="0.22"/>
+<circle cx="720" cy="240" r="1.2" fill="#2A6040" opacity="0.15"/>
+<!-- Rangée y=320 -->
+<circle cx="80"  cy="320" r="1.2" fill="#2A6040" opacity="0.25"/>
+<circle cx="160" cy="320" r="1.2" fill="#2A6040" opacity="0.20"/>
+<circle cx="240" cy="320" r="1.2" fill="#2A6040" opacity="0.15"/>
+<circle cx="320" cy="320" r="1.2" fill="#2A6040" opacity="0.13"/>
+<circle cx="400" cy="320" r="1.2" fill="#2A6040" opacity="0.13"/>
+<circle cx="480" cy="320" r="1.2" fill="#2A6040" opacity="0.15"/>
+<circle cx="560" cy="320" r="1.2" fill="#2A6040" opacity="0.18"/>
+<circle cx="640" cy="320" r="1.2" fill="#2A6040" opacity="0.22"/>
+<circle cx="720" cy="320" r="1.2" fill="#2A6040" opacity="0.15"/>
+<!-- Rangée y=400 -->
+<circle cx="80"  cy="400" r="1.2" fill="#2A6040" opacity="0.25"/>
+<circle cx="160" cy="400" r="1.2" fill="#2A6040" opacity="0.20"/>
+<circle cx="240" cy="400" r="1.2" fill="#2A6040" opacity="0.16"/>
+<circle cx="320" cy="400" r="1.2" fill="#2A6040" opacity="0.14"/>
+<circle cx="400" cy="400" r="1.2" fill="#2A6040" opacity="0.14"/>
+<circle cx="480" cy="400" r="1.2" fill="#2A6040" opacity="0.16"/>
+<circle cx="560" cy="400" r="1.2" fill="#2A6040" opacity="0.20"/>
+<circle cx="640" cy="400" r="1.2" fill="#2A6040" opacity="0.24"/>
+<circle cx="720" cy="400" r="1.2" fill="#2A6040" opacity="0.16"/>
+
+<!-- ═══ LIGNES TRÈS LÉGÈRES (structure géométrique discrète) ════════════ -->
+<!-- Diagonale principale (haut-gauche → bas-droit) -->
+<line x1="0"   y1="60"  x2="800" y2="390"
+      stroke="#1A4030" stroke-width="0.5" opacity="0.35"/>
+<!-- Diagonale secondaire -->
+<line x1="0"   y1="390" x2="800" y2="60"
+      stroke="#1A4030" stroke-width="0.5" opacity="0.22"/>
+<!-- Deux légères horizontales, tiers supérieur et inférieur -->
+<line x1="0" y1="150" x2="800" y2="150"
+      stroke="#163828" stroke-width="0.4" opacity="0.28"/>
+<line x1="0" y1="300" x2="800" y2="300"
+      stroke="#163828" stroke-width="0.4" opacity="0.22"/>
+<!-- Deux légères verticales, tiers gauche et droit -->
+<line x1="267" y1="0" x2="267" y2="450"
+      stroke="#163828" stroke-width="0.4" opacity="0.22"/>
+<line x1="533" y1="0" x2="533" y2="450"
+      stroke="#163828" stroke-width="0.4" opacity="0.22"/>
+
+<!-- ═══ NŒUDS DÉCORATIFS AUX COINS (très discrets) ════════════════════ -->
+<!-- Coin haut-gauche -->
+<circle cx="38" cy="90"  r="14" fill="none" stroke="#2A6040" stroke-width="1" opacity="0.28"/>
+<circle cx="38" cy="90"  r="20" fill="none" stroke="#2A6040" stroke-width="0.5" opacity="0.12"/>
+<text x="38" y="91" style="font-family:monospace;font-size:10px;fill:#2A6040;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold;opacity:0.35">v</text>
+
+<!-- Coin haut-droit -->
+<circle cx="762" cy="90"  r="14" fill="none" stroke="#2A6040" stroke-width="1" opacity="0.25"/>
+<circle cx="762" cy="90"  r="20" fill="none" stroke="#2A6040" stroke-width="0.5" opacity="0.10"/>
+<text x="762" y="91" style="font-family:monospace;font-size:10px;fill:#2A6040;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold;opacity:0.30">F</text>
+
+<!-- Coin bas-gauche -->
+<circle cx="38" cy="360" r="14" fill="none" stroke="#2A6040" stroke-width="1" opacity="0.25"/>
+<circle cx="38" cy="360" r="20" fill="none" stroke="#2A6040" stroke-width="0.5" opacity="0.10"/>
+<text x="38" y="361" style="font-family:monospace;font-size:10px;fill:#2A6040;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold;opacity:0.30">t</text>
+
+<!-- Coin bas-droit -->
+<circle cx="762" cy="360" r="14" fill="none" stroke="#2A6040" stroke-width="1" opacity="0.22"/>
+<circle cx="762" cy="360" r="20" fill="none" stroke="#2A6040" stroke-width="0.5" opacity="0.09"/>
+<text x="762" y="361" style="font-family:monospace;font-size:10px;fill:#2A6040;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold;opacity:0.28">E</text>
+
+<!-- Nœud très discret au centre-gauche -->
+<circle cx="38" cy="225" r="10" fill="none" stroke="#2A6040" stroke-width="0.8" opacity="0.20"/>
+<text x="38" y="226" style="font-family:monospace;font-size:8px;fill:#2A6040;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold;opacity:0.22">d</text>
+
+<!-- Nœud très discret au centre-droit -->
+<circle cx="762" cy="225" r="10" fill="none" stroke="#2A6040" stroke-width="0.8" opacity="0.18"/>
+<text x="762" y="226" style="font-family:monospace;font-size:8px;fill:#2A6040;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold;opacity=0.20">a</text>
+
+<!-- ═══ CONNEXIONS LÉGÈRES ENTRE COINS ═══════════════════════════════════ -->
+<line x1="52"  cy="90"  x1="52"  y1="90"  x2="748" y2="90"
+      stroke="#1A4030" stroke-width="0.4" opacity="0.00"/>
+<!-- Arc discret haut-gauche → haut-droit (via le haut) -->
+<path d="M52,90 C200,65 600,65 748,90"
+      fill="none" stroke="#1A4030" stroke-width="0.5" opacity="0.22"/>
+<!-- Arc discret bas-gauche → bas-droit (via le bas) -->
+<path d="M52,360 C200,385 600,385 748,360"
+      fill="none" stroke="#1A4030" stroke-width="0.5" opacity="0.18"/>
+<!-- Connexion haut-gauche → bas-droit (diagonale douce) -->
+<path d="M52,90 C100,160 180,260 38,360"
+      fill="none" stroke="#1A4030" stroke-width="0.4" opacity="0.18"/>
+<!-- Connexion haut-droit → bas-gauche -->
+<path d="M748,90 C700,160 620,260 762,360"
+      fill="none" stroke="#1A4030" stroke-width="0.4" opacity="0.15"/>
+
+<!-- ═══ TEXTE DÉCORATIF TRÈS DISCRET (extrémités) ═════════════════════ -->
+<!-- Condition SPA, coin haut-centre, fantôme -->
+<text x="400" y="76"
+      style="font-family:monospace;font-size:8px;fill:#1C4A30;text-anchor:middle;opacity:0.40">
+  F · s = F · e − 1
+</text>
+
+<!-- Formule coin bas-centre -->
+<text x="400" y="432"
+      style="font-family:monospace;font-size:7.5px;fill:#1C4A30;text-anchor:middle;opacity:0.35">
+  ρ = étapes optimales / étapes totales
+</text>
+
+<!-- Marque Défi STEM — très effacée -->
+<text x="400" y="444"
+      style="font-size:7.5px;fill:#0E2A1A;text-anchor:middle;letter-spacing:4px;font-weight:bold;opacity:0.50">
+  DÉFI  STEM
+</text>
+</svg>

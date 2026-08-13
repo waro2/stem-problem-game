@@ -139,9 +139,9 @@ export function TutorialPage() {
 
   return (
     <div
+      className="bg-pages"
       style={{
         minHeight: '100vh',
-        background: '#F5F6F8',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -152,7 +152,7 @@ export function TutorialPage() {
     >
       <div
         style={{
-          background: '#fff',
+          background: 'rgba(10, 30, 18, 0.80)',
           borderRadius: 14,
           boxShadow: '0 2px 16px rgba(0,0,0,0.08)',
           width: '100%',

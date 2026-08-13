@@ -50,8 +50,8 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
 
   if (role !== 'instructor' && role !== 'admin') {
     return (
-      <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ background: '#fff', border: '1px solid #D6DCE4', borderRadius: 10, padding: 24, textAlign: 'center' }}>
+      <div className="bg-pages" style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ background: 'rgba(10, 30, 18, 0.80)', border: '1px solid #1E6040', borderRadius: 10, padding: 24, textAlign: 'center' }}>
           <h1 style={{ margin: '0 0 8px', fontSize: 18, color: '#2E2E2E' }}>{t('accessDeniedTitle', lang)}</h1>
           <p style={{ margin: 0, fontSize: 14, color: '#595959' }}>{t('accessDeniedMsg', lang)}</p>
         </div>
@@ -61,8 +61,8 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
 
   if (!cohortId) {
     return (
-      <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ background: '#fff', border: '1px solid #D6DCE4', borderRadius: 10, padding: 24, textAlign: 'center' }}>
+      <div className="bg-pages" style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ background: 'rgba(10, 30, 18, 0.80)', border: '1px solid #1E6040', borderRadius: 10, padding: 24, textAlign: 'center' }}>
           <h1 style={{ margin: '0 0 8px', fontSize: 18, color: '#2E2E2E' }}>{t('noCohortAssignedTitle', lang)}</h1>
           <p style={{ margin: 0, fontSize: 14, color: '#595959' }}>{t('noCohortAssignedMsg', lang)}</p>
         </div>
@@ -101,15 +101,15 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
   const domains = data ? [...new Set(data.students.flatMap(s => s.domainCompletion.map(d => d.domain)))] : [];
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8' }}>
+    <div className="bg-pages" style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh' }}>
       <header
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '14px 24px',
-          background: '#fff',
-          borderBottom: '1px solid #D6DCE4',
+          background: 'rgba(10, 30, 18, 0.80)',
+          borderBottom: '1px solid #1E6040',
         }}
       >
         <h1 style={{ margin: 0, fontSize: 18, color: '#2E2E2E' }}>

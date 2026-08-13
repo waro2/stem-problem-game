@@ -1,0 +1,277 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 800 450" role="img">
+<title>Défi STEM — fond page de jeu (Flux SPA)</title>
+
+<defs>
+  <!-- Dégradé de fond : noir profond au centre, légèrement plus lumineux sur les bords -->
+  <radialGradient id="bg-main" cx="42%" cy="48%" r="72%">
+    <stop offset="0%"   stop-color="#0C2418"/>
+    <stop offset="60%"  stop-color="#081509"/>
+    <stop offset="100%" stop-color="#040C06"/>
+  </radialGradient>
+
+  <!-- Halos verts (variables connues) -->
+  <radialGradient id="glow-green" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#3EC988" stop-opacity="0.22"/>
+    <stop offset="100%" stop-color="#3EC988" stop-opacity="0"/>
+  </radialGradient>
+  <!-- Halo doré (formule en activation) -->
+  <radialGradient id="glow-gold" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#F5A623" stop-opacity="0.28"/>
+    <stop offset="100%" stop-color="#F5A623" stop-opacity="0"/>
+  </radialGradient>
+  <!-- Halo rouge (objectif) -->
+  <radialGradient id="glow-red" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#E05555" stop-opacity="0.20"/>
+    <stop offset="100%" stop-color="#E05555" stop-opacity="0"/>
+  </radialGradient>
+
+  <!-- Marqueur de flèche pour les chemins actifs -->
+  <marker id="arrow-gold" viewBox="0 0 8 8" refX="7" refY="4"
+          markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M0,0 L8,4 L0,8 Z" fill="#F5A623" opacity="0.7"/>
+  </marker>
+  <marker id="arrow-green" viewBox="0 0 8 8" refX="7" refY="4"
+          markerWidth="4" markerHeight="4" orient="auto">
+    <path d="M0,0 L8,4 L0,8 Z" fill="#3EC988" opacity="0.6"/>
+  </marker>
+</defs>
+
+<!-- ═══ FOND ════════════════════════════════════════════════════════════ -->
+<rect width="800" height="450" fill="url(#bg-main)"/>
+
+<!-- Vignette : coins plus sombres -->
+<rect x="0"   y="0"   width="200" height="450" fill="#040C06" opacity="0.35"
+      style="mask:none" rx="0"/>
+<!-- Gradient gauche  -->
+<rect x="0" y="0" width="120" height="450" fill="#040C06" opacity="0.30"/>
+<rect x="680" y="0" width="120" height="450" fill="#040C06" opacity="0.25"/>
+<rect x="0" y="0" width="800" height="70"   fill="#040C06" opacity="0.20"/>
+<rect x="0" y="380" width="800" height="70" fill="#040C06" opacity="0.25"/>
+
+<!-- ═══ TEXTURE : grille de points ══════════════════════════════════════ -->
+<!-- Rangée 1 -->
+<circle cx="80"  cy="100" r="1" fill="#1A5030" opacity="0.5"/>
+<circle cx="160" cy="100" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="240" cy="100" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="320" cy="100" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="400" cy="100" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="480" cy="100" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="560" cy="100" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="640" cy="100" r="1" fill="#1A5030" opacity="0.45"/>
+<circle cx="720" cy="100" r="1" fill="#1A5030" opacity="0.3"/>
+<!-- Rangée 2 -->
+<circle cx="80"  cy="180" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="160" cy="180" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="240" cy="180" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="320" cy="180" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="400" cy="180" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="480" cy="180" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="560" cy="180" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="640" cy="180" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="720" cy="180" r="1" fill="#1A5030" opacity="0.25"/>
+<!-- Rangée 3 -->
+<circle cx="80"  cy="260" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="160" cy="260" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="240" cy="260" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="320" cy="260" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="400" cy="260" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="480" cy="260" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="560" cy="260" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="640" cy="260" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="720" cy="260" r="1" fill="#1A5030" opacity="0.25"/>
+<!-- Rangée 4 -->
+<circle cx="80"  cy="340" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="160" cy="340" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="240" cy="340" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="320" cy="340" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="400" cy="340" r="1" fill="#1A5030" opacity="0.3"/>
+<circle cx="480" cy="340" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="560" cy="340" r="1" fill="#1A5030" opacity="0.35"/>
+<circle cx="640" cy="340" r="1" fill="#1A5030" opacity="0.4"/>
+<circle cx="720" cy="340" r="1" fill="#1A5030" opacity="0.25"/>
+
+<!-- ═══ LIGNES STRUCTURELLES (arrière-plan profond) ══════════════════════ -->
+<!-- Grande diagonale principale (haut-gauche → bas-droit) -->
+<line x1="0"   y1="130" x2="800" y2="310" stroke="#122E1C" stroke-width="0.6" opacity="0.55"/>
+<!-- Contre-diagonale -->
+<line x1="0"   y1="280" x2="800" y2="150" stroke="#122E1C" stroke-width="0.5" opacity="0.45"/>
+<!-- Horizontale milieu -->
+<line x1="0"   y1="225" x2="800" y2="225" stroke="#0E2416" stroke-width="0.4" opacity="0.40"/>
+
+<!-- ═══ CHEMINS BEZIER — RÉSEAU DE FORMULES ══════════════════════════════ -->
+
+<!-- Chemin de fond large (flux ambiant) -->
+<path d="M0,200 C100,180 280,140 420,160 C560,180 680,240 800,220"
+      fill="none" stroke="#143A22" stroke-width="1.2" opacity="0.50"/>
+<path d="M0,320 C120,300 260,350 420,320 C550,296 660,310 800,330"
+      fill="none" stroke="#143A22" stroke-width="0.9" opacity="0.38"/>
+<path d="M200,0 C210,80 240,130 260,200"
+      fill="none" stroke="#143A22" stroke-width="0.8" opacity="0.40"/>
+<path d="M580,0 C590,90 600,160 600,250"
+      fill="none" stroke="#143A22" stroke-width="0.8" opacity="0.35"/>
+
+<!-- ─── Chemins de formules résolues (vert solide) ────────────────────── -->
+<!-- v(110,130) → d(290,200) : d = v × t  -->
+<path d="M110,130 C170,148 230,172 290,200"
+      fill="none" stroke="#2A8055" stroke-width="1.4" opacity="0.65"
+      marker-end="url(#arrow-green)"/>
+<!-- t(110,310) → d(290,200) -->
+<path d="M110,310 C170,278 230,242 290,200"
+      fill="none" stroke="#2A8055" stroke-width="1.4" opacity="0.65"
+      marker-end="url(#arrow-green)"/>
+
+<!-- F(680,130) → a(530,270)   F = m·a (ACTIVATION EN COURS, doré) -->
+<path d="M680,130 C650,170 600,220 530,270"
+      fill="none" stroke="#F5A623" stroke-width="2.0" opacity="0.75"
+      stroke-dasharray="8,5"
+      marker-end="url(#arrow-gold)"/>
+<!-- Aura large sur le chemin actif -->
+<path d="M680,130 C650,170 600,220 530,270"
+      fill="none" stroke="#F5A623" stroke-width="8" opacity="0.10"/>
+
+<!-- m(480,100) → a(530,270)   F = m·a -->
+<path d="M480,100 C498,160 512,210 530,270"
+      fill="none" stroke="#F5A623" stroke-width="1.6" opacity="0.65"
+      stroke-dasharray="8,5"
+      marker-end="url(#arrow-gold)"/>
+
+<!-- Chemins vers E (encore non résolus, pointillés gris-vert) -->
+<path d="M290,200 C320,260 350,310 380,370"
+      fill="none" stroke="#2A6040" stroke-width="1.0" opacity="0.38" stroke-dasharray="5,4"/>
+<path d="M530,270 C520,300 510,335 380,370"
+      fill="none" stroke="#2A6040" stroke-width="1.0" opacity="0.35" stroke-dasharray="5,4"/>
+
+<!-- ═══ HALOS DE LUMIÈRE (atmosphère) ════════════════════════════════════ -->
+<!-- Source lumineuse verte : autour des variables connues v/t -->
+<circle cx="85"  cy="220" r="110" fill="url(#glow-green)" opacity="0.65"/>
+<!-- Source lumineuse dorée : autour du chemin d'activation -->
+<circle cx="600" cy="195" r="130" fill="url(#glow-gold)"  opacity="0.60"/>
+<!-- Source lumineuse rouge : objectif non résolu E -->
+<circle cx="380" cy="370" r="90"  fill="url(#glow-red)"   opacity="0.60"/>
+
+<!-- ═══ HALOS CONCENTRIQUES SUR LES NŒUDS OBJECTIFS ════════════════════ -->
+<!-- d (résolu - rouge qui s'estompe) -->
+<circle cx="290" cy="200" r="42" fill="none" stroke="#E05555" stroke-width="0.9" opacity="0.22"/>
+<circle cx="290" cy="200" r="56" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.09"/>
+<!-- a (activation en cours - or pulsant) -->
+<circle cx="530" cy="270" r="44" fill="none" stroke="#F5A623" stroke-width="1.0" opacity="0.28"/>
+<circle cx="530" cy="270" r="60" fill="none" stroke="#F5A623" stroke-width="0.6" opacity="0.12"/>
+<circle cx="530" cy="270" r="78" fill="none" stroke="#F5A623" stroke-width="0.4" opacity="0.06"/>
+<!-- E (objectif à atteindre) -->
+<circle cx="380" cy="370" r="42" fill="none" stroke="#E05555" stroke-width="0.9" opacity="0.22"/>
+<circle cx="380" cy="370" r="56" fill="none" stroke="#E05555" stroke-width="0.5" opacity="0.09"/>
+
+<!-- ═══ NŒUDS ═════════════════════════════════════════════════════════════
+
+     Disposition :
+       v  : 110, 130   connue  (vert)
+       t  : 110, 310   connue  (vert)
+       d  : 290, 200   objectif résolu (rouge, ✓)
+       m  : 480, 100   connue  (vert)
+       F  : 680, 130   connue  (vert)
+       a  : 530, 270   inconnue EN ACTIVATION (or)
+       E  : 380, 370   objectif non résolu (rouge)
+═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- v — connue -->
+<circle cx="110" cy="130" r="24" fill="#0E3A22" stroke="#3EC988" stroke-width="2.2"/>
+<text x="110" y="130" style="font-family:monospace;font-size:14px;fill:#fff;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold">v</text>
+
+<!-- t — connue -->
+<circle cx="110" cy="310" r="24" fill="#0E3A22" stroke="#3EC988" stroke-width="2.2"/>
+<text x="110" y="310" style="font-family:monospace;font-size:14px;fill:#fff;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold">t</text>
+
+<!-- d — objectif (résolu, croix ✓ intégrée) -->
+<circle cx="290" cy="200" r="26" fill="#3A1010" stroke="#E05555" stroke-width="2.5"/>
+<text x="290" y="200" style="font-family:monospace;font-size:14px;fill:#fff;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold">d</text>
+<!-- Petit indicateur résolu -->
+<circle cx="307" cy="183" r="7" fill="#E05555" opacity="0.9"/>
+<text x="307" y="184" style="font-size:8px;fill:#fff;text-anchor:middle;dominant-baseline:middle;font-weight:bold">✓</text>
+
+<!-- m — connue -->
+<circle cx="480" cy="100" r="24" fill="#0E3A22" stroke="#3EC988" stroke-width="2.2"/>
+<text x="480" y="100" style="font-family:monospace;font-size:14px;fill:#fff;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold">m</text>
+
+<!-- F — connue -->
+<circle cx="680" cy="130" r="24" fill="#0E3A22" stroke="#3EC988" stroke-width="2.2"/>
+<text x="680" y="130" style="font-family:monospace;font-size:14px;fill:#fff;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold">F</text>
+
+<!-- a — ACTIVATION EN COURS (bordure or, texte or) -->
+<circle cx="530" cy="270" r="28" fill="#1C1808" stroke="#F5A623" stroke-width="3"/>
+<text x="530" y="270" style="font-family:monospace;font-size:15px;fill:#F5A623;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold">a</text>
+<!-- Indicateur activation -->
+<circle cx="550" cy="250" r="8" fill="#F5A623" opacity="0.9"/>
+<text x="550" y="251" style="font-size:8px;fill:#0E1208;text-anchor:middle;dominant-baseline:middle;font-weight:bold">!</text>
+
+<!-- E — objectif non résolu -->
+<circle cx="380" cy="370" r="24" fill="#3A1010" stroke="#E05555" stroke-width="2.5"/>
+<text x="380" y="370" style="font-family:monospace;font-size:14px;fill:#fff;
+      text-anchor:middle;dominant-baseline:middle;font-weight:bold">E</text>
+
+<!-- ═══ LABELS DE FORMULES ════════════════════════════════════════════════ -->
+<!-- d = v × t  (entre v/t et d) -->
+<text x="192" y="162"
+      style="font-family:monospace;font-size:9px;fill:#7EC9A2;text-anchor:middle;opacity:0.80">d = v × t</text>
+
+<!-- F = m · a  (sur le chemin d'activation) -->
+<text x="600" y="192"
+      style="font-family:monospace;font-size:9px;fill:#F5A623;text-anchor:middle;opacity:0.85">F = m · a</text>
+
+<!-- E = ½mv²  (chemin vers E) -->
+<text x="355" y="298"
+      style="font-family:monospace;font-size:8px;fill:#2A7050;text-anchor:middle;opacity:0.60">E = ½mv²</text>
+
+<!-- ═══ ÉLÉMENTS DÉCORATIFS / STATUT ════════════════════════════════════ -->
+
+<!-- Boîte condition SPA (haut-gauche, discrète) -->
+<rect x="60" y="65" width="168" height="32" rx="4"
+      fill="#0B2818" stroke="#1A4828" stroke-width="0.6" opacity="0.80"/>
+<text x="144" y="77"
+      style="font-family:monospace;font-size:8px;fill:#F5A623;text-anchor:middle;font-weight:bold;opacity:0.85">F · s = F · e − 1</text>
+<text x="144" y="90"
+      style="font-size:6.5px;fill:#8B6010;text-anchor:middle;opacity:0.75">condition d'activation SPA</text>
+
+<!-- Barre de progression rho (bas-droit) -->
+<rect x="590" y="388" width="160" height="30" rx="4"
+      fill="#0B2818" stroke="#1A4828" stroke-width="0.6" opacity="0.80"/>
+<text x="670" y="400"
+      style="font-family:monospace;font-size:7.5px;fill:#2A9060;text-anchor:middle;opacity:0.80">ρ = étapes opt. / total</text>
+<rect x="598" y="406" width="144" height="5" rx="2" fill="#122A18" opacity="0.9"/>
+<rect x="598" y="406" width="86"  height="5" rx="2" fill="#F5A623" opacity="0.75"/>
+<text x="670" y="420"
+      style="font-size:6px;fill:#6A7860;text-anchor:middle;opacity:0.65">Efficacité : 60 %</text>
+
+<!-- Annotation coin haut-gauche -->
+<text x="48" y="118"
+      style="font-size:9px;fill:#1E5A38;font-style:italic;opacity:0.70">(V, F)</text>
+<text x="48" y="130"
+      style="font-size:6.5px;fill:#124028;opacity:0.60">Théorie STEM</text>
+
+<!-- Annotation coin bas-gauche -->
+<text x="48" y="396"
+      style="font-size:9px;fill:#1E5A38;font-style:italic;opacity:0.70">(H, C)</text>
+<text x="48" y="408"
+      style="font-size:6.5px;fill:#124028;opacity:0.60">Problème STEM</text>
+
+<!-- Légende compacte (bas-centre) -->
+<rect x="300" y="388" width="148" height="42" rx="4"
+      fill="#0B2818" stroke="#1A4828" stroke-width="0.5" opacity="0.80"/>
+<circle cx="315" cy="401" r="4" fill="#0E3A22" stroke="#3EC988" stroke-width="1.2"/>
+<text x="323" y="405" style="font-size:7px;fill:#7EC9A2;opacity:0.85">connue</text>
+<circle cx="368" cy="401" r="4" fill="#3A1010" stroke="#E05555" stroke-width="1.2"/>
+<text x="376" y="405" style="font-size:7px;fill:#E08080;opacity:0.85">objectif</text>
+<circle cx="315" cy="421" r="4" fill="#1C1808" stroke="#F5A623" stroke-width="1.2"/>
+<text x="323" y="425" style="font-size:7px;fill:#C8942A;opacity:0.85">activation</text>
+<circle cx="368" cy="421" r="4" fill="#131C2B" stroke="#5A7D9A" stroke-width="1.2"/>
+<text x="376" y="425" style="font-size:7px;fill:#7090B0;opacity:0.85">inconnue</text>
+
+<!-- Marque -->
+<text x="400" y="444"
+      style="font-size:8px;fill:#0E2818;text-anchor:middle;letter-spacing:4px;font-weight:bold;opacity:0.65">DÉFI STEM</text>
+</svg>
