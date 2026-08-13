@@ -10,7 +10,6 @@ import { useAuth } from '@auth/AuthContext';
 
 const TEAL = '#0F6E56';
 const TEAL_LT = '#E6F4F0';
-const GRAY = '#595959';
 
 // ── Step content ─────────────────────────────────────────────────────────────
 
@@ -162,7 +161,7 @@ export function TutorialPage() {
       >
         {/* Progress bar */}
         <div style={{ marginBottom: 28 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: GRAY, marginBottom: 6 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#9ECFB8', marginBottom: 6 }}>
             <span>Étape {step + 1} / {total}</span>
             <span>{Math.round(((step + 1) / total) * 100)} %</span>
           </div>
@@ -181,12 +180,12 @@ export function TutorialPage() {
 
         {/* Step header */}
         <div style={{ fontSize: 40, marginBottom: 12, lineHeight: 1 }}>{current.emoji}</div>
-        <h2 style={{ margin: '0 0 16px', fontSize: 20, fontWeight: 700, color: '#2E2E2E', lineHeight: 1.3 }}>
+        <h2 style={{ margin: '0 0 16px', fontSize: 20, fontWeight: 700, color: '#ffffff', lineHeight: 1.3 }}>
           {current.title}
         </h2>
 
         {/* Step body */}
-        <div style={{ fontSize: 14, color: '#3A3A3A', lineHeight: 1.7 }}>
+        <div style={{ fontSize: 14, color: '#E6F4F0', lineHeight: 1.7 }}>
           {current.body}
         </div>
 
@@ -196,9 +195,9 @@ export function TutorialPage() {
             onClick={() => setStep(s => s - 1)}
             disabled={step === 0}
             style={{
-              border: '1px solid #D6DCE4',
-              background: '#fff',
-              color: step === 0 ? '#C0C0C0' : '#2E2E2E',
+              border: '1px solid #2D8050',
+              background: 'rgba(255,255,255,0.07)',
+              color: step === 0 ? '#4A7A60' : '#E6F4F0',
               borderRadius: 8,
               padding: '10px 20px',
               fontSize: 14,
@@ -248,7 +247,7 @@ export function TutorialPage() {
           <div style={{ textAlign: 'center', marginTop: 16 }}>
             <button
               onClick={markDone}
-              style={{ background: 'none', border: 'none', color: GRAY, fontSize: 12, cursor: 'pointer', textDecoration: 'underline' }}
+              style={{ background: 'none', border: 'none', color: '#7EC9A2', fontSize: 12, cursor: 'pointer', textDecoration: 'underline' }}
             >
               Passer le tutoriel
             </button>

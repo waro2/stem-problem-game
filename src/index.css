@@ -1,5 +1,6 @@
 /* SVG background classes — applied on page root divs */
 .bg-home {
+  background-color: #0B3728;
   background-image: url('/defi_stem_background.svg');
   background-size: cover;
   background-position: center;
@@ -7,6 +8,7 @@
 }
 
 .bg-game {
+  background-color: #0B1F35;
   background-image: url('/defi_stem_game_background.svg');
   background-size: cover;
   background-position: center;
@@ -14,6 +16,7 @@
 }
 
 .bg-pages {
+  background-color: #0B2A1E;
   background-image: url('/defi_stem_pages_background.svg');
   background-size: cover;
   background-position: center;
