@@ -82,7 +82,7 @@ export function GameScreenMobile({
   const hintsDisabled = tutorialStep !== null;
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: 'transparent', display: 'flex', flexDirection: 'column' }}>
       <header
         style={{
           display: 'flex',

@@ -53,7 +53,7 @@ export function GameScreen({
   const [helpOpen, setHelpOpen] = useState(false);
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: '#F5F6F8' }}>
+    <div style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100vh', background: 'transparent' }}>
       <header
         style={{
           display: 'flex',
