@@ -22,3 +22,14 @@
   background-position: center;
   background-attachment: fixed;
 }
+
+.bg-gameplay {
+  background-image: url('/defi_stem_gameplay_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}

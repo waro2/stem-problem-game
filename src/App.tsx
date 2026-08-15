@@ -490,7 +490,7 @@ function GamePage() {
   const Screen = isMobile ? GameScreenMobile : GameScreen;
 
   return (
-    <div className="bg-game" style={{ minHeight: '100vh' }}>
+    <div className="bg-gameplay min-h-screen">
       {showSettings ? (
         <Settings lang={lang} onLangChange={setLang} onBack={() => setShowSettings(false)} />
       ) : (
