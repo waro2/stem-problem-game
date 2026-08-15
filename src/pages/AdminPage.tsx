@@ -432,7 +432,8 @@ export function AdminPage() {
   }, []);
 
   return (
-    <div style={{ maxWidth: 960, margin: '0 auto', padding: '32px 16px' }}>
+    <div className="bg-pages" style={{ minHeight: '100vh', padding: '32px 16px' }}>
+    <div style={{ maxWidth: 960, margin: '0 auto' }}>
       {/* En-tête */}
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700, color: TEAL, margin: 0 }}>
@@ -456,6 +457,7 @@ export function AdminPage() {
       {/* Contenu */}
       {tab === 'users'   && <UsersTab cohorts={cohorts} />}
       {tab === 'cohorts' && <CohortsTab />}
+    </div>
     </div>
   );
 }
