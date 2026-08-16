@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@auth/AuthContext';
 
 const TEAL = '#0F6E56';
-const TEAL_LT = '#E6F4F0';
 
 // ── Step content ─────────────────────────────────────────────────────────────
 
@@ -78,7 +77,20 @@ const STEPS = [
     body: (
       <>
         <p>Une formule <strong>f</strong> est <em>activable</em> si et seulement si elle contient <strong>exactement une variable inconnue</strong> — les autres étant toutes identifiées.</p>
-        <p style={{ background: TEAL_LT, borderLeft: `3px solid ${TEAL}`, padding: '10px 14px', borderRadius: 4, marginTop: 12 }}>
+        <p
+          style={{
+            background: '#E6F4F0',
+            color: '#0F3D26',
+            border: '1px solid #3EC988',
+            fontFamily: 'monospace',
+            fontSize: 16,
+            fontWeight: 700,
+            textAlign: 'center',
+            padding: '16px',
+            borderRadius: 8,
+            marginTop: 12,
+          }}
+        >
           <strong>Règle :</strong> |V<sub>f</sub> \ identifiées| = 1
         </p>
         <p>Activer cette formule <strong>révèle</strong> la variable inconnue — elle devient identifiée.</p>
