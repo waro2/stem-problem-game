@@ -81,7 +81,7 @@ export function GameScreen({
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-start',
-          padding: '24px 40px',
+          padding: '48px 40px 24px 40px',
           gap: 0,
           width: '100%',
           boxSizing: 'border-box',
