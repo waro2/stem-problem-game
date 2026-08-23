@@ -61,7 +61,7 @@ jobs:
     needs: build
     services:
       postgres:
-        image: ghcr.io/cloudnative-pg/postgresql:16
+        image: postgres:16-alpine
         env:
           POSTGRES_USER: stem_game
           POSTGRES_PASSWORD: stem_game
