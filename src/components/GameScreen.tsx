@@ -79,57 +79,82 @@ export function GameScreen({
       <main
         style={{
           display: 'flex',
-          flexDirection: 'row',
-          gap: 16,
-          padding: '0 16px',
-          marginTop: '60px',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          padding: '24px 40px',
+          gap: 0,
+          width: '100%',
+          boxSizing: 'border-box',
         }}
       >
-        <Panel data-tutorial="variables" style={{ padding: 10, width: 210, flexShrink: 0, alignSelf: 'flex-start' }}>
-          <VariableBoard
-            variables={problem.variables}
-            identifiedVars={gameState.identifiedVars}
-            hypotheses={problem.hypotheses}
-            conclusions={problem.conclusions}
-            newlyIdentifiedVarId={newlyIdentifiedVarId}
-            lang={lang}
-          />
-        </Panel>
-
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
-            <Panel data-tutorial="formulas" style={{ flex: 1 }}>
-              <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
-                {t('panelFormulas', lang)}
-              </h3>
-              <FormulaBoard
-                formulas={problem.formulas}
-                evaluations={evaluations}
-                activatedFormulas={gameState.activatedFormulas}
-                newlyActivatedFormulaId={newlyActivatedFormulaId}
-                disabled={formulaBoardDisabled}
-                onActivate={onActivate}
-                lang={lang}
-              />
-            </Panel>
-
-            <Panel data-tutorial="progress" style={{ padding: 10, width: 220, flexShrink: 0 }}>
-              <ProgressPanel
-                gameState={gameState}
-                elapsedSeconds={elapsedSeconds}
-                onRequestHint={onRequestHint}
-                hintsDisabled={hintsDisabled}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            gap: 16,
+            width: '100%',
+            maxWidth: 1100,
+          }}
+        >
+          {/* 1. Panneau Variables — colonne gauche */}
+          <div style={{ width: 200, flexShrink: 0 }}>
+            <Panel data-tutorial="variables" style={{ padding: 10, width: '100%' }}>
+              <VariableBoard
+                variables={problem.variables}
+                identifiedVars={gameState.identifiedVars}
+                hypotheses={problem.hypotheses}
+                conclusions={problem.conclusions}
+                newlyIdentifiedVarId={newlyIdentifiedVarId}
                 lang={lang}
               />
             </Panel>
           </div>
 
-          <StatementPanel
-            variables={problem.variables}
-            hypotheses={problem.hypotheses}
-            conclusions={problem.conclusions}
-            lang={lang}
-          />
+          {/* 2. Colonne droite — Formules + Énoncé empilés */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Ligne haute : Formules + Progression */}
+            <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+              <div style={{ flex: 1 }}>
+                <Panel data-tutorial="formulas" style={{ width: '100%' }}>
+                  <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
+                    {t('panelFormulas', lang)}
+                  </h3>
+                  <FormulaBoard
+                    formulas={problem.formulas}
+                    evaluations={evaluations}
+                    activatedFormulas={gameState.activatedFormulas}
+                    newlyActivatedFormulaId={newlyActivatedFormulaId}
+                    disabled={formulaBoardDisabled}
+                    onActivate={onActivate}
+                    lang={lang}
+                  />
+                </Panel>
+              </div>
+
+              <div style={{ width: 210, flexShrink: 0 }}>
+                <Panel data-tutorial="progress" style={{ padding: 10, width: '100%' }}>
+                  <ProgressPanel
+                    gameState={gameState}
+                    elapsedSeconds={elapsedSeconds}
+                    onRequestHint={onRequestHint}
+                    hintsDisabled={hintsDisabled}
+                    lang={lang}
+                  />
+                </Panel>
+              </div>
+            </div>
+
+            {/* Ligne basse : Énoncé pleine largeur */}
+            <div style={{ width: '100%' }}>
+              <StatementPanel
+                variables={problem.variables}
+                hypotheses={problem.hypotheses}
+                conclusions={problem.conclusions}
+                lang={lang}
+              />
+            </div>
+          </div>
         </div>
       </main>
     </div>
