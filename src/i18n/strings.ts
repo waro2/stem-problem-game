@@ -39,6 +39,9 @@ export const UI = {
   panelVariables:  { fr: 'Variables', en: 'Variables' },
   panelFormulas:   { fr: 'Formules', en: 'Formulas' },
   panelProgress:   { fr: 'Progression', en: 'Progress' },
+  panelStatement:      { fr: '📋 Énoncé du problème', en: '📋 Problem Statement' },
+  statementGivenLabel:  { fr: 'Données (H)', en: 'Given (H)' },
+  statementTargetLabel: { fr: 'À trouver (C)', en: 'To find (C)' },
 
   // ── Mobile ───────────────────────────────────────────────────
   swipeToActivate: { fr: 'Glisser pour activer →', en: 'Swipe to activate →' },

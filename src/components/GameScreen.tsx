@@ -11,6 +11,7 @@ import { VariableBoard } from './VariableBoard';
 import { FormulaBoard } from './FormulaBoard';
 import { ProgressPanel } from './ProgressPanel';
 import { HelpPanel } from './HelpPanel';
+import { StatementPanel } from './StatementPanel';
 
 interface GameScreenProps {
   gameState: GameState;
@@ -121,6 +122,13 @@ export function GameScreen({
           />
         </Panel>
       </main>
+
+      <StatementPanel
+        variables={problem.variables}
+        hypotheses={problem.hypotheses}
+        conclusions={problem.conclusions}
+        lang={lang}
+      />
     </div>
   );
 }

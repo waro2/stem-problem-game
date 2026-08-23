@@ -1,0 +1,73 @@
+/**
+ * StatementPanel — Problem statement summary, shown below the 3 main panels.
+ * Recaps the hypotheses H (given) and conclusions C (to find) for the loaded problem.
+ */
+
+import type { Variable } from '@game/types';
+import { t } from '@i18n/strings';
+import type { Lang } from '@i18n/strings';
+
+interface StatementPanelProps {
+  variables: Variable[];
+  hypotheses: string[];
+  conclusions: string[];
+  lang?: Lang;
+}
+
+export function StatementPanel({ variables, hypotheses, conclusions, lang = 'fr' }: StatementPanelProps) {
+  const byId = new Map(variables.map(v => [v.id, v]));
+  const given = hypotheses.map(id => byId.get(id)).filter((v): v is Variable => v !== undefined);
+  const target = conclusions.map(id => byId.get(id)).filter((v): v is Variable => v !== undefined);
+
+  return (
+    <div style={{ maxWidth: 750, margin: '24px auto 0', padding: '0 16px' }}>
+      <div
+        style={{
+          background: 'rgba(255,255,255,0.93)',
+          borderRadius: 12,
+          padding: '16px 24px',
+        }}
+      >
+        <h3 style={{ margin: '0 0 14px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
+          {t('panelStatement', lang)}
+        </h3>
+        <div style={{ display: 'flex', gap: 24 }}>
+          <StatementColumn label={t('statementGivenLabel', lang)} variables={given} color="#70AD47" background="#F0FBF0" lang={lang} />
+          <StatementColumn label={t('statementTargetLabel', lang)} variables={target} color="#C00000" background="#FBEEEE" lang={lang} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function StatementColumn({
+  label, variables, color, background, lang,
+}: { label: string; variables: Variable[]; color: string; background: string; lang: Lang }) {
+  return (
+    <div style={{ flex: 1 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: '#595959', marginBottom: 8 }}>{label}</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {variables.map(variable => (
+          <span
+            key={variable.id}
+            style={{
+              display: 'inline-block',
+              border: `1px solid ${color}`,
+              background,
+              color,
+              borderRadius: 6,
+              padding: '4px 10px',
+              fontSize: 13,
+              fontWeight: 600,
+            }}
+          >
+            {variable.id} — {lang === 'fr' ? variable.label_fr : variable.label}
+            {variable.unit && ` (${variable.unit})`}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
