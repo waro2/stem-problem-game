@@ -60,11 +60,11 @@ export function GameScreen({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '14px 24px',
-          background: '#fff',
+          background: 'rgba(7, 24, 14, 0.60)',
           borderBottom: '1px solid #D6DCE4',
         }}
       >
-        <h1 style={{ margin: 0, fontSize: 18, color: '#2E2E2E' }}>{title}</h1>
+        <h1 style={{ margin: 0, fontSize: 18, color: '#fff' }}>{title}</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <PendingEventsBadge count={pendingEventCount} lang={lang} />
           <HelpButton onClick={() => setHelpOpen(true)} lang={lang} />
@@ -83,10 +83,11 @@ export function GameScreen({
           padding: 24,
           maxWidth: '92%',
           margin: '0 auto',
-          alignItems: 'start',
+          marginTop: 16,
+          alignItems: 'flex-start',
         }}
       >
-        <Panel data-tutorial="variables" style={{ padding: 10 }}>
+        <Panel data-tutorial="variables" style={{ padding: 10, alignSelf: 'flex-start' }}>
           <VariableBoard
             variables={problem.variables}
             identifiedVars={gameState.identifiedVars}
@@ -97,7 +98,7 @@ export function GameScreen({
           />
         </Panel>
 
-        <Panel data-tutorial="formulas">
+        <Panel data-tutorial="formulas" style={{ maxWidth: 520, margin: '0 auto', alignSelf: 'flex-start' }}>
           <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
             {t('panelFormulas', lang)}
           </h3>
@@ -112,7 +113,7 @@ export function GameScreen({
           />
         </Panel>
 
-        <Panel data-tutorial="progress" style={{ padding: 10 }}>
+        <Panel data-tutorial="progress" style={{ padding: 10, alignSelf: 'flex-start' }}>
           <ProgressPanel
             gameState={gameState}
             elapsedSeconds={elapsedSeconds}
