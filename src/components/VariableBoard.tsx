@@ -105,14 +105,14 @@ function VariableCard({
       style={{
         border: `2px solid ${borderColor}`,
         borderRadius: 8,
-        padding: '8px 12px',
+        padding: '8px',
         minWidth: 110,
         background,
         boxShadow: isNewlyFound ? '0 0 0 3px rgba(244,185,66,0.3)' : 'none',
         transition: 'all 0.2s',
       }}
     >
-      <div style={{ fontWeight: 700, fontSize: 14 }}>
+      <div style={{ fontWeight: 700, fontSize: 12 }}>
         {icon} {variable.id}
         {variable.unit && (
           <span style={{ fontWeight: 400, fontSize: 11, color: '#595959' }}> ({variable.unit})</span>

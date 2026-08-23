@@ -78,13 +78,15 @@ export function GameScreen({
       <main
         style={{
           display: 'grid',
-          gridTemplateColumns: '280px 1fr 260px',
+          gridTemplateColumns: '200px 1fr 210px',
           gap: 20,
           padding: 24,
+          maxWidth: '92%',
+          margin: '0 auto',
           alignItems: 'start',
         }}
       >
-        <Panel data-tutorial="variables">
+        <Panel data-tutorial="variables" style={{ padding: 10 }}>
           <VariableBoard
             variables={problem.variables}
             identifiedVars={gameState.identifiedVars}
@@ -110,7 +112,7 @@ export function GameScreen({
           />
         </Panel>
 
-        <Panel data-tutorial="progress">
+        <Panel data-tutorial="progress" style={{ padding: 10 }}>
           <ProgressPanel
             gameState={gameState}
             elapsedSeconds={elapsedSeconds}
@@ -126,9 +128,12 @@ export function GameScreen({
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function Panel({ children, ...rest }: { children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
+function Panel({ children, style, ...rest }: { children: React.ReactNode; style?: React.CSSProperties } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div style={{ background: '#fff', border: '1px solid #D6DCE4', borderRadius: 10, padding: 16 }} {...rest}>
+    <div
+      style={{ background: 'rgba(255,255,255,0.93)', border: '1px solid #D6DCE4', borderRadius: 10, padding: 16, ...style }}
+      {...rest}
+    >
       {children}
     </div>
   );
