@@ -111,42 +111,49 @@ export function GameScreen({
             </Panel>
           </div>
 
-          {/* 2. Colonne droite — Formules + Énoncé empilés */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 16 }}>
-            {/* Ligne haute : Formules + Progression */}
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: 16 }}>
-              <div style={{ flex: 1, alignSelf: 'flex-start', height: 'auto' }}>
-                <Panel data-tutorial="formulas" style={{ width: '100%' }}>
-                  <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
-                    {t('panelFormulas', lang)}
-                  </h3>
-                  <FormulaBoard
-                    formulas={problem.formulas}
-                    evaluations={evaluations}
-                    activatedFormulas={gameState.activatedFormulas}
-                    newlyActivatedFormulaId={newlyActivatedFormulaId}
-                    disabled={formulaBoardDisabled}
-                    onActivate={onActivate}
-                    lang={lang}
-                  />
-                </Panel>
-              </div>
-
-              <div style={{ width: 210, flexShrink: 0, alignSelf: 'flex-start', height: 'auto' }}>
-                <Panel data-tutorial="progress" style={{ padding: 10, width: '100%' }}>
-                  <ProgressPanel
-                    gameState={gameState}
-                    elapsedSeconds={elapsedSeconds}
-                    onRequestHint={onRequestHint}
-                    hintsDisabled={hintsDisabled}
-                    lang={lang}
-                  />
-                </Panel>
-              </div>
+          {/* 2. Colonne droite — CSS Grid : Formules + Progression + Énoncé */}
+          <div
+            style={{
+              flex: 1,
+              display: 'grid',
+              gridTemplateColumns: '1fr 210px',
+              gridTemplateRows: 'auto auto',
+              gap: 16,
+            }}
+          >
+            {/* Formules : ligne 1, colonne 1 */}
+            <div style={{ gridColumn: '1', gridRow: '1' }}>
+              <Panel data-tutorial="formulas" style={{ width: '100%' }}>
+                <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
+                  {t('panelFormulas', lang)}
+                </h3>
+                <FormulaBoard
+                  formulas={problem.formulas}
+                  evaluations={evaluations}
+                  activatedFormulas={gameState.activatedFormulas}
+                  newlyActivatedFormulaId={newlyActivatedFormulaId}
+                  disabled={formulaBoardDisabled}
+                  onActivate={onActivate}
+                  lang={lang}
+                />
+              </Panel>
             </div>
 
-            {/* Ligne basse : Énoncé pleine largeur */}
-            <div style={{ width: '100%', alignSelf: 'flex-start', height: 'auto' }}>
+            {/* Progression : lignes 1 ET 2, colonne 2 — s'étire sur toute la hauteur */}
+            <div style={{ gridColumn: '2', gridRow: '1 / span 2' }}>
+              <Panel data-tutorial="progress" style={{ padding: 10, width: '100%', height: '100%' }}>
+                <ProgressPanel
+                  gameState={gameState}
+                  elapsedSeconds={elapsedSeconds}
+                  onRequestHint={onRequestHint}
+                  hintsDisabled={hintsDisabled}
+                  lang={lang}
+                />
+              </Panel>
+            </div>
+
+            {/* Énoncé : ligne 2, colonne 1 */}
+            <div style={{ gridColumn: '1', gridRow: '2' }}>
               <StatementPanel
                 variables={problem.variables}
                 hypotheses={problem.hypotheses}
