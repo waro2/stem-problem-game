@@ -81,7 +81,7 @@ export function GameScreen({
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-start',
-          padding: '48px 40px 24px 40px',
+          padding: '48px 60px 24px 40px',
           gap: 0,
           width: '100%',
           boxSizing: 'border-box',
@@ -116,13 +116,13 @@ export function GameScreen({
             style={{
               flex: 1,
               display: 'grid',
-              gridTemplateColumns: '1fr 210px',
+              gridTemplateColumns: '1fr 240px',
               gridTemplateRows: 'auto auto',
               gap: 16,
             }}
           >
             {/* Formules : ligne 1, colonne 1 */}
-            <div style={{ gridColumn: '1', gridRow: '1', alignSelf: 'start', minWidth: 0 }}>
+            <div style={{ gridColumn: '1', gridRow: '1', alignSelf: 'start', minWidth: 0, display: 'block', height: 'fit-content' }}>
               <Panel data-tutorial="formulas" style={{ width: '100%' }}>
                 <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
                   {t('panelFormulas', lang)}
@@ -140,7 +140,7 @@ export function GameScreen({
             </div>
 
             {/* Progression : lignes 1 ET 2, colonne 2 — s'étire sur toute la hauteur */}
-            <div style={{ gridColumn: '2', gridRow: '1 / span 2', width: 210, overflow: 'hidden' }}>
+            <div style={{ gridColumn: '2', gridRow: '1 / span 2', width: 240, overflow: 'hidden' }}>
               <Panel data-tutorial="progress" style={{ padding: 10, width: '100%', height: '100%' }}>
                 <ProgressPanel
                   gameState={gameState}
