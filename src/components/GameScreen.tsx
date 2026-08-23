@@ -121,6 +121,7 @@ export function GameScreen({
               alignItems: 'flex-start',
               gap: 16,
               minWidth: 0,
+              overflow: 'visible',
             }}
           >
             {/* Sous-colonne gauche : Formules + Énoncé empilés */}
