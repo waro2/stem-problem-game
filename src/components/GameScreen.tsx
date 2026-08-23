@@ -112,18 +112,28 @@ export function GameScreen({
             </Panel>
           </div>
 
-          {/* 2. Colonne droite — CSS Grid : Formules + Progression + Énoncé */}
+          {/* 2. Colonne droite — flex row : sous-colonne Formules+Énoncé | Progression */}
           <div
             style={{
               flex: 1,
-              display: 'grid',
-              gridTemplateColumns: '1fr 220px',
-              gridTemplateRows: 'auto auto',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
               gap: 16,
+              minWidth: 0,
             }}
           >
-            {/* Formules : ligne 1, colonne 1 */}
-            <div style={{ gridColumn: '1', gridRow: '1', alignSelf: 'start', minWidth: 0, display: 'block', height: 'fit-content' }}>
+            {/* Sous-colonne gauche : Formules + Énoncé empilés */}
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                gap: 16,
+                minWidth: 0,
+              }}
+            >
               <Panel data-tutorial="formulas" style={{ width: '100%' }}>
                 <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
                   {t('panelFormulas', lang)}
@@ -138,11 +148,18 @@ export function GameScreen({
                   lang={lang}
                 />
               </Panel>
+
+              <StatementPanel
+                variables={problem.variables}
+                hypotheses={problem.hypotheses}
+                conclusions={problem.conclusions}
+                lang={lang}
+              />
             </div>
 
-            {/* Progression : lignes 1 ET 2, colonne 2 — s'étire sur toute la hauteur */}
-            <div style={{ gridColumn: '2', gridRow: '1 / span 2', width: 220, minWidth: 220, overflow: 'visible' }}>
-              <Panel data-tutorial="progress" style={{ padding: 10, width: '100%', height: '100%' }}>
+            {/* Sous-colonne droite : Progression seul */}
+            <div style={{ width: 230, flexShrink: 0, overflow: 'visible' }}>
+              <Panel data-tutorial="progress" style={{ padding: 10, width: '100%' }}>
                 <ProgressPanel
                   gameState={gameState}
                   elapsedSeconds={elapsedSeconds}
@@ -151,16 +168,6 @@ export function GameScreen({
                   lang={lang}
                 />
               </Panel>
-            </div>
-
-            {/* Énoncé : ligne 2, colonne 1 */}
-            <div style={{ gridColumn: '1', gridRow: '2', alignSelf: 'start', minWidth: 0 }}>
-              <StatementPanel
-                variables={problem.variables}
-                hypotheses={problem.hypotheses}
-                conclusions={problem.conclusions}
-                lang={lang}
-              />
             </div>
           </div>
         </div>
