@@ -79,14 +79,13 @@ export function GameScreen({
       <main
         style={{
           display: 'flex',
+          flexDirection: 'row',
           gap: 16,
-          justifyContent: 'center',
-          alignItems: 'flex-start',
           padding: '0 16px',
           marginTop: '60px',
         }}
       >
-        <Panel data-tutorial="variables" style={{ padding: 10, width: 210, flexShrink: 0 }}>
+        <Panel data-tutorial="variables" style={{ padding: 10, width: 210, flexShrink: 0, alignSelf: 'flex-start' }}>
           <VariableBoard
             variables={problem.variables}
             identifiedVars={gameState.identifiedVars}
@@ -97,38 +96,42 @@ export function GameScreen({
           />
         </Panel>
 
-        <Panel data-tutorial="formulas" style={{ width: 480, flexShrink: 0 }}>
-          <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
-            {t('panelFormulas', lang)}
-          </h3>
-          <FormulaBoard
-            formulas={problem.formulas}
-            evaluations={evaluations}
-            activatedFormulas={gameState.activatedFormulas}
-            newlyActivatedFormulaId={newlyActivatedFormulaId}
-            disabled={formulaBoardDisabled}
-            onActivate={onActivate}
-            lang={lang}
-          />
-        </Panel>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+            <Panel data-tutorial="formulas" style={{ flex: 1 }}>
+              <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
+                {t('panelFormulas', lang)}
+              </h3>
+              <FormulaBoard
+                formulas={problem.formulas}
+                evaluations={evaluations}
+                activatedFormulas={gameState.activatedFormulas}
+                newlyActivatedFormulaId={newlyActivatedFormulaId}
+                disabled={formulaBoardDisabled}
+                onActivate={onActivate}
+                lang={lang}
+              />
+            </Panel>
 
-        <Panel data-tutorial="progress" style={{ padding: 10, width: 220, flexShrink: 0 }}>
-          <ProgressPanel
-            gameState={gameState}
-            elapsedSeconds={elapsedSeconds}
-            onRequestHint={onRequestHint}
-            hintsDisabled={hintsDisabled}
+            <Panel data-tutorial="progress" style={{ padding: 10, width: 220, flexShrink: 0 }}>
+              <ProgressPanel
+                gameState={gameState}
+                elapsedSeconds={elapsedSeconds}
+                onRequestHint={onRequestHint}
+                hintsDisabled={hintsDisabled}
+                lang={lang}
+              />
+            </Panel>
+          </div>
+
+          <StatementPanel
+            variables={problem.variables}
+            hypotheses={problem.hypotheses}
+            conclusions={problem.conclusions}
             lang={lang}
           />
-        </Panel>
+        </div>
       </main>
-
-      <StatementPanel
-        variables={problem.variables}
-        hypotheses={problem.hypotheses}
-        conclusions={problem.conclusions}
-        lang={lang}
-      />
     </div>
   );
 }

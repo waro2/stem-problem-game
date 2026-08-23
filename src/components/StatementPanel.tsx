@@ -20,21 +20,20 @@ export function StatementPanel({ variables, hypotheses, conclusions, lang = 'fr'
   const target = conclusions.map(id => byId.get(id)).filter((v): v is Variable => v !== undefined);
 
   return (
-    <div style={{ maxWidth: 750, margin: '24px auto 0', padding: '0 16px' }}>
-      <div
-        style={{
-          background: 'rgba(255,255,255,0.93)',
-          borderRadius: 12,
-          padding: '16px 24px',
-        }}
-      >
-        <h3 style={{ margin: '0 0 14px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
-          {t('panelStatement', lang)}
-        </h3>
-        <div style={{ display: 'flex', gap: 24 }}>
-          <StatementColumn label={t('statementGivenLabel', lang)} variables={given} color="#70AD47" background="#F0FBF0" lang={lang} />
-          <StatementColumn label={t('statementTargetLabel', lang)} variables={target} color="#C00000" background="#FBEEEE" lang={lang} />
-        </div>
+    <div
+      style={{
+        width: '100%',
+        background: 'rgba(255,255,255,0.93)',
+        borderRadius: 12,
+        padding: '16px 24px',
+      }}
+    >
+      <h3 style={{ margin: '0 0 14px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
+        {t('panelStatement', lang)}
+      </h3>
+      <div style={{ display: 'flex', gap: 24 }}>
+        <StatementColumn label={t('statementGivenLabel', lang)} variables={given} color="#70AD47" background="#F0FBF0" lang={lang} />
+        <StatementColumn label={t('statementTargetLabel', lang)} variables={target} color="#C00000" background="#FBEEEE" lang={lang} />
       </div>
     </div>
   );
