@@ -44,8 +44,8 @@ export function ProgressPanel({ gameState, elapsedSeconds, onRequestHint, hintsD
       {/* Progress bar toward conclusions */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
-          <span>{t('goalsLabel', lang)}</span>
-          <span>{identifiedGoals} / {totalGoals}</span>
+          <span style={{ whiteSpace: 'nowrap' }}>{t('goalsLabel', lang)}</span>
+          <span style={{ whiteSpace: 'nowrap' }}>{identifiedGoals} / {totalGoals}</span>
         </div>
         <div
           role="progressbar"
@@ -105,6 +105,7 @@ export function ProgressPanel({ gameState, elapsedSeconds, onRequestHint, hintsD
                   fontWeight: 600,
                   cursor: hintsDisabled ? 'not-allowed' : 'pointer',
                   textAlign: 'left',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {t(key, lang)}
@@ -122,8 +123,8 @@ export function ProgressPanel({ gameState, elapsedSeconds, onRequestHint, hintsD
 function Stat({ label, value, bold }: { label: string; value: string | number; bold?: boolean }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <span style={{ color: '#595959' }}>{label}</span>
-      <span style={{ fontWeight: bold ? 700 : 500 }}>{value}</span>
+      <span style={{ color: '#595959', whiteSpace: 'nowrap' }}>{label}</span>
+      <span style={{ fontWeight: bold ? 700 : 500, whiteSpace: 'nowrap' }}>{value}</span>
     </div>
   );
 }

@@ -81,7 +81,6 @@ export function GameScreen({
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-start',
-          padding: '48px 60px 24px 40px',
           gap: 0,
           width: '100%',
           boxSizing: 'border-box',
@@ -94,7 +93,9 @@ export function GameScreen({
             alignItems: 'flex-start',
             gap: 16,
             width: '100%',
-            maxWidth: 1100,
+            maxWidth: 1050,
+            padding: '48px 80px 24px 44px',
+            boxSizing: 'border-box',
           }}
         >
           {/* 1. Panneau Variables — colonne gauche */}
@@ -116,7 +117,7 @@ export function GameScreen({
             style={{
               flex: 1,
               display: 'grid',
-              gridTemplateColumns: '1fr 240px',
+              gridTemplateColumns: '1fr 220px',
               gridTemplateRows: 'auto auto',
               gap: 16,
             }}
@@ -140,7 +141,7 @@ export function GameScreen({
             </div>
 
             {/* Progression : lignes 1 ET 2, colonne 2 — s'étire sur toute la hauteur */}
-            <div style={{ gridColumn: '2', gridRow: '1 / span 2', width: 240, overflow: 'hidden' }}>
+            <div style={{ gridColumn: '2', gridRow: '1 / span 2', width: 220, minWidth: 220, overflow: 'visible' }}>
               <Panel data-tutorial="progress" style={{ padding: 10, width: '100%', height: '100%' }}>
                 <ProgressPanel
                   gameState={gameState}
