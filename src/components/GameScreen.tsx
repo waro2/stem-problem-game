@@ -82,6 +82,7 @@ export function GameScreen({
           justifyContent: 'center',
           alignItems: 'flex-start',
           padding: '0 16px',
+          marginTop: '60px',
         }}
       >
         <Panel data-tutorial="variables" style={{ padding: 10, width: 210, flexShrink: 0 }}>
