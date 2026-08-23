@@ -122,7 +122,7 @@ export function GameScreen({
             }}
           >
             {/* Formules : ligne 1, colonne 1 */}
-            <div style={{ gridColumn: '1', gridRow: '1' }}>
+            <div style={{ gridColumn: '1', gridRow: '1', alignSelf: 'start', minWidth: 0 }}>
               <Panel data-tutorial="formulas" style={{ width: '100%' }}>
                 <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
                   {t('panelFormulas', lang)}
@@ -140,7 +140,7 @@ export function GameScreen({
             </div>
 
             {/* Progression : lignes 1 ET 2, colonne 2 — s'étire sur toute la hauteur */}
-            <div style={{ gridColumn: '2', gridRow: '1 / span 2' }}>
+            <div style={{ gridColumn: '2', gridRow: '1 / span 2', width: 210, overflow: 'hidden' }}>
               <Panel data-tutorial="progress" style={{ padding: 10, width: '100%', height: '100%' }}>
                 <ProgressPanel
                   gameState={gameState}
@@ -153,7 +153,7 @@ export function GameScreen({
             </div>
 
             {/* Énoncé : ligne 2, colonne 1 */}
-            <div style={{ gridColumn: '1', gridRow: '2' }}>
+            <div style={{ gridColumn: '1', gridRow: '2', alignSelf: 'start', minWidth: 0 }}>
               <StatementPanel
                 variables={problem.variables}
                 hypotheses={problem.hypotheses}
