@@ -98,7 +98,7 @@ export function GameScreen({
           }}
         >
           {/* 1. Panneau Variables — colonne gauche */}
-          <div style={{ width: 200, flexShrink: 0 }}>
+          <div style={{ width: 200, flexShrink: 0, alignSelf: 'flex-start', height: 'auto' }}>
             <Panel data-tutorial="variables" style={{ padding: 10, width: '100%' }}>
               <VariableBoard
                 variables={problem.variables}
@@ -112,10 +112,10 @@ export function GameScreen({
           </div>
 
           {/* 2. Colonne droite — Formules + Énoncé empilés */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 16 }}>
             {/* Ligne haute : Formules + Progression */}
-            <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
-              <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: 16 }}>
+              <div style={{ flex: 1, alignSelf: 'flex-start', height: 'auto' }}>
                 <Panel data-tutorial="formulas" style={{ width: '100%' }}>
                   <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
                     {t('panelFormulas', lang)}
@@ -132,7 +132,7 @@ export function GameScreen({
                 </Panel>
               </div>
 
-              <div style={{ width: 210, flexShrink: 0 }}>
+              <div style={{ width: 210, flexShrink: 0, alignSelf: 'flex-start', height: 'auto' }}>
                 <Panel data-tutorial="progress" style={{ padding: 10, width: '100%' }}>
                   <ProgressPanel
                     gameState={gameState}
@@ -146,7 +146,7 @@ export function GameScreen({
             </div>
 
             {/* Ligne basse : Énoncé pleine largeur */}
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', alignSelf: 'flex-start', height: 'auto' }}>
               <StatementPanel
                 variables={problem.variables}
                 hypotheses={problem.hypotheses}
