@@ -77,17 +77,14 @@ export function GameScreen({
 
       <main
         style={{
-          display: 'grid',
-          gridTemplateColumns: '200px 1fr 210px',
-          gap: 20,
-          padding: 24,
-          maxWidth: '92%',
-          margin: '0 auto',
-          marginTop: 16,
+          display: 'flex',
+          gap: 16,
+          justifyContent: 'center',
           alignItems: 'flex-start',
+          padding: '0 16px',
         }}
       >
-        <Panel data-tutorial="variables" style={{ padding: 10, alignSelf: 'flex-start' }}>
+        <Panel data-tutorial="variables" style={{ padding: 10, width: 210, flexShrink: 0 }}>
           <VariableBoard
             variables={problem.variables}
             identifiedVars={gameState.identifiedVars}
@@ -98,7 +95,7 @@ export function GameScreen({
           />
         </Panel>
 
-        <Panel data-tutorial="formulas" style={{ maxWidth: 520, margin: '0 auto', alignSelf: 'flex-start' }}>
+        <Panel data-tutorial="formulas" style={{ width: 480, flexShrink: 0 }}>
           <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
             {t('panelFormulas', lang)}
           </h3>
@@ -113,7 +110,7 @@ export function GameScreen({
           />
         </Panel>
 
-        <Panel data-tutorial="progress" style={{ padding: 10, alignSelf: 'flex-start' }}>
+        <Panel data-tutorial="progress" style={{ padding: 10, width: 220, flexShrink: 0 }}>
           <ProgressPanel
             gameState={gameState}
             elapsedSeconds={elapsedSeconds}
