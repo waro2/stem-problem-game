@@ -85,7 +85,7 @@ export function GameScreen({
             "vars formules  progression"
             "vars enonce    progression"
           `,
-          columnGap: 24,
+          columnGap: 48,
           rowGap: 16,
           alignItems: 'start',
           padding: '48px 60px 24px 44px',
