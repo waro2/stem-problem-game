@@ -86,7 +86,7 @@ export function GameScreen({
             "vars enonce    progression"
           `,
           columnGap: 16,
-          rowGap: 12,
+          rowGap: 8,
           // PAS de alignItems:'start' — on laisse stretch (défaut)
           // pour que Variables et Progression remplissent toute la hauteur
           padding: '48px 60px 24px 44px',
@@ -126,12 +126,13 @@ export function GameScreen({
           </Panel>
         </div>
 
-        <div style={{ gridArea: 'enonce' }}>
+        <div style={{ gridArea: 'enonce', height: '100%' }}>
           <StatementPanel
             variables={problem.variables}
             hypotheses={problem.hypotheses}
             conclusions={problem.conclusions}
             lang={lang}
+            style={{ height: '100%' }}
           />
         </div>
 

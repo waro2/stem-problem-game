@@ -3,6 +3,7 @@
  * Recaps the hypotheses H (given) and conclusions C (to find) for the loaded problem.
  */
 
+import type { CSSProperties } from 'react';
 import type { Variable } from '@game/types';
 import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
@@ -12,9 +13,10 @@ interface StatementPanelProps {
   hypotheses: string[];
   conclusions: string[];
   lang?: Lang;
+  style?: CSSProperties;
 }
 
-export function StatementPanel({ variables, hypotheses, conclusions, lang = 'fr' }: StatementPanelProps) {
+export function StatementPanel({ variables, hypotheses, conclusions, lang = 'fr', style }: StatementPanelProps) {
   const byId = new Map(variables.map(v => [v.id, v]));
   const given = hypotheses.map(id => byId.get(id)).filter((v): v is Variable => v !== undefined);
   const target = conclusions.map(id => byId.get(id)).filter((v): v is Variable => v !== undefined);
@@ -23,9 +25,12 @@ export function StatementPanel({ variables, hypotheses, conclusions, lang = 'fr'
     <div
       style={{
         width: '100%',
+        height: '100%',
+        boxSizing: 'border-box',
         background: 'rgba(255,255,255,0.93)',
         borderRadius: 12,
         padding: '16px 24px',
+        ...style,
       }}
     >
       <h3 style={{ margin: '0 0 14px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
