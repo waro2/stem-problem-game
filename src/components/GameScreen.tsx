@@ -85,9 +85,10 @@ export function GameScreen({
             "vars formules  progression"
             "vars enonce    progression"
           `,
-          columnGap: 48,
-          rowGap: 16,
-          alignItems: 'start',
+          columnGap: 16,
+          rowGap: 12,
+          // PAS de alignItems:'start' — on laisse stretch (défaut)
+          // pour que Variables et Progression remplissent toute la hauteur
           padding: '48px 60px 24px 44px',
           width: '100%',
           maxWidth: 1100,
@@ -95,8 +96,8 @@ export function GameScreen({
           boxSizing: 'border-box',
         }}
       >
-        <div style={{ gridArea: 'vars' }} data-tutorial="variables">
-          <Panel style={{ padding: 10, width: '100%' }}>
+        <div style={{ gridArea: 'vars', height: '100%' }} data-tutorial="variables">
+          <Panel style={{ padding: 10, width: '100%', height: '100%' }}>
             <VariableBoard
               variables={problem.variables}
               identifiedVars={gameState.identifiedVars}
@@ -134,8 +135,8 @@ export function GameScreen({
           />
         </div>
 
-        <div style={{ gridArea: 'progression', alignSelf: 'start' }} data-tutorial="progress">
-          <Panel style={{ padding: 10, width: '100%' }}>
+        <div style={{ gridArea: 'progression', height: '100%' }} data-tutorial="progress">
+          <Panel style={{ padding: 10, width: '100%', height: '100%' }}>
             <ProgressPanel
               gameState={gameState}
               elapsedSeconds={elapsedSeconds}
