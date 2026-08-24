@@ -119,7 +119,7 @@ export function GameScreen({
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'flex-start',
-              gap: 24,
+              gap: 40,
               minWidth: 0,
               overflow: 'visible',
             }}
