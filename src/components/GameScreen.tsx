@@ -80,18 +80,19 @@ export function GameScreen({
         style={{
           display: 'grid',
           gridTemplateColumns: '210px 1fr 230px',
+          gridTemplateRows: 'auto auto',
           gridTemplateAreas: `
             "vars formules  progression"
             "vars enonce    progression"
           `,
-          columnGap: 40,
+          columnGap: 24,
           rowGap: 16,
           alignItems: 'start',
-          padding: '48px 80px 24px 44px',
+          padding: '48px 60px 24px 44px',
           width: '100%',
-          maxWidth: 1050,
-          boxSizing: 'border-box',
+          maxWidth: 1100,
           margin: '0 auto',
+          boxSizing: 'border-box',
         }}
       >
         <div style={{ gridArea: 'vars' }} data-tutorial="variables">
