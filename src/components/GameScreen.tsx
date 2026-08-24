@@ -78,99 +78,71 @@ export function GameScreen({
 
       <main
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          gap: 0,
+          display: 'grid',
+          gridTemplateColumns: '210px 1fr 230px',
+          gridTemplateAreas: `
+            "vars formules  progression"
+            "vars enonce    progression"
+          `,
+          columnGap: 40,
+          rowGap: 16,
+          alignItems: 'start',
+          padding: '48px 80px 24px 44px',
           width: '100%',
+          maxWidth: 1050,
           boxSizing: 'border-box',
+          margin: '0 auto',
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            gap: 16,
-            width: '100%',
-            maxWidth: 1050,
-            padding: '48px 80px 24px 44px',
-            boxSizing: 'border-box',
-          }}
-        >
-          {/* 1. Panneau Variables — colonne gauche */}
-          <div style={{ width: 200, flexShrink: 0, alignSelf: 'flex-start', height: 'auto' }}>
-            <Panel data-tutorial="variables" style={{ padding: 10, width: '100%' }}>
-              <VariableBoard
-                variables={problem.variables}
-                identifiedVars={gameState.identifiedVars}
-                hypotheses={problem.hypotheses}
-                conclusions={problem.conclusions}
-                newlyIdentifiedVarId={newlyIdentifiedVarId}
-                lang={lang}
-              />
-            </Panel>
-          </div>
+        <div style={{ gridArea: 'vars' }} data-tutorial="variables">
+          <Panel style={{ padding: 10, width: '100%' }}>
+            <VariableBoard
+              variables={problem.variables}
+              identifiedVars={gameState.identifiedVars}
+              hypotheses={problem.hypotheses}
+              conclusions={problem.conclusions}
+              newlyIdentifiedVarId={newlyIdentifiedVarId}
+              lang={lang}
+            />
+          </Panel>
+        </div>
 
-          {/* 2. Colonne droite — flex row : sous-colonne Formules+Énoncé | Progression */}
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              gap: 40,
-              minWidth: 0,
-              overflow: 'visible',
-            }}
-          >
-            {/* Sous-colonne gauche : Formules + Énoncé empilés */}
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'stretch',
-                gap: 16,
-                minWidth: 0,
-              }}
-            >
-              <Panel data-tutorial="formulas" style={{ width: '100%' }}>
-                <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
-                  {t('panelFormulas', lang)}
-                </h3>
-                <FormulaBoard
-                  formulas={problem.formulas}
-                  evaluations={evaluations}
-                  activatedFormulas={gameState.activatedFormulas}
-                  newlyActivatedFormulaId={newlyActivatedFormulaId}
-                  disabled={formulaBoardDisabled}
-                  onActivate={onActivate}
-                  lang={lang}
-                />
-              </Panel>
+        <div style={{ gridArea: 'formules' }} data-tutorial="formulas">
+          <Panel style={{ width: '100%' }}>
+            <h3 style={{ margin: '0 0 10px', fontSize: 14, textTransform: 'uppercase', color: '#595959' }}>
+              {t('panelFormulas', lang)}
+            </h3>
+            <FormulaBoard
+              formulas={problem.formulas}
+              evaluations={evaluations}
+              activatedFormulas={gameState.activatedFormulas}
+              newlyActivatedFormulaId={newlyActivatedFormulaId}
+              disabled={formulaBoardDisabled}
+              onActivate={onActivate}
+              lang={lang}
+            />
+          </Panel>
+        </div>
 
-              <StatementPanel
-                variables={problem.variables}
-                hypotheses={problem.hypotheses}
-                conclusions={problem.conclusions}
-                lang={lang}
-              />
-            </div>
+        <div style={{ gridArea: 'enonce' }}>
+          <StatementPanel
+            variables={problem.variables}
+            hypotheses={problem.hypotheses}
+            conclusions={problem.conclusions}
+            lang={lang}
+          />
+        </div>
 
-            {/* Sous-colonne droite : Progression seul */}
-            <div style={{ width: 230, flexShrink: 0, overflow: 'visible' }}>
-              <Panel data-tutorial="progress" style={{ padding: 10, width: '100%' }}>
-                <ProgressPanel
-                  gameState={gameState}
-                  elapsedSeconds={elapsedSeconds}
-                  onRequestHint={onRequestHint}
-                  hintsDisabled={hintsDisabled}
-                  lang={lang}
-                />
-              </Panel>
-            </div>
-          </div>
+        <div style={{ gridArea: 'progression', alignSelf: 'start' }} data-tutorial="progress">
+          <Panel style={{ padding: 10, width: '100%' }}>
+            <ProgressPanel
+              gameState={gameState}
+              elapsedSeconds={elapsedSeconds}
+              onRequestHint={onRequestHint}
+              hintsDisabled={hintsDisabled}
+              lang={lang}
+            />
+          </Panel>
         </div>
       </main>
     </div>
