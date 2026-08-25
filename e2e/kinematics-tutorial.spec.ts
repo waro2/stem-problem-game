@@ -51,16 +51,17 @@ test('tutorial → cinématique → score en base → événement problem_comple
   await nextBtn.click();
 
   // ── 3. Étape tutoriel 2 — activer f1 (révèle t) ──────────────────────────
-  // After step 1 → 2, the formula board is enabled. f1 is the only activatable formula.
-  // FormulaCard outer div has role="button" and aria-label containing "Formule f1" and "Activable".
-  const f1Card = page.getByRole('button', { name: /Formule f1.*Activable/ });
+  // After step 1 → 2, the formula board is enabled. "Mode défi maximal": every
+  // not-yet-done card is role="button" (no activatable/locked distinction), so
+  // we target f1 by its formula id, embedded in the card's aria-label.
+  const f1Card = page.getByRole('button', { name: /Formule f1/ });
   await expect(f1Card).toBeVisible();
   await f1Card.click();
 
   // ── 4. Étape tutoriel 3 — activer f3 (révèle a) ──────────────────────────
   // f1 activation reveals t, making f3 the next activatable formula.
   // store.ts advances tutorialStep 2→3 after the activation.
-  const f3Card = page.getByRole('button', { name: /Formule f3.*Activable/ });
+  const f3Card = page.getByRole('button', { name: /Formule f3/ });
   await expect(f3Card).toBeVisible();
   await f3Card.click();
 
@@ -74,7 +75,7 @@ test('tutorial → cinématique → score en base → événement problem_comple
     { timeout: 30_000 },
   );
 
-  const f2Card = page.getByRole('button', { name: /Formule f2.*Activable/ });
+  const f2Card = page.getByRole('button', { name: /Formule f2/ });
   await expect(f2Card).toBeVisible();
   await f2Card.click();
 
