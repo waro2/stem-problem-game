@@ -195,6 +195,46 @@ describe('useGameStore — edge cases', () => {
   });
 });
 
+describe('useGameStore — mode défi maximal (wrong guesses)', () => {
+  it('penalizes a not-yet-activatable formula without revealing anything', () => {
+    useGameStore.getState().loadProblem(KINEMATICS);
+
+    useGameStore.getState().activate('f2'); // F=m*a — F and a both still unknown
+
+    const { gameState, lastActivationError } = useGameStore.getState();
+    expect(gameState!.identifiedVars.has('F')).toBe(false);
+    expect(gameState!.activatedFormulas.has('f2')).toBe(false);
+    expect(gameState!.steps).toBe(1);
+    expect(gameState!.incorrectAttempts).toBe(1);
+    expect(gameState!.scorePenaltyFromErrors).toBe(80);
+    expect(lastActivationError).toEqual({ formulaId: 'f2', reason: 'variables_manquantes', scorePenalty: -80, key: expect.any(Number) });
+  });
+
+  it('clears lastActivationError and proceeds normally on the next correct activation', () => {
+    useGameStore.getState().loadProblem(KINEMATICS);
+
+    useGameStore.getState().activate('f2'); // wrong guess
+    useGameStore.getState().activate('f1'); // reveals t — correct
+
+    const { gameState, lastActivationError } = useGameStore.getState();
+    expect(lastActivationError).toBeNull();
+    expect(gameState!.identifiedVars.has('t')).toBe(true);
+    expect(gameState!.steps).toBe(2); // 1 wrong attempt + 1 real activation
+    expect(gameState!.incorrectAttempts).toBe(1);
+  });
+
+  it('folds the error penalty into the final score on win', () => {
+    useGameStore.getState().loadProblem(KINEMATICS);
+
+    useGameStore.getState().activate('f2'); // wrong guess, -80
+    activateAllFormulas();
+
+    const { summary } = useGameStore.getState();
+    expect(summary!.outcome).toBe('win');
+    expect(summary!.score.errorPenalty).toBe(80);
+  });
+});
+
 describe('useGameStore — progression', () => {
   it('marks the problem as completed in localStorage on win', () => {
     const PROBLEM: Problem = { ...KINEMATICS, id: 'p-kinematics-progression-01' };

@@ -1,16 +1,22 @@
 /**
  * FormulaBoard — Centre panel of the web UI  (GDD §5.1)
- * Displays all formula cards with their activation state.
- * Activatable formulas pulse and show an Activate button.
+ * "Mode défi maximal": every formula looks identical and offers the same
+ * "Activer" button, whether or not it's actually activatable right now —
+ * the player reasons from the problem statement, not from a visual cue.
+ * Wrong guesses are handled by the store (penalty) and surfaced here as a
+ * brief red flash on the clicked card.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Formula } from '@game/types';
 import type { FormulaEvaluation } from '@game/types';
-import { t, tf, format } from '@i18n/strings';
+import { t } from '@i18n/strings';
 
 /** Horizontal drag distance (px) required to trigger a swipe-activate. */
 const SWIPE_THRESHOLD = 60;
+
+/** How long the red "incorrect" flash stays on the clicked card (ms). */
+const ERROR_FLASH_DURATION = 800;
 
 interface FormulaBoardProps {
   formulas: Formula[];
@@ -18,10 +24,12 @@ interface FormulaBoardProps {
   activatedFormulas: ReadonlySet<string>;
   /** Formula ID activated by the most recent step, for a brief golden halo (0.5s) */
   newlyActivatedFormulaId?: string | null;
-  /** Enable swipe-to-activate on activatable cards (mobile layout) */
+  /** Enable swipe-to-activate on all not-yet-done cards (mobile layout) */
   swipeToActivate?: boolean;
   /** When true, all activation controls (button + swipe) are disabled. */
   disabled?: boolean;
+  /** Most recent failed activation attempt ("mode défi maximal"), if any, for the red flash. */
+  errorFlash?: { formulaId: string; key: number } | null;
   onActivate: (formulaId: string) => void;
   lang?: 'fr' | 'en';
 }
@@ -33,20 +41,17 @@ export function FormulaBoard({
   newlyActivatedFormulaId = null,
   swipeToActivate = false,
   disabled = false,
+  errorFlash = null,
   onActivate,
   lang = 'fr',
 }: FormulaBoardProps) {
   const evalMap = new Map(evaluations.map(e => [e.formulaId, e]));
 
-  // Sort: activatable first, then locked, then done
+  // Sort: not-yet-done formulas keep their declared order (no activatable cue), done ones sink to the bottom.
   const sorted = [...formulas].sort((a, b) => {
-    const ea = evalMap.get(a.id);
-    const eb = evalMap.get(b.id);
-    const doneA = activatedFormulas.has(a.id) ? 2 : 0;
-    const doneB = activatedFormulas.has(b.id) ? 2 : 0;
-    const activeA = ea?.isActivatable ? -1 : 0;
-    const activeB = eb?.isActivatable ? -1 : 0;
-    return (doneA + activeA) - (doneB + activeB);
+    const doneA = activatedFormulas.has(a.id) ? 1 : 0;
+    const doneB = activatedFormulas.has(b.id) ? 1 : 0;
+    return doneA - doneB;
   });
 
   return (
@@ -54,7 +59,6 @@ export function FormulaBoard({
       {sorted.map(formula => {
         const ev = evalMap.get(formula.id);
         const isDone = activatedFormulas.has(formula.id);
-        const isActivatable = ev?.isActivatable ?? false;
         const expr = lang === 'fr' && formula.expression_fr
           ? formula.expression_fr
           : formula.expression;
@@ -66,10 +70,10 @@ export function FormulaBoard({
             expression={expr}
             evaluation={ev}
             isDone={isDone}
-            isActivatable={isActivatable}
             isNewlyActivated={newlyActivatedFormulaId === formula.id}
             swipeToActivate={swipeToActivate}
             disabled={disabled}
+            errorFlashKey={errorFlash?.formulaId === formula.id ? errorFlash.key : null}
             onActivate={onActivate}
             lang={lang}
           />
@@ -86,28 +90,36 @@ interface FormulaCardProps {
   expression: string;
   evaluation?: FormulaEvaluation | undefined;
   isDone: boolean;
-  isActivatable: boolean;
   isNewlyActivated: boolean;
   swipeToActivate: boolean;
   disabled: boolean;
+  /** Non-null key means: this card was just guessed wrong — flash red. */
+  errorFlashKey: number | null;
   onActivate: (id: string) => void;
   lang: 'fr' | 'en';
 }
 
 function FormulaCard({
-  formula, expression, evaluation, isDone, isActivatable, isNewlyActivated, swipeToActivate, disabled, onActivate, lang,
+  formula, expression, isDone, isNewlyActivated, swipeToActivate, disabled, errorFlashKey, onActivate, lang,
 }: FormulaCardProps) {
   const label = t('activateButton', lang);
-  const unknownMsg = tf('unknownsRemaining', lang)(evaluation?.unknownCount ?? 0);
 
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const touchStartX = React.useRef(0);
+  const [flashing, setFlashing] = useState(false);
 
-  const canSwipe = swipeToActivate && isActivatable && !disabled;
-  // Operable: this card's primary action (activation) can be triggered right now —
-  // drives both the click/keyboard handlers and the role="button" vs role="group" choice.
-  const operable = isActivatable && !disabled;
+  useEffect(() => {
+    if (errorFlashKey === null) return;
+    setFlashing(true);
+    const timeout = setTimeout(() => setFlashing(false), ERROR_FLASH_DURATION);
+    return () => clearTimeout(timeout);
+  }, [errorFlashKey]);
+
+  // Operable: this card's primary action (activation attempt) can be triggered right now —
+  // every not-yet-done card is operable, regardless of whether it's truly activatable.
+  const operable = !isDone && !disabled;
+  const canSwipe = swipeToActivate && operable;
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!canSwipe) return;
@@ -145,28 +157,15 @@ function FormulaCard({
     }
   };
 
-  const stateLabel = isDone
-    ? t('formulaActivated', lang)
-    : isActivatable
-    ? t('formulaActivatable', lang)
-    : t('formulaLocked', lang);
-
-  const detailLabel = isDone
-    ? null
-    : isActivatable
-    ? format(t('formulaReveals', lang), evaluation?.revealedVarId ?? '')
-    : unknownMsg;
-
-  const ariaLabel = [`${t('formulaAriaPrefix', lang)} ${formula.id}: ${expression}`, stateLabel, detailLabel]
-    .filter((part): part is string => part !== null)
-    .join(' — ');
+  const stateLabel = isDone ? t('formulaActivated', lang) : t('formulaAvailable', lang);
+  const ariaLabel = `${t('formulaAriaPrefix', lang)} ${formula.id}: ${expression} — ${stateLabel}`;
 
   return (
     <div
       role={operable ? 'button' : 'group'}
       tabIndex={0}
       aria-label={ariaLabel}
-      aria-disabled={isActivatable && disabled ? true : undefined}
+      aria-disabled={!isDone && disabled ? true : undefined}
       onClick={operable ? handleClick : undefined}
       onKeyDown={handleKeyDown}
       className={isNewlyActivated ? 'golden-halo' : undefined}
@@ -176,14 +175,13 @@ function FormulaCard({
       style={{
         border: isDone
           ? '2px solid #70AD47'
-          : isActivatable
-          ? '2px solid #F4B942'
+          : flashing
+          ? '1.5px solid #E05555'
           : '1px solid #D6DCE4',
         borderRadius: 8,
         padding: '10px 14px',
-        background: isDone ? '#F0FBF0' : isActivatable ? '#FFFDF5' : '#FAFAFA',
+        background: isDone ? '#F0FBF0' : flashing ? '#FFF0F0' : '#FAFAFA',
         opacity: isDone ? 0.7 : 1,
-        boxShadow: isActivatable ? '0 0 0 3px rgba(244,185,66,0.3)' : 'none',
         transform: dragX > 0 ? `translateX(${dragX}px)` : undefined,
         transition: dragging ? 'none' : 'all 0.2s',
         touchAction: canSwipe ? 'pan-y' : undefined,
@@ -191,16 +189,14 @@ function FormulaCard({
       }}
     >
       <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-        {isDone ? '✓ ' : isActivatable ? '⚡ ' : '🔒 '}
+        {isDone ? '✓ ' : ''}
         {formula.id}: <span style={{ fontFamily: 'monospace' }}>{expression}</span>
       </div>
 
       {!isDone && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: 12, color: '#595959' }}>
-            {detailLabel}
-          </span>
-          {isActivatable && !swipeToActivate && (
+          <span />
+          {!swipeToActivate && (
             <button
               type="button"
               tabIndex={-1}
@@ -229,7 +225,7 @@ function FormulaCard({
         </div>
       )}
 
-      {formula.conceptName && isActivatable && (
+      {formula.conceptName && !isDone && (
         <div style={{ fontSize: 11, color: '#2E75B6', marginTop: 4 }}>
           💡 {lang === 'fr' ? formula.conceptName_fr : formula.conceptName}
         </div>

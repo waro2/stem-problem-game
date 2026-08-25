@@ -122,6 +122,12 @@ export interface GameState {
 
   hintsUsed: number;
 
+  /** "Mode défi maximal" — count of failed activation attempts (wrong or not-yet-activatable formula). */
+  incorrectAttempts: number;
+
+  /** "Mode défi maximal" — total points deducted for failed attempts, as a positive amount. */
+  scorePenaltyFromErrors: number;
+
   /** ISO timestamp of session start */
   startedAt: string;
 
@@ -169,6 +175,21 @@ export interface HintResult {
 }
 
 // ─────────────────────────────────────────────
+// "Mode défi maximal" — attempted activation of a formula whose
+// activatable/locked status is hidden from the player (GDD extension).
+// ─────────────────────────────────────────────
+
+/**
+ * variables_manquantes — the formula still has 2+ unknown variables (not activatable).
+ * mauvaise_formule     — the formula has 0 unknown variables (nothing left to reveal).
+ */
+export type ActivationFailureReason = 'variables_manquantes' | 'mauvaise_formule';
+
+export type ActivationAttemptResult =
+  | { success: true; state: GameState }
+  | { success: false; reason: ActivationFailureReason; scorePenalty: number; state: GameState };
+
+// ─────────────────────────────────────────────
 // Scoring  (GDD §6.2)
 // ─────────────────────────────────────────────
 
@@ -177,6 +198,8 @@ export interface ScoreBreakdown {
   stepPenalty: number;   // steps * S_STEP (20)
   hintPenalty: number;   // hints * S_HINT (50)
   timeBonus: number;     // max(0, 200 - elapsedSeconds * 2)
+  /** "Mode défi maximal" — total points deducted for failed activation attempts. */
+  errorPenalty: number;
   total: number;
 }
 

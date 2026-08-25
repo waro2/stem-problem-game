@@ -17,12 +17,12 @@ export const UI = {
   varHypothesisTooltip: { fr: 'Donnée de départ', en: 'Starting value' },
 
   // ── Formula states ───────────────────────────────────────────
-  formulaActivatable:  { fr: 'Activable ⚡', en: 'Activatable ⚡' },
-  formulaLocked:       { fr: 'Bloquée', en: 'Locked' },
   formulaActivated:    { fr: 'Utilisée ✓', en: 'Used ✓' },
+  // "Mode défi maximal" — no card visually reveals whether it's activatable.
+  formulaAvailable:    { fr: 'Non activée', en: 'Not yet activated' },
   activateButton:      { fr: 'Activer', en: 'Activate' },
-  unknownsRemaining:   { fr: (n: number) => `${n} variable(s) inconnue(s)`, en: (n: number) => `${n} unknown variable(s)` },
-  formulaReveals:      { fr: 'Révèle : {0}', en: 'Reveals: {0}' },
+  incorrectAttemptToast:  { fr: 'Formule incorrecte', en: 'Incorrect formula' },
+  incorrectAttemptsLabel: { fr: 'Tentatives incorrectes', en: 'Incorrect attempts' },
 
   // ── Accessibility — ARIA labels & prefixes (WCAG AA) ───────────
   variableAriaPrefix: { fr: 'Variable', en: 'Variable' },

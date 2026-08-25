@@ -8,12 +8,12 @@
 
 import { create } from 'zustand';
 import { Capacitor } from '@capacitor/core';
-import type { GameState, Platform, Problem, HintTier } from './types';
+import type { GameState, Platform, Problem, HintTier, ActivationFailureReason } from './types';
 import type { Lang } from '../i18n/strings';
 import { t, format } from '../i18n/strings';
 import {
   initGameState,
-  activateFormula,
+  attemptActivateFormula,
   undoLastActivation,
   applyAutoActivate,
   computeHint,
@@ -37,6 +37,15 @@ import { getWeakestDomain, recommendNextProblem } from './recommendation';
 // Store shape
 // ─────────────────────────────────────────────
 
+/** "Mode défi maximal" — describes the most recent failed activation attempt. */
+export interface ActivationError {
+  formulaId: string;
+  reason: ActivationFailureReason;
+  scorePenalty: number;
+  /** Monotonic nonce so the UI can re-trigger a flash/toast even for repeated identical errors. */
+  key: number;
+}
+
 interface GameStore {
   // State
   gameState: GameState | null;
@@ -53,6 +62,8 @@ interface GameStore {
   pendingEventCount: number;
   /** Latest screen-reader announcement (cascade activations, win/stuck), or null. */
   announcement: string | null;
+  /** "Mode défi maximal" — most recent failed activation attempt, or null. */
+  lastActivationError: ActivationError | null;
 
   // Derived (computed on demand)
   getAllEvaluations: () => FormulaEvaluation[];
@@ -116,6 +127,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   recommendedProblem: null,
   pendingEventCount: 0,
   announcement: null,
+  lastActivationError: null,
 
   getAllEvaluations: () => {
     const gs = get().gameState;
@@ -139,6 +151,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastHint: null,
       tutorialStep: isTutorialDone() ? null : 1,
       announcement: null,
+      lastActivationError: null,
     });
 
     emitEvent(Events.sessionStart(get().userId, problem.id, {
@@ -165,7 +178,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       : 0;
     const activatableCount = getActivatableFormulas(gameState).length;
 
-    const next = activateFormula(gameState, formulaId);
+    const attempt = attemptActivateFormula(gameState, formulaId);
+
+    if (!attempt.success) {
+      // "Mode défi maximal" — wrong guess: apply the penalty, surface it to the UI
+      // (flash + toast), but don't touch identifiedVars/activatedFormulas/announcement.
+      set({
+        gameState: attempt.state,
+        lastActivationError: { formulaId, reason: attempt.reason, scorePenalty: attempt.scorePenalty, key: Date.now() },
+      });
+      return;
+    }
+
+    const next = attempt.state;
     const ann = describeActivation(gameState, next, formulaId);
 
     emitEvent(Events.formulaActivated(userId, gameState.problem.id, {
@@ -177,7 +202,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       activatableCount,
     }));
 
-    set({ gameState: next, announcement: formatAnnouncement(ann, get().lang) });
+    set({ gameState: next, announcement: formatAnnouncement(ann, get().lang), lastActivationError: null });
 
     // Auto-end session if won or stuck
     if (next.phase === 'win' || next.phase === 'stuck') {
@@ -257,7 +282,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ summary });
   },
 
-  reset: () => set({ gameState: null, summary: null, lastHint: null, sessionStartTime: null, announcement: null }),
+  reset: () => set({ gameState: null, summary: null, lastHint: null, sessionStartTime: null, announcement: null, lastActivationError: null }),
 
   nextTutorialStep: () => {
     const { tutorialStep } = get();

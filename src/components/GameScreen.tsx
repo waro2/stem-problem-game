@@ -3,8 +3,8 @@
  * Columns: Variables (left) | Formulas (center) | Progress & Hints (right).
  */
 
-import React, { useState } from 'react';
-import type { GameState, FormulaEvaluation, HintTier } from '@game/types';
+import React, { useEffect, useState } from 'react';
+import type { GameState, FormulaEvaluation, HintTier, ActivationFailureReason } from '@game/types';
 import { t } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
 import { VariableBoard } from './VariableBoard';
@@ -12,6 +12,14 @@ import { FormulaBoard } from './FormulaBoard';
 import { ProgressPanel } from './ProgressPanel';
 import { HelpPanel } from './HelpPanel';
 import { StatementPanel } from './StatementPanel';
+
+/** "Mode défi maximal" — most recent failed activation attempt, or null. */
+export interface ActivationErrorInfo {
+  formulaId: string;
+  reason: ActivationFailureReason;
+  scorePenalty: number;
+  key: number;
+}
 
 interface GameScreenProps {
   gameState: GameState;
@@ -29,6 +37,8 @@ interface GameScreenProps {
   tutorialStep?: number | null;
   /** Number of analytics events queued but not yet confirmed sent (GDD §9.4). */
   pendingEventCount?: number;
+  /** "Mode défi maximal" — most recent failed activation attempt, drives the card flash + toast. */
+  activationError?: ActivationErrorInfo | null;
 }
 
 export function GameScreen({
@@ -44,6 +54,7 @@ export function GameScreen({
   onOpenSettings,
   tutorialStep = null,
   pendingEventCount = 0,
+  activationError = null,
 }: GameScreenProps) {
   const { problem } = gameState;
   const title = lang === 'fr' ? problem.title_fr : problem.title;
@@ -120,6 +131,7 @@ export function GameScreen({
               activatedFormulas={gameState.activatedFormulas}
               newlyActivatedFormulaId={newlyActivatedFormulaId}
               disabled={formulaBoardDisabled}
+              errorFlash={activationError}
               onActivate={onActivate}
               lang={lang}
             />
@@ -148,11 +160,48 @@ export function GameScreen({
           </Panel>
         </div>
       </main>
+
+      {activationError && <ErrorToast error={activationError} lang={lang} />}
     </div>
   );
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
+
+/** "Mode défi maximal" — bottom toast shown for ~2s after a wrong activation guess. */
+export function ErrorToast({ error, lang }: { error: ActivationErrorInfo; lang: Lang }) {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    setVisible(true);
+    const timeout = setTimeout(() => setVisible(false), 2000);
+    return () => clearTimeout(timeout);
+  }, [error.key]);
+
+  if (!visible) return null;
+
+  return (
+    <div
+      role="status"
+      style={{
+        position: 'fixed',
+        bottom: 24,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: '#2A0A0A',
+        color: '#E05555',
+        padding: '10px 20px',
+        borderRadius: 8,
+        fontSize: 13,
+        fontWeight: 600,
+        boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
+        zIndex: 1000,
+      }}
+    >
+      {t('incorrectAttemptToast', lang)} {error.scorePenalty} pts
+    </div>
+  );
+}
 
 function Panel({ children, style, ...rest }: { children: React.ReactNode; style?: React.CSSProperties } & React.HTMLAttributes<HTMLDivElement>) {
   return (

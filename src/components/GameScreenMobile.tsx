@@ -12,7 +12,8 @@ import type { Lang } from '@i18n/strings';
 import { VariableBoard } from './VariableBoard';
 import { FormulaBoard } from './FormulaBoard';
 import { ProgressPanel } from './ProgressPanel';
-import { LangSwitch, HelpButton, SettingsButton, PendingEventsBadge } from './GameScreen';
+import { LangSwitch, HelpButton, SettingsButton, PendingEventsBadge, ErrorToast } from './GameScreen';
+import type { ActivationErrorInfo } from './GameScreen';
 import { HelpPanel } from './HelpPanel';
 
 type MobileTab = 'variables' | 'formulas' | 'progress';
@@ -50,6 +51,8 @@ interface GameScreenMobileProps {
   tutorialStep?: number | null;
   /** Number of analytics events queued but not yet confirmed sent (GDD §9.4). */
   pendingEventCount?: number;
+  /** "Mode défi maximal" — most recent failed activation attempt, drives the card flash + toast. */
+  activationError?: ActivationErrorInfo | null;
 }
 
 export function GameScreenMobile({
@@ -65,6 +68,7 @@ export function GameScreenMobile({
   onOpenSettings,
   tutorialStep = null,
   pendingEventCount = 0,
+  activationError = null,
 }: GameScreenMobileProps) {
   const [activeTab, setActiveTab] = useState<MobileTab>('formulas');
   const [helpOpen, setHelpOpen] = useState(false);
@@ -132,6 +136,7 @@ export function GameScreenMobile({
               newlyActivatedFormulaId={newlyActivatedFormulaId}
               swipeToActivate
               disabled={formulaBoardDisabled}
+              errorFlash={activationError}
               onActivate={onActivate}
               lang={lang}
             />
@@ -174,6 +179,8 @@ export function GameScreenMobile({
           />
         ))}
       </nav>
+
+      {activationError && <ErrorToast error={activationError} lang={lang} />}
     </div>
   );
 }

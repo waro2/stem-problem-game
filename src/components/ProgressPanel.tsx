@@ -26,7 +26,7 @@ const HINT_TIERS: { tier: HintTier; key: 'hintTier1' | 'hintTier2' | 'hintTier3'
 ];
 
 export function ProgressPanel({ gameState, elapsedSeconds, onRequestHint, hintsDisabled = false, lang = 'fr' }: ProgressPanelProps) {
-  const { problem, identifiedVars, steps, hintsUsed, phase } = gameState;
+  const { problem, identifiedVars, steps, hintsUsed, incorrectAttempts, phase } = gameState;
 
   const totalGoals = problem.conclusions.length;
   const identifiedGoals = problem.conclusions.filter(c => identifiedVars.has(c)).length;
@@ -70,6 +70,11 @@ export function ProgressPanel({ gameState, elapsedSeconds, onRequestHint, hintsD
         <Stat label={t('scoreLabel', lang)} value={score.total} bold />
         <Stat label={t('stepsLabel', lang)} value={`${steps} (${t('optimalLabel', lang)}: ${problem.optimalSteps})`} />
         <Stat label={t('hintsLabel', lang)} value={hintsUsed} />
+        <Stat
+          label={t('incorrectAttemptsLabel', lang)}
+          value={incorrectAttempts}
+          valueColor={incorrectAttempts > 0 ? '#C00000' : '#8C8C8C'}
+        />
       </div>
 
       {/* Outcome banner */}
@@ -120,11 +125,13 @@ export function ProgressPanel({ gameState, elapsedSeconds, onRequestHint, hintsD
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function Stat({ label, value, bold }: { label: string; value: string | number; bold?: boolean }) {
+function Stat({
+  label, value, bold, valueColor,
+}: { label: string; value: string | number; bold?: boolean; valueColor?: string }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <span style={{ color: '#595959', whiteSpace: 'nowrap' }}>{label}</span>
-      <span style={{ fontWeight: bold ? 700 : 500, whiteSpace: 'nowrap' }}>{value}</span>
+      <span style={{ fontWeight: bold ? 700 : 500, color: valueColor, whiteSpace: 'nowrap' }}>{value}</span>
     </div>
   );
 }

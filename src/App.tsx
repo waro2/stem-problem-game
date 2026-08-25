@@ -329,6 +329,7 @@ function GamePage() {
     skipTutorial,
     pendingEventCount,
     setPendingEventCount,
+    lastActivationError,
   } = useGameStore();
   const { profile, getAccessToken } = useAuth();
   const navigate = useNavigate();
@@ -508,6 +509,7 @@ function GamePage() {
             onOpenSettings={() => setShowSettings(true)}
             tutorialStep={tutorialStep}
             pendingEventCount={pendingEventCount}
+            activationError={lastActivationError}
           />
           {tutorialStep !== null && (
             <TutorialOverlay

@@ -7,6 +7,8 @@
  */
 
 import type {
+  ActivationAttemptResult,
+  ActivationFailureReason,
   Formula,
   FormulaEvaluation,
   GamePhase,
@@ -32,6 +34,8 @@ export function initGameState(problem: Problem): GameState {
     activatedFormulas: new Set(),
     steps: 0,
     hintsUsed: 0,
+    incorrectAttempts: 0,
+    scorePenaltyFromErrors: 0,
     startedAt: new Date().toISOString(),
     history: [],
     phase: 'scan',
@@ -126,6 +130,48 @@ export function activateFormula(state: GameState, formulaId: string): GameState 
 
   // Determine next phase
   return resolvePhase(nextState);
+}
+
+// ─────────────────────────────────────────────
+// "Mode défi maximal"  (GDD extension)
+// No visual activatable/locked cue is shown to the player; every formula
+// looks clickable. Wrong guesses cost points instead of being blocked.
+// ─────────────────────────────────────────────
+
+const INCORRECT_ATTEMPT_PENALTIES: Record<ActivationFailureReason, number> = {
+  variables_manquantes: -80,
+  mauvaise_formule: -50,
+};
+
+/**
+ * Attempt to activate a formula without assuming the caller already knows
+ * whether it's currently activatable. Never throws:
+ *  - unknownCount === 1  → activates normally (same as activateFormula)
+ *  - unknownCount >= 2   → 'variables_manquantes' (-80 pts)
+ *  - unknownCount === 0  → 'mauvaise_formule', nothing left to reveal (-50 pts)
+ * On failure, identifiedVars/activatedFormulas are untouched, but steps and
+ * the error counters still advance — a wrong guess still costs a step.
+ */
+export function attemptActivateFormula(state: GameState, formulaId: string): ActivationAttemptResult {
+  const formula = state.problem.formulas.find(f => f.id === formulaId);
+  if (!formula) throw new Error(`Formula "${formulaId}" not found in problem`);
+
+  const evaluation = evaluateFormula(formula, state.identifiedVars);
+  if (evaluation.isActivatable) {
+    return { success: true, state: activateFormula(state, formulaId) };
+  }
+
+  const reason: ActivationFailureReason = evaluation.unknownCount === 0 ? 'mauvaise_formule' : 'variables_manquantes';
+  const scorePenalty = INCORRECT_ATTEMPT_PENALTIES[reason];
+
+  const nextState: GameState = {
+    ...state,
+    steps: state.steps + 1,
+    incorrectAttempts: state.incorrectAttempts + 1,
+    scorePenaltyFromErrors: state.scorePenaltyFromErrors + Math.abs(scorePenalty),
+  };
+
+  return { success: false, reason, scorePenalty, state: nextState };
 }
 
 /** Effect of a single activation, used to build screen-reader announcements (GDD §8.1 — Cascade). */
@@ -246,12 +292,14 @@ export function computeScore(
 ): ScoreBreakdown {
   const stepPenalty = state.steps * config.stepPenalty;
   const hintPenalty = state.hintsUsed * config.hintPenalty;
+  const errorPenalty = state.scorePenaltyFromErrors;
   const timeBonus = Math.max(0, config.timeBonusBase - elapsedSeconds * config.timeBonusRate);
-  const total = Math.max(0, config.maxScore - stepPenalty - hintPenalty + timeBonus);
+  const total = Math.max(0, config.maxScore - stepPenalty - hintPenalty - errorPenalty + timeBonus);
   return {
     base: config.maxScore,
     stepPenalty,
     hintPenalty,
+    errorPenalty,
     timeBonus,
     total: Math.round(total),
   };

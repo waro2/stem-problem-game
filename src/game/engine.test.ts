@@ -9,6 +9,7 @@ import {
   evaluateFormula,
   getActivatableFormulas,
   activateFormula,
+  attemptActivateFormula,
   describeActivation,
   isWon,
   isStuck,
@@ -47,6 +48,31 @@ const KINEMATICS: Problem = {
   hypotheses: ['d', 'v', 'm'],
   conclusions: ['F'],
   optimalSteps: 3,
+  solvable: true,
+};
+
+// ── Fixture: "mode défi maximal" — includes a formula whose variables are
+// ALL already known at the start (unknownCount === 0 → 'mauvaise_formule').
+// Variables: x, y, z   Formulas: f1: z=x+y (x,y,z), f2: x=y (x,y — redundant)
+// H = {x, y}   C = {z}
+const REDUNDANT_FORMULA_PROBLEM: Problem = {
+  id: 'p-redundant-01',
+  domain: 'physics',
+  difficulty: 'beginner',
+  title: 'Redundant Formula',
+  title_fr: 'Formule redondante',
+  variables: [
+    { id: 'x', label: 'x', label_fr: 'x', domain: 'physics' },
+    { id: 'y', label: 'y', label_fr: 'y', domain: 'physics' },
+    { id: 'z', label: 'z', label_fr: 'z', domain: 'physics' },
+  ],
+  formulas: [
+    { id: 'f1', expression: 'z = x + y', variableIds: ['x', 'y', 'z'] },
+    { id: 'f2', expression: 'x = y', variableIds: ['x', 'y'] },
+  ],
+  hypotheses: ['x', 'y'],
+  conclusions: ['z'],
+  optimalSteps: 1,
   solvable: true,
 };
 
@@ -110,6 +136,67 @@ describe('activateFormula', () => {
     const s1 = activateFormula(s0, 'f1'); // reveals t
     const activatable = getActivatableFormulas(s1).map(e => e.formulaId);
     expect(activatable).toContain('f3');
+  });
+});
+
+describe('attemptActivateFormula — "mode défi maximal"', () => {
+  it('activates normally when unknownCount === 1', () => {
+    const s0 = initGameState(KINEMATICS);
+    const result = attemptActivateFormula(s0, 'f1');
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.state.identifiedVars.has('t')).toBe(true);
+      expect(result.state.steps).toBe(1);
+      expect(result.state.incorrectAttempts).toBe(0);
+    }
+  });
+
+  it('returns "variables_manquantes" with a -80 penalty when 2+ variables are unknown', () => {
+    const s0 = initGameState(KINEMATICS); // f2 = F=m*a: F and a both unknown
+    const result = attemptActivateFormula(s0, 'f2');
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.reason).toBe('variables_manquantes');
+      expect(result.scorePenalty).toBe(-80);
+      // the formula is not actually activated: no new variable revealed
+      expect(result.state.identifiedVars.has('F')).toBe(false);
+      expect(result.state.activatedFormulas.has('f2')).toBe(false);
+      // but the attempt still counts as a step and an error
+      expect(result.state.steps).toBe(1);
+      expect(result.state.incorrectAttempts).toBe(1);
+      expect(result.state.scorePenaltyFromErrors).toBe(80);
+    }
+  });
+
+  it('returns "mauvaise_formule" with a -50 penalty when nothing is left to reveal', () => {
+    const s0 = initGameState(REDUNDANT_FORMULA_PROBLEM); // f2 = x=y: both already known
+    const result = attemptActivateFormula(s0, 'f2');
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.reason).toBe('mauvaise_formule');
+      expect(result.scorePenalty).toBe(-50);
+      expect(result.state.activatedFormulas.has('f2')).toBe(false);
+      expect(result.state.incorrectAttempts).toBe(1);
+      expect(result.state.scorePenaltyFromErrors).toBe(50);
+    }
+  });
+
+  it('accumulates incorrectAttempts and scorePenaltyFromErrors across repeated wrong guesses', () => {
+    let s = initGameState(KINEMATICS);
+    let result = attemptActivateFormula(s, 'f2'); // variables_manquantes, -80
+    if (!result.success) s = result.state;
+    result = attemptActivateFormula(s, 'f2'); // still wrong, -80 again
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.state.incorrectAttempts).toBe(2);
+      expect(result.state.scorePenaltyFromErrors).toBe(160);
+      expect(result.state.steps).toBe(2);
+    }
+  });
+
+  it('throws for a formulaId that does not exist, same as activateFormula', () => {
+    const s0 = initGameState(KINEMATICS);
+    expect(() => attemptActivateFormula(s0, 'nope')).toThrow();
   });
 });
 
@@ -221,6 +308,13 @@ describe('computeScore', () => {
     const score = computeScore(s, 1.25);
     expect(score.timeBonus).toBe(197.5); // 200 - 1.25*2
     expect(score.total).toBe(1198); // round(1197.5)
+  });
+
+  it('subtracts scorePenaltyFromErrors ("mode défi maximal") from the total', () => {
+    const s = { ...initGameState(KINEMATICS), scorePenaltyFromErrors: 130 };
+    const score = computeScore(s, 0);
+    expect(score.errorPenalty).toBe(130);
+    expect(score.total).toBe(1070); // 1000 - 0 - 0 - 130 + 200
   });
 
   it('respects a custom ScoreConfig', () => {

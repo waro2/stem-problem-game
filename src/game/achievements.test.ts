@@ -14,7 +14,7 @@ const BASE_SUMMARY: SessionSummary = {
   optimalSteps: 3,
   elapsedSeconds: 30,
   hintsUsed: 0,
-  score: { base: 1000, stepPenalty: 60, hintPenalty: 0, timeBonus: 140, total: 1080 },
+  score: { base: 1000, stepPenalty: 60, hintPenalty: 0, errorPenalty: 0, timeBonus: 140, total: 1080 },
   activationPath: ['f1', 'f2', 'f3'],
 };
 
