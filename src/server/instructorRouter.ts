@@ -10,11 +10,54 @@
 import { Router, type Request, type Response } from 'express';
 import type { Prisma } from '@prisma/client';
 import type { Domain, GameOutcome } from '../game/types';
-import type { InstructorDashboardData } from '../api/instructor';
+import type { InstructorDashboardData, StudentSessionRow } from '../api/instructor';
 import { computeCohortStudentRows, mergeScoreConfig, parseScoreConfig } from './instructorStats';
 
+/**
+ * Extra `session.findMany` shape needed by the student-detail sessions route.
+ * Kept as its own interface (intersected into InstructorDatabase below) —
+ * PrismaClient's generic `findMany` is only assignable to an intersection of
+ * single-signature overloads, not to a single property declared with
+ * multiple call signatures.
+ */
+export interface InstructorStudentSessionsDatabase {
+  session: {
+    findMany: (args: {
+      where: { userId: string };
+      select: {
+        id: true;
+        outcome: true;
+        totalSteps: true;
+        optimalSteps: true;
+        hintsUsed: true;
+        finalScore: true;
+        stepEfficiencyRatio: true;
+        timeElapsedSeconds: true;
+        startedAt: true;
+        completedAt: true;
+        problem: { select: { domain: true } };
+      };
+      orderBy: { startedAt: 'asc' };
+    }) => Promise<
+      {
+        id: string;
+        outcome: GameOutcome | null;
+        totalSteps: number | null;
+        optimalSteps: number | null;
+        hintsUsed: number;
+        finalScore: number | null;
+        stepEfficiencyRatio: number | null;
+        timeElapsedSeconds: number | null;
+        startedAt: Date;
+        completedAt: Date | null;
+        problem: { domain: Domain };
+      }[]
+    >;
+  };
+}
+
 /** Minimal slice of PrismaClient this route needs — keeps it easy to mock in tests. */
-export interface InstructorDatabase {
+export type InstructorDatabase = {
   cohort: {
     findUnique: (args: {
       where: { id: string };
@@ -39,7 +82,7 @@ export interface InstructorDatabase {
       { userId: string; finalScore: number | null; outcome: GameOutcome | null; problem: { domain: Domain } }[]
     >;
   };
-}
+} & InstructorStudentSessionsDatabase;
 
 export function createInstructorRouter(db: InstructorDatabase): Router {
   const router = Router();
@@ -80,6 +123,59 @@ export function createInstructorRouter(db: InstructorDatabase): Router {
     } catch (err) {
       console.error('[instructor] failed to load cohort dashboard', err);
       res.status(500).json({ error: 'Failed to load cohort dashboard' });
+    }
+  });
+
+  router.get('/api/instructor/cohorts/:cohortId/students/:studentId/sessions', async (req: Request, res: Response) => {
+    const cohortId = req.params['cohortId'] ?? '';
+    const studentId = req.params['studentId'] ?? '';
+
+    try {
+      const cohort = await db.cohort.findUnique({
+        where: { id: cohortId },
+        select: { id: true, name: true, scoreConfig: true, leaderboardEnabled: true, members: { select: { id: true, name: true, email: true } } },
+      });
+      if (!cohort || !cohort.members.some(m => m.id === studentId)) {
+        res.status(404).json({ error: 'Student not found in this cohort' });
+        return;
+      }
+
+      const sessions = await db.session.findMany({
+        where: { userId: studentId },
+        select: {
+          id: true,
+          outcome: true,
+          totalSteps: true,
+          optimalSteps: true,
+          hintsUsed: true,
+          finalScore: true,
+          stepEfficiencyRatio: true,
+          timeElapsedSeconds: true,
+          startedAt: true,
+          completedAt: true,
+          problem: { select: { domain: true } },
+        },
+        orderBy: { startedAt: 'asc' },
+      });
+
+      const rows: StudentSessionRow[] = sessions.map(s => ({
+        id: s.id,
+        domain: s.problem.domain,
+        outcome: s.outcome,
+        totalSteps: s.totalSteps,
+        optimalSteps: s.optimalSteps,
+        hintsUsed: s.hintsUsed,
+        finalScore: s.finalScore,
+        stepEfficiencyRatio: s.stepEfficiencyRatio,
+        timeElapsedSeconds: s.timeElapsedSeconds,
+        startedAt: s.startedAt.toISOString(),
+        completedAt: s.completedAt ? s.completedAt.toISOString() : null,
+      }));
+
+      res.status(200).json(rows);
+    } catch (err) {
+      console.error('[instructor] failed to load student sessions', err);
+      res.status(500).json({ error: 'Failed to load student sessions' });
     }
   });
 

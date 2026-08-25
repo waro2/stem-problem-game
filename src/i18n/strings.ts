@@ -381,6 +381,22 @@ export const UI = {
   exportCsvButton:           { fr: 'Exporter CSV', en: 'Export CSV' },
   exportCsvErrorMsg:         { fr: 'Échec de l’export CSV.', en: 'Failed to export CSV.' },
 
+  // ── Cognitive profile (radar) & domain mastery (heatmap) ────────
+  cognitiveProfileTitle:     { fr: 'Profil cognitif', en: 'Cognitive Profile' },
+  domainMasteryTitle:        { fr: 'Maîtrise par domaine', en: 'Mastery by Domain' },
+  closeStudentDetailButton:  { fr: '✕ Fermer', en: '✕ Close' },
+  autonomyCardLabel:         { fr: 'Autonomie', en: 'Autonomy' },
+  radarSubjectReussite:      { fr: 'Réussite', en: 'Completion' },
+  radarSubjectEfficacite:    { fr: 'Efficacité', en: 'Efficiency' },
+  radarSubjectAutonomie:     { fr: 'Autonomie', en: 'Autonomy' },
+  radarSubjectMetacognition: { fr: 'Métacognition', en: 'Metacognition' },
+  radarSubjectVitesse:       { fr: 'Vitesse', en: 'Speed' },
+  radarSubjectScore:         { fr: 'Score', en: 'Score' },
+  heatmapScoreLabel:         { fr: 'Score moyen', en: 'Average score' },
+  heatmapNoDataLegend:       { fr: 'Aucune donnée', en: 'No data' },
+  heatmapLowMasteryLegend:   { fr: '< 40 %', en: '< 40%' },
+  studentSessionsErrorMsg:   { fr: 'Impossible de charger les parties de cet élève.', en: 'Failed to load this student’s sessions.' },
+
   // ── Concept Library ────────────────────────────────────────────
   conceptLinkLabel:        { fr: '💡 En savoir plus sur ce concept :', en: '💡 Learn more about this concept:' },
   conceptLibraryTitle:     { fr: 'Bibliothèque de concepts', en: 'Concept Library' },

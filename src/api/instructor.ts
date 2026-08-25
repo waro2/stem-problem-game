@@ -6,7 +6,7 @@
  * src/pages/InstructorDashboard.tsx (consumer).
  */
 
-import type { Domain, ScoreConfig } from '../game/types';
+import type { Domain, GameOutcome, ScoreConfig } from '../game/types';
 
 export interface StudentDomainCompletion {
   domain: Domain;
@@ -57,4 +57,28 @@ export async function updateLeaderboardEnabled(apiUrl: string, cohortId: string,
   });
   if (!res.ok) throw new Error(`Failed to update leaderboard setting: ${res.status}`);
   return res.json() as Promise<{ leaderboardEnabled: boolean }>;
+}
+
+/** One raw session row for a single student, used by the cognitive radar chart and domain heatmap. */
+export interface StudentSessionRow {
+  id: string;
+  domain: Domain;
+  outcome: GameOutcome | null;
+  totalSteps: number | null;
+  optimalSteps: number | null;
+  hintsUsed: number;
+  finalScore: number | null;
+  stepEfficiencyRatio: number | null;
+  timeElapsedSeconds: number | null;
+  startedAt: string;
+  completedAt: string | null;
+}
+
+/** Fetch every session played by one student in a cohort, ordered oldest-first. */
+export async function fetchStudentSessions(apiUrl: string, cohortId: string, studentId: string): Promise<StudentSessionRow[]> {
+  const res = await fetch(
+    `${apiUrl}/api/instructor/cohorts/${encodeURIComponent(cohortId)}/students/${encodeURIComponent(studentId)}/sessions`
+  );
+  if (!res.ok) throw new Error(`Failed to fetch student sessions: ${res.status}`);
+  return res.json() as Promise<StudentSessionRow[]>;
 }

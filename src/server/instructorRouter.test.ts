@@ -6,7 +6,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { Server } from 'node:http';
 import { createApp, type Database } from './app';
-import type { InstructorDashboardData } from '../api/instructor';
+import type { InstructorDashboardData, StudentSessionRow } from '../api/instructor';
 import { DEFAULT_SCORE_CONFIG } from '../game/types';
 
 let server: Server;
@@ -141,5 +141,80 @@ describe('PUT /api/instructor/cohorts/:cohortId/leaderboard', () => {
       body: JSON.stringify({ enabled: 'yes' }),
     });
     expect(res.status).toBe(400);
+  });
+});
+
+describe('GET /api/instructor/cohorts/:cohortId/students/:studentId/sessions', () => {
+  beforeEach(async () => {
+    await start({
+      cohort: {
+        findUnique: vi.fn().mockResolvedValue({
+          id: 'cohort-1',
+          name: 'Class A',
+          scoreConfig: null,
+          leaderboardEnabled: true,
+          members: [{ id: 'user-1', name: 'Alice', email: 'alice@example.com' }],
+        }),
+        update: vi.fn(),
+      },
+      session: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            id: 'session-1',
+            outcome: 'win',
+            totalSteps: 4,
+            optimalSteps: 3,
+            hintsUsed: 0,
+            finalScore: 900,
+            stepEfficiencyRatio: 0.75,
+            timeElapsedSeconds: 120,
+            startedAt: new Date('2026-01-01T00:00:00.000Z'),
+            completedAt: new Date('2026-01-01T00:05:00.000Z'),
+            problem: { domain: 'physics' },
+          },
+        ]),
+      },
+    } as unknown as Database);
+  });
+
+  it("returns the student's sessions with ISO date strings and the problem domain", async () => {
+    const res = await fetch(`${baseUrl}/api/instructor/cohorts/cohort-1/students/user-1/sessions`);
+    expect(res.status).toBe(200);
+
+    const data = (await res.json()) as StudentSessionRow[];
+    expect(data).toEqual([
+      {
+        id: 'session-1',
+        domain: 'physics',
+        outcome: 'win',
+        totalSteps: 4,
+        optimalSteps: 3,
+        hintsUsed: 0,
+        finalScore: 900,
+        stepEfficiencyRatio: 0.75,
+        timeElapsedSeconds: 120,
+        startedAt: '2026-01-01T00:00:00.000Z',
+        completedAt: '2026-01-01T00:05:00.000Z',
+      },
+    ]);
+  });
+
+  it('returns 404 when the student is not a member of the cohort', async () => {
+    const res = await fetch(`${baseUrl}/api/instructor/cohorts/cohort-1/students/not-a-member/sessions`);
+    expect(res.status).toBe(404);
+  });
+});
+
+describe('GET /api/instructor/cohorts/:cohortId/students/:studentId/sessions — cohort not found', () => {
+  beforeEach(async () => {
+    await start({
+      cohort: { findUnique: vi.fn().mockResolvedValue(null), update: vi.fn() },
+      session: { findMany: vi.fn() },
+    } as unknown as Database);
+  });
+
+  it('returns 404 when the cohort does not exist', async () => {
+    const res = await fetch(`${baseUrl}/api/instructor/cohorts/missing/students/user-1/sessions`);
+    expect(res.status).toBe(404);
   });
 });

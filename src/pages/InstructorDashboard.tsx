@@ -6,13 +6,15 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { fetchInstructorDashboard, updateScoreConfig, updateLeaderboardEnabled } from '@api/instructor';
-import type { InstructorDashboardData, CohortStudentRow } from '@api/instructor';
+import { fetchInstructorDashboard, fetchStudentSessions, updateScoreConfig, updateLeaderboardEnabled } from '@api/instructor';
+import type { InstructorDashboardData, CohortStudentRow, StudentSessionRow } from '@api/instructor';
 import type { Domain, ScoreConfig, UserRole } from '@game/types';
 import { DEFAULT_SCORE_CONFIG } from '@game/types';
 import { t, domainLabel } from '@i18n/strings';
 import type { Lang } from '@i18n/strings';
 import { LangSwitch } from '@components/GameScreen';
+import { CognitiveRadarChart } from '@components/analytics/CognitiveRadarChart';
+import { DomainHeatmap } from '@components/analytics/DomainHeatmap';
 
 interface InstructorDashboardProps {
   apiUrl: string;
@@ -31,6 +33,9 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [leaderboardEnabled, setLeaderboardEnabled] = useState(false);
   const [leaderboardSaveStatus, setLeaderboardSaveStatus] = useState<SaveStatus>('idle');
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [studentSessions, setStudentSessions] = useState<StudentSessionRow[] | null>(null);
+  const [studentSessionsError, setStudentSessionsError] = useState(false);
 
   useEffect(() => {
     if (role !== 'instructor' && role !== 'admin') return;
@@ -47,6 +52,22 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
         setError(true);
       });
   }, [apiUrl, cohortId, role]);
+
+  useEffect(() => {
+    if (!selectedStudentId) {
+      setStudentSessions(null);
+      return;
+    }
+
+    setStudentSessions(null);
+    setStudentSessionsError(false);
+    fetchStudentSessions(apiUrl, cohortId, selectedStudentId)
+      .then(setStudentSessions)
+      .catch(err => {
+        console.error('[instructor-dashboard] failed to load student sessions', err);
+        setStudentSessionsError(true);
+      });
+  }, [apiUrl, cohortId, selectedStudentId]);
 
   if (role !== 'instructor' && role !== 'admin') {
     return (
@@ -144,9 +165,25 @@ export function InstructorDashboard({ apiUrl, cohortId, role, lang, onLangChange
               {data.students.length === 0 ? (
                 <NoData lang={lang} />
               ) : (
-                <StudentsTable students={data.students} domains={domains} lang={lang} />
+                <StudentsTable
+                  students={data.students}
+                  domains={domains}
+                  lang={lang}
+                  selectedStudentId={selectedStudentId}
+                  onSelectStudent={setSelectedStudentId}
+                />
               )}
             </Section>
+
+            {selectedStudentId && (
+              <StudentDetailSection
+                student={data.students.find(s => s.userId === selectedStudentId) ?? null}
+                sessions={studentSessions}
+                error={studentSessionsError}
+                lang={lang}
+                onClose={() => setSelectedStudentId(null)}
+              />
+            )}
 
             <Section title={t('scoreConfigSectionTitle', lang)}>
               <ScoreConfigForm
@@ -188,7 +225,15 @@ function NoData({ lang }: { lang: Lang }) {
   return <div style={{ color: '#595959', fontSize: 13 }}>{t('noDataMsg', lang)}</div>;
 }
 
-function StudentsTable({ students, domains, lang }: { students: CohortStudentRow[]; domains: Domain[]; lang: Lang }) {
+function StudentsTable({
+  students, domains, lang, selectedStudentId, onSelectStudent,
+}: {
+  students: CohortStudentRow[];
+  domains: Domain[];
+  lang: Lang;
+  selectedStudentId: string | null;
+  onSelectStudent: (userId: string) => void;
+}) {
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
       <thead>
@@ -204,26 +249,131 @@ function StudentsTable({ students, domains, lang }: { students: CohortStudentRow
         </tr>
       </thead>
       <tbody>
-        {students.map(student => (
-          <tr key={student.userId} style={{ borderBottom: '1px solid #D6DCE4' }}>
-            <td style={{ padding: '6px 8px' }}>{student.displayName}</td>
-            <td style={{ padding: '6px 8px', textAlign: 'right', fontWeight: 600 }}>
-              {student.avgScore !== null ? Math.round(student.avgScore) : '—'}
-            </td>
-            <td style={{ padding: '6px 8px', textAlign: 'right' }}>{student.sessionsPlayed}</td>
-            {domains.map(domain => {
-              const rate = student.domainCompletion.find(d => d.domain === domain)?.completionRate ?? null;
-              return (
-                <td key={domain} style={{ padding: '6px 8px', textAlign: 'right' }}>
-                  {rate !== null ? `${Math.round(rate * 100)}%` : '—'}
-                </td>
-              );
-            })}
-          </tr>
-        ))}
+        {students.map(student => {
+          const selected = student.userId === selectedStudentId;
+          return (
+            <tr
+              key={student.userId}
+              onClick={() => onSelectStudent(student.userId)}
+              style={{
+                borderBottom: '1px solid #D6DCE4',
+                cursor: 'pointer',
+                background: selected ? '#EEF5FC' : 'transparent',
+              }}
+            >
+              <td style={{ padding: '6px 8px', fontWeight: selected ? 700 : 400, color: selected ? '#185FA5' : 'inherit' }}>
+                {student.displayName}
+              </td>
+              <td style={{ padding: '6px 8px', textAlign: 'right', fontWeight: 600 }}>
+                {student.avgScore !== null ? Math.round(student.avgScore) : '—'}
+              </td>
+              <td style={{ padding: '6px 8px', textAlign: 'right' }}>{student.sessionsPlayed}</td>
+              {domains.map(domain => {
+                const rate = student.domainCompletion.find(d => d.domain === domain)?.completionRate ?? null;
+                return (
+                  <td key={domain} style={{ padding: '6px 8px', textAlign: 'right' }}>
+                    {rate !== null ? `${Math.round(rate * 100)}%` : '—'}
+                  </td>
+                );
+              })}
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
+}
+
+// ── Student detail — cognitive profile radar + domain mastery heatmap ────────
+
+function StudentDetailSection({
+  student, sessions, error, lang, onClose,
+}: {
+  student: CohortStudentRow | null;
+  sessions: StudentSessionRow[] | null;
+  error: boolean;
+  lang: Lang;
+  onClose: () => void;
+}) {
+  return (
+    <section style={{ background: '#fff', border: '1px solid #D6DCE4', borderRadius: 10, padding: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <h2 style={{ margin: 0, fontSize: 14, color: '#2E2E2E' }}>
+          {t('cognitiveProfileTitle', lang)}{student ? ` — ${student.displayName}` : ''}
+        </h2>
+        <button
+          onClick={onClose}
+          style={{ border: 'none', background: 'none', color: '#595959', fontSize: 12, cursor: 'pointer' }}
+        >
+          {t('closeStudentDetailButton', lang)}
+        </button>
+      </div>
+
+      {error && (
+        <div
+          style={{ border: '2px solid #C00000', background: '#FBEEEE', color: '#C00000', borderRadius: 8, padding: '10px 14px', fontSize: 14 }}
+        >
+          {t('studentSessionsErrorMsg', lang)}
+        </div>
+      )}
+
+      {!error && !sessions && (
+        <div style={{ color: '#595959', fontSize: 14 }}>{t('loading', lang)}</div>
+      )}
+
+      {!error && sessions && (
+        <>
+          {sessions.length === 0 ? (
+            <NoData lang={lang} />
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '5fr 7fr', gap: 20, alignItems: 'start' }}>
+              <CognitiveRadarChart sessions={sessions} studentName={student?.displayName ?? ''} lang={lang} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <MetricCard label={t('avgEfficiencyLabel', lang)} value={formatEfficiency(sessions)} />
+                <MetricCard label={t('autonomyCardLabel', lang)} value={formatAutonomy(sessions)} />
+                <MetricCard label={t('avgScoreLabel', lang)} value={formatAvgScore(sessions)} />
+              </div>
+            </div>
+          )}
+
+          <h3 style={{ margin: '20px 0 12px', fontSize: 14, color: '#2E2E2E' }}>{t('domainMasteryTitle', lang)}</h3>
+          <DomainHeatmap sessions={sessions} lang={lang} />
+        </>
+      )}
+    </section>
+  );
+}
+
+function MetricCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div style={{ border: '1px solid #D6DCE4', borderRadius: 8, padding: '10px 14px', display: 'flex', justifyContent: 'space-between' }}>
+      <span style={{ color: '#595959', fontSize: 13 }}>{label}</span>
+      <span style={{ fontWeight: 700, fontSize: 13 }}>{value}</span>
+    </div>
+  );
+}
+
+function average(values: readonly number[]): number | null {
+  if (values.length === 0) return null;
+  return values.reduce((sum, v) => sum + v, 0) / values.length;
+}
+
+function formatEfficiency(sessions: StudentSessionRow[]): string {
+  const values = sessions.map(s => s.stepEfficiencyRatio).filter((v): v is number => v !== null);
+  const avg = average(values);
+  return avg !== null ? avg.toFixed(2) : '—';
+}
+
+function formatAutonomy(sessions: StudentSessionRow[]): string {
+  if (sessions.length === 0) return '—';
+  const rate = sessions.filter(s => s.hintsUsed === 0).length / sessions.length;
+  return `${Math.round(rate * 100)}%`;
+}
+
+function formatAvgScore(sessions: StudentSessionRow[]): string {
+  const values = sessions.map(s => s.finalScore).filter((v): v is number => v !== null);
+  const avg = average(values);
+  return avg !== null ? String(Math.round(avg)) : '—';
 }
 
 const SCORE_CONFIG_FIELDS: { key: keyof ScoreConfig; labelKey: 'scoreConfigMaxScoreLabel' | 'scoreConfigStepPenaltyLabel' | 'scoreConfigHintPenaltyLabel' | 'scoreConfigTimeBonusBaseLabel' | 'scoreConfigTimeBonusRateLabel' }[] = [
